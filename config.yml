@@ -1,0 +1,32 @@
+SLiM_PATH: /usr/bin/slim
+
+SEEDS:
+  TODO: add_seeds
+
+
+LAI_PROGRAMS:
+  rfmix:
+    name: rfmix
+    path: /path/to/file
+  rfmix2:
+    name: rfmix2
+    path: /path/to/file
+  ELAI:
+    name: elai
+    path: /path/to/file
+  MOSAIC:
+    name: mosaic
+    path: /path/to/file
+
+
+DEMOGRAPHIC_MODELS:
+  american_admixture:
+    organism: human
+    file: /path/to/file
+    # could put separate config files here
+  ooa_4pop:
+    organism: human
+    file: /path/to/file
+  simple_admixture:
+    organism: human
+    file: /path/to/file

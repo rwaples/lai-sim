@@ -1,0 +1,32 @@
+snakemake.utils.min_version("6.3")
+
+configfile: "config.yml"
+
+rule all:
+    input:
+        'results/sims/AmericanAdmixture_4B11/AmericanAdmixture_4B11.full.tsz'
+
+rule simulate_AmericanAdmixture_4B11:
+    input:
+        "workflow/scripts/sim/SLiM/AmericanAdmixture_4B11.slim"
+    output:
+        "results/sims/AmericanAdmixture_4B11/AmericanAdmixture_4B11.from_slim.trees"
+    params:
+        slim = config["SLiM_PATH"]
+    shell:
+        "{params.slim} {input} > {output}.log"
+
+rule recap_and_mutate_AmericanAdmixture_4B11:
+    input:
+        ts = "results/sims/AmericanAdmixture_4B11/AmericanAdmixture_4B11.from_slim.trees"
+    output:
+        "results/sims/AmericanAdmixture_4B11/AmericanAdmixture_4B11.full.tsz"
+    params:
+        ancestral_Ne= "7310",
+        chrom= "chr22",
+        contig_len= .25,
+        mut_rate= 1.44e-8,
+        seed= 42,
+
+    script:
+        "scripts/recap_and_mutate.py"
