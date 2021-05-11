@@ -13,8 +13,6 @@ contig_len = float(snakemake.params.contig_len)
 mut_rate = float(snakemake.params.mut_rate)
 seed = int(snakemake.params.seed)
 
-
-
 assert(mut_rate < 1e-7) # make sure mutation rate is small
 
 ts = tskit.load(ts_path)

@@ -18,10 +18,11 @@ rule simulate_AmericanAdmixture_4B11:
 
 rule recap_and_mutate_AmericanAdmixture_4B11:
     input:
-        ts = "results/sims/AmericanAdmixture_4B11/AmericanAdmixture_4B11.from_slim.trees"
+        "results/sims/AmericanAdmixture_4B11/AmericanAdmixture_4B11.from_slim.trees"
     output:
         "results/sims/AmericanAdmixture_4B11/AmericanAdmixture_4B11.full.tsz"
     params:
+        # used by the script
         ancestral_Ne= "7310",
         chrom= "chr22",
         contig_len= .25,
