@@ -1,22 +1,15 @@
-SLiM_PATH: /usr/bin/slim
-
-SEEDS:
-  TODO: add_seeds
 
 
-LAI_PROGRAMS:
-  rfmix:
-    name: rfmix
-    path: /path/to/file
-  rfmix2:
-    name: rfmix2
-    path: /path/to/file
-  ELAI:
-    name: elai
-    path: /path/to/file
-  MOSAIC:
-    name: mosaic
-    path: /path/to/file
+simulations: config/simulations.tsv
+analyses: config/analyses.tsv
+
+PATHS:
+    SLiM: /usr/bin/slim
+    rfmix: /path/to/file
+    rfmix2: /path/to/file
+    ELAI: /path/to/file
+    MOSAIC: /path/to/file
+    
 
 
 DEMOGRAPHIC_MODELS:

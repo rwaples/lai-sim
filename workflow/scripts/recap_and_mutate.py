@@ -35,5 +35,5 @@ coalesced_ts = msprime.simulate(
     migration_matrix=None
 )
 
-mut_ts = msprime.mutate(tree_sequence = coalesced_ts, random_seed=seed, rate = mut_rate)
+mut_ts = msprime.mutate(tree_sequence=coalesced_ts, random_seed=seed, rate=mut_rate)
 tszip.compress(mut_ts, out_path)

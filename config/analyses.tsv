@@ -1,0 +1,2 @@
+name	from_sim	nsamp_admixed	nsamp_ref	MAC_filter	max_snps	seed?
+test_anal_1	AA_42	50	50	5	10000	99

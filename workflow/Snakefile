@@ -2,19 +2,27 @@ snakemake.utils.min_version("6.3")
 
 configfile: "config.yml"
 
-rule all:
-    input:
-        'results/sims/AmericanAdmixture_4B11/AmericanAdmixture_4B11.full.tsz'
+rule sims_done:
+	input:
+		# TODO move these to 
+		'results/sims/AmericanAdmixture_4B11/AA_42.full.tsz',
+		'results/sims/AmericanAdmixture_4B11/AA_52.full.tsz',
 
-rule simulate_AmericanAdmixture_4B11:
-    input:
-        "workflow/scripts/sim/SLiM/AmericanAdmixture_4B11.slim"
-    output:
-        "results/sims/AmericanAdmixture_4B11/AmericanAdmixture_4B11.from_slim.trees"
-    params:
-        slim = config["SLiM_PATH"]
-    shell:
-        "{params.slim} {input} > {output}.log"
+rule simulate_admixture:
+	input:
+		#"workflow/scripts/sim/SLiM/AmericanAdmixture_4B11.slim"
+		#expand("{slim_script_path}", sample=simulations["slim_script_path"])
+		#"workflow/scripts/sim/SLiM/AmericanAdmixture_4B11.slim"
+	output:
+		#"results/sims/AmericanAdmixture_4B11/AmericanAdmixture_4B11.from_slim.trees"
+		#[f"results/sims/{sim.model_name}/{sim.sim_name}.from_slim.trees" for sim in simulations.itertuples()]
+		lambda w: "results/sims/AmericanAdmixture_4B11/AA_42.from_slim.trees",
+		"results/sims/AmericanAdmixture_4B11/AA_52.from_slim.trees"
+	params:
+		slim_path = config["PATHS.SLiM"]
+		slim_script =
+	shell:
+		"{params.slim_path} {input} > {output}.log"
 
 rule recap_and_mutate_AmericanAdmixture_4B11:
     input:
@@ -23,11 +31,10 @@ rule recap_and_mutate_AmericanAdmixture_4B11:
         "results/sims/AmericanAdmixture_4B11/AmericanAdmixture_4B11.full.tsz"
     params:
         # used by the script
-        ancestral_Ne= "7310",
-        chrom= "chr22",
-        contig_len= .25,
-        mut_rate= 1.44e-8,
-        seed= 42,
-
+        ancestral_Ne=7310,
+        chrom="chr22",
+        contig_len=.25,
+        mut_rate=1.44e-8,
+        seed=42,
     script:
         "scripts/recap_and_mutate.py"
