@@ -1,40 +1,65 @@
 snakemake.utils.min_version("6.3")
-
 configfile: "config.yml"
+include: "rules/common.smk"
+
+
+rule sample_filter:
+	input:
+		[f'results/sims/{u.model_name}/{u.sim_name}/{u.anal_name}.sample.filter.tsz' for u in units.itertuples()]
+
+rule sample:
+	input:
+		'results/sims/{model_name}/{sim_name}/full.tsz'
+	output:
+		'results/sims/{model_name}/{sim_name}/{anal_name}.sample.tsz'
+	params:
+		nind_admixed = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_admixed,
+		nind_ref = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_ref,
+		random_seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed
+	script:
+		"scripts/sample.py"
+
+rule filter:
+	input:
+		'results/sims/{model_name}/{sim_name}/{anal_name}.sample.tsz'
+	output:
+		'results/sims/{model_name}/{sim_name}/{anal_name}.sample.filter.tsz'
+	params:
+		MAC_filter = lambda w: units.loc[(u.sim_name, u.anal_name)].MAC_filter,
+		max_snps = lambda w: units.loc[(u.sim_name, u.anal_name)].max_snps,
+		sim_seed = lambda w: units.loc[(u.sim_name, u.anal_name)].anal_seed
+	script:
+		"scripts/filter.py"
+
+
 
 rule sims_done:
 	input:
-		# TODO move these to 
-		'results/sims/AmericanAdmixture_4B11/AA_42.full.tsz',
-		'results/sims/AmericanAdmixture_4B11/AA_52.full.tsz',
+		[f'results/sims/{s.model_name}/{s.sim_name}/full.tsz' for s in simulations.itertuples()]
+
 
 rule simulate_admixture:
-	input:
-		#"workflow/scripts/sim/SLiM/AmericanAdmixture_4B11.slim"
-		#expand("{slim_script_path}", sample=simulations["slim_script_path"])
-		#"workflow/scripts/sim/SLiM/AmericanAdmixture_4B11.slim"
 	output:
-		#"results/sims/AmericanAdmixture_4B11/AmericanAdmixture_4B11.from_slim.trees"
-		#[f"results/sims/{sim.model_name}/{sim.sim_name}.from_slim.trees" for sim in simulations.itertuples()]
-		lambda w: "results/sims/AmericanAdmixture_4B11/AA_42.from_slim.trees",
-		"results/sims/AmericanAdmixture_4B11/AA_52.from_slim.trees"
+		"results/sims/{model_name}/{sim_name}/from_slim.trees",
 	params:
-		slim_path = config["PATHS.SLiM"]
-		slim_script =
+		slim_path = config["PATHS"]["SLiM"],
+		seed = lambda w: simulations.loc[w.sim_name].random_seed,
+		slim_script = lambda w: simulations.loc[w.sim_name].slim_script_path,
 	shell:
-		"{params.slim_path} {input} > {output}.log"
+		"""{params.slim_path} -seed {params.seed} -d 'trees_file="{output}"' {params.slim_script} > {output}.log"""
 
-rule recap_and_mutate_AmericanAdmixture_4B11:
-    input:
-        "results/sims/AmericanAdmixture_4B11/AmericanAdmixture_4B11.from_slim.trees"
-    output:
-        "results/sims/AmericanAdmixture_4B11/AmericanAdmixture_4B11.full.tsz"
-    params:
-        # used by the script
-        ancestral_Ne=7310,
-        chrom="chr22",
-        contig_len=.25,
-        mut_rate=1.44e-8,
-        seed=42,
-    script:
-        "scripts/recap_and_mutate.py"
+
+rule recap_and_mutate:
+	input:
+		"results/sims/{model_name}/{sim_name}/from_slim.trees",
+	output:
+		'results/sims/{model_name}/{sim_name}/full.tsz'
+	params:
+		# params are used by the script
+		ancestral_Ne = lambda w: simulations.loc[w.sim_name].ancestral_Ne,
+		chr = lambda w: simulations.loc[w.sim_name].chr,
+		chr_len = lambda w: simulations.loc[w.sim_name].chr_len,
+		mutation_rate = lambda w: simulations.loc[w.sim_name].mutation_rate,
+		sim_seed = lambda w: simulations.loc[w.sim_name].sim_seed,
+	script:
+		"scripts/recap_and_mutate.py"
