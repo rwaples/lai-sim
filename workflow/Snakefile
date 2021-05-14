@@ -3,57 +3,82 @@ configfile: "config.yml"
 include: "rules/common.smk"
 
 
-rule sample_filter:
+
+rule true_la_done:
 	input:
-		[f'results/sims/{u.model_name}/{u.sim_name}/{u.anal_name}.sample.filter.tsz' for u in units.itertuples()]
+		[f'results/local_ancestry/{u.model_name}/{u.sim_name}/{u.anal_name}.true_local_ancestry.tracts.hdf' for u in units.itertuples()],
+		[f'results/local_ancestry/{u.model_name}/{u.sim_name}/{u.anal_name}.true_local_ancestry.site_matrix.npz' for u in units.itertuples()],
+		[f'results/local_ancestry/{u.model_name}/{u.sim_name}/{u.anal_name}.true_local_ancestry.samples.txt' for u in units.itertuples()],
+
+rule true_local_ancestry:
+	input:
+		ancestry_ts = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.tsz',
+		site_ts = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.filter.tsz',
+		node_mapping = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.filter.node_mapping.npy'
+	output:
+		tracts = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.true_local_ancestry.tracts.hdf',
+		site_matrix = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.true_local_ancestry.site_matrix.npz',
+		samples = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.true_local_ancestry.samples.txt',
+	params:
+		admixture_time = lambda w: units.loc[(w.sim_name, w.anal_name)].admixture_time
+	script:
+		"scripts/true_local_ancestry.py"
+
+
+rule sample_filter_done:
+	input:
+		[f'results/simulations/{u.model_name}/{u.sim_name}/{u.anal_name}.sample.filter.tsz' for u in units.itertuples()]
+
 
 rule sample:
 	input:
-		'results/sims/{model_name}/{sim_name}/full.tsz'
+		'results/simulations/{model_name}/{sim_name}/full.tsz'
 	output:
-		'results/sims/{model_name}/{sim_name}/{anal_name}.sample.tsz'
+		'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.tsz'
 	params:
 		nind_admixed = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_admixed,
 		nind_ref = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_ref,
-		random_seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed
+		anal_seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed,
+		admixture_time = lambda w: units.loc[(w.sim_name, w.anal_name)].admixture_time
 	script:
 		"scripts/sample.py"
 
+
 rule filter:
 	input:
-		'results/sims/{model_name}/{sim_name}/{anal_name}.sample.tsz'
+		'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.tsz'
 	output:
-		'results/sims/{model_name}/{sim_name}/{anal_name}.sample.filter.tsz'
+		tsz = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.filter.tsz',
+		node_mapping = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.filter.node_mapping.npy'
 	params:
-		MAC_filter = lambda w: units.loc[(u.sim_name, u.anal_name)].MAC_filter,
-		max_snps = lambda w: units.loc[(u.sim_name, u.anal_name)].max_snps,
-		sim_seed = lambda w: units.loc[(u.sim_name, u.anal_name)].anal_seed
+		MAC_filter = lambda w: units.loc[(w.sim_name, w.anal_name)].MAC_filter,
+		max_snps = lambda w: units.loc[(w.sim_name, w.anal_name)].max_snps,
+		anal_seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed
 	script:
 		"scripts/filter.py"
 
 
-
 rule sims_done:
 	input:
-		[f'results/sims/{s.model_name}/{s.sim_name}/full.tsz' for s in simulations.itertuples()]
+		[f'results/simulations/{s.model_name}/{s.sim_name}/full.tsz' for s in simulations.itertuples()]
 
 
 rule simulate_admixture:
 	output:
-		"results/sims/{model_name}/{sim_name}/from_slim.trees",
+		temp("results/simulations/{model_name}/{sim_name}/from_slim.trees",)
 	params:
 		slim_path = config["PATHS"]["SLiM"],
-		seed = lambda w: simulations.loc[w.sim_name].random_seed,
+		sim_seed = lambda w: simulations.loc[w.sim_name].sim_seed,
 		slim_script = lambda w: simulations.loc[w.sim_name].slim_script_path,
 	shell:
-		"""{params.slim_path} -seed {params.seed} -d 'trees_file="{output}"' {params.slim_script} > {output}.log"""
+		"""{params.slim_path} -seed {params.sim_seed} -d 'trees_file="{output}"' {params.slim_script} > {output}.log"""
 
 
 rule recap_and_mutate:
 	input:
-		"results/sims/{model_name}/{sim_name}/from_slim.trees",
+		"results/simulations/{model_name}/{sim_name}/from_slim.trees",
 	output:
-		'results/sims/{model_name}/{sim_name}/full.tsz'
+		'results/simulations/{model_name}/{sim_name}/full.tsz'
 	params:
 		# params are used by the script
 		ancestral_Ne = lambda w: simulations.loc[w.sim_name].ancestral_Ne,

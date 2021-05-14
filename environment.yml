@@ -14,3 +14,6 @@ dependencies:
   - tskit
   - stdpopsim
   - tszip
+  - pytables
+  - jupyter
+  - notebook
