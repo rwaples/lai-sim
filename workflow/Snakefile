@@ -2,13 +2,35 @@ snakemake.utils.min_version("6.3")
 configfile: "config.yml"
 include: "rules/common.smk"
 
-
-
-rule true_la_done:
+rule la_and_vcf_done:
 	input:
 		[f'results/local_ancestry/{u.model_name}/{u.sim_name}/{u.anal_name}.true_local_ancestry.tracts.hdf' for u in units.itertuples()],
 		[f'results/local_ancestry/{u.model_name}/{u.sim_name}/{u.anal_name}.true_local_ancestry.site_matrix.npz' for u in units.itertuples()],
 		[f'results/local_ancestry/{u.model_name}/{u.sim_name}/{u.anal_name}.true_local_ancestry.samples.txt' for u in units.itertuples()],
+		[f'results/local_ancestry/{u.model_name}/{u.sim_name}/{u.anal_name}.la_true.vcf.gz' for u in units.itertuples()],
+		[f'results/local_ancestry/{u.model_name}/{u.sim_name}/{u.anal_name}.genotypes.vcf.gz' for u in units.itertuples()],
+
+rule vcfs_done:
+	input:
+		[f'results/local_ancestry/{u.model_name}/{u.sim_name}/{u.anal_name}.la_true.vcf.gz' for u in units.itertuples()],
+		[f'results/local_ancestry/{u.model_name}/{u.sim_name}/{u.anal_name}.genotypes.vcf.gz' for u in units.itertuples()],
+
+rule write_vcfs:
+	input:
+		site_ts = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.filter.tsz',
+		site_matrix = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.true_local_ancestry.site_matrix.npz',
+	output:
+		phased_ancestry_vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.la_true.vcf.gz',
+		phased_genotype_vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.vcf.gz',
+	params:
+		base_path = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}',
+		chrom_id = lambda w: units.loc[(w.sim_name, w.anal_name)].chr,
+		nind_ref = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_ref,
+		chr_len = lambda w: units.loc[w.sim_name, w.anal_name].chr_len,
+	script:
+		'scripts/write_vcfs.py'
+
+
 
 rule true_local_ancestry:
 	input:
@@ -22,15 +44,10 @@ rule true_local_ancestry:
 	params:
 		admixture_time = lambda w: units.loc[(w.sim_name, w.anal_name)].admixture_time
 	script:
-		"scripts/true_local_ancestry.py"
+		'scripts/true_local_ancestry.py'
 
 
-rule sample_filter_done:
-	input:
-		[f'results/simulations/{u.model_name}/{u.sim_name}/{u.anal_name}.sample.filter.tsz' for u in units.itertuples()]
-
-
-rule sample:
+rule sample_sites:
 	input:
 		'results/simulations/{model_name}/{sim_name}/full.tsz'
 	output:
@@ -44,7 +61,7 @@ rule sample:
 		"scripts/sample.py"
 
 
-rule filter:
+rule filter_inds:
 	input:
 		'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.tsz'
 	output:

@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import tszip
+
 from common.utils import get_local_ancestry, get_la_mat
 
 ancestry_ts = str(snakemake.input.ancestry_ts)
@@ -10,7 +11,6 @@ tracts_path = str(snakemake.output.tracts)
 site_matrix_path = str(snakemake.output.site_matrix)
 samples_path = str(snakemake.output.samples)
 admixture_time = int(snakemake.params.admixture_time)
-
 
 
 # local ancestry tracts
@@ -28,5 +28,19 @@ local_ancestry_df.to_hdf(
 ts = tszip.decompress(site_ts)
 mapping = np.load(file=node_mapping)
 site_matrix, sample_order = get_la_mat(ts, df=local_ancestry_df, mapping=mapping)
+
+
+if snakemake.config["diagnostic_plots"] == True:
+	from matplotlib import pyplot as plt
+	import seaborn as sns
+	fig, ax = plt.subplots(figsize = (16,16))
+	ax = sns.heatmap(site_matrix[::100].T)
+	fig.savefig(site_matrix_path.replace('.npz', '.png'))   # save the figure to file
+	plt.close(fig)    # close the figure window
+
+
+
+
+
 np.savez_compressed(file = site_matrix_path, arr = site_matrix)
 np.savetxt(fname=samples_path, X=sample_order, fmt='%i', delimiter="\t")

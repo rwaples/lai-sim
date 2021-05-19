@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import collections
 
 
 def sample_inds(ts, pop_id, nind, seed):
@@ -201,5 +202,32 @@ def get_la_mat(ts, df, mapping = None):
         poporder = sample_order
     la_mat = la_mat[:, poporder]
 
-
     return(la_mat, sample_order)
+
+
+def make_ind_labels(export_ts):
+	pop_of_sample = dict(zip(range(len(export_ts.tables.nodes)), export_ts.tables.nodes.population))
+	nind_in_pop = collections.defaultdict(int)
+	pops = [pop_of_sample[i] for i in export_ts.samples()]
+	for p in pops:
+		nind_in_pop[p] +=1
+	for p in nind_in_pop:
+		nind_in_pop[p] = int(nind_in_pop[p]/2)
+	ind_labels = []
+	for p in nind_in_pop:
+		for i in range(1, nind_in_pop[p]+1):
+			ind_labels.append(f'pop_{p}-ind_{i:04}')
+	return(ind_labels)
+
+
+def vcfheader(contig_id, contig_len, ind_labels):
+    from datetime import date
+    fileformat = '##fileformat=VCFv4.2\n'
+    fileDate = f'##filedate={date.today().ctime()}\n'
+    FILTER = '##FILTER=<ID=PASS,Description="All filters passed">\n'
+    contig = f'##contig=<ID={contig_id},length={contig_len}>\n'
+    FORMAT = '##FORMAT=<ID=LA,Number=1,Type=String,Description="Local ancestry">\n'
+    header = fileformat+fileDate+FILTER+contig+FORMAT
+    header = header +'\t'.join(['#CHROM','POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO', 'FORMAT'])
+    header = header + '\t' + '\t'.join(ind_labels) + '\n'
+    return(header)
