@@ -9,7 +9,6 @@ import os
 from common.utils import make_ind_labels, vcfheader
 
 
-
 site_ts = str(snakemake.input.site_ts)
 site_matrix = str(snakemake.input.site_matrix)
 
@@ -113,7 +112,6 @@ with open(output_VCF, 'w') as vcf:
     vcf.write(header)
 
 metadata.to_csv(output_VCF, sep="\t", mode='a', index=False, header=False)
-
 
 
 ## use BCFTOOLS to compress vcf files with gz
