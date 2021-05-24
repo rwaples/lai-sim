@@ -1,5 +1,7 @@
 src/
 env/
+r-env/
+programs/*
 results/*
 .snakemake/
 *.log
