@@ -6,8 +6,8 @@ analyses: config/analyses.tsv
 PATHS:
     SLiM: /usr/bin/slim
     BCFTOOLS: /home/kele/programs/bcftools/bcftools-1.11/bcftools
-    rfmix: /path/to/file
-    rfmix2: /path/to/file
+    RFMix: /path/to/file
+    RFMix2: programs/RFmix2/rfmix
     ELAI: /path/to/file
     MOSAIC: /path/to/file
 

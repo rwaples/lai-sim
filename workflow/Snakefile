@@ -2,6 +2,72 @@ snakemake.utils.min_version("6.3")
 configfile: "config.yml"
 include: "rules/common.smk"
 
+wildcard_constraints:
+    anal_name="\w+"
+
+
+rule temp:
+	input:
+		[f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}.rfmix2.fb.tsv' for u in units.itertuples()]
+
+
+
+rule run_RFMix2:
+	input:
+		target_vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.target_inds.vcf.gz',
+		reference_vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.reference_inds.vcf.gz',
+		sample_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.sample_map.txt',
+		genetic_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genetic_map.txt',
+	output:
+		fb = 'results/RFMix2/{model_name}/{sim_name}/{anal_name}.rfmix2.fb.tsv',
+	params:
+		rfmix2 = config['PATHS']['RFMix2'],
+		bcftools = config['PATHS']['BCFTOOLS'],
+		output = 'results/RFMix2/{model_name}/{sim_name}/{anal_name}.rfmix2',
+		n_threads = 8,
+		chr = lambda w: simulations.loc[w.sim_name].chr,
+	shell:
+		"""
+		export PATH="{params.bcftools}:$PATH"
+		"""
+		"{params.rfmix2} -f {input.target_vcf} -r {input.reference_vcf} "
+		"-m {input.sample_map} -g {input.genetic_map} -o {params.output} "
+		"--reanalyze-reference "
+		"--nthreads {params.n_threads} --chromosome={params.chr}"
+
+
+
+
+
+rule split_vcf:
+	input:
+		vcf =  'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.vcf.gz',
+		samples = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.{sample_group}.txt'
+	output:
+		vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.{sample_group}.vcf.gz',
+	params:
+		bcftools = config['PATHS']['BCFTOOLS']
+	shell:
+		"""
+		{params.bcftools} view --samples-file {input.samples} --output {output.vcf} --output-type z {input.vcf}
+		{params.bcftools} index {output.vcf}
+		"""
+
+rule split_bcf:
+	input:
+		vcf =  'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.vcf.gz',
+		samples = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.{sample_group}.txt'
+	output:
+		bcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.{sample_group}.bcf',
+	params:
+		bcftools = config['PATHS']['BCFTOOLS']
+	shell:
+		"""
+		{params.bcftools} view --samples-file {input.samples} --output {output.bcf} --output-type u {input.vcf}
+		"""
+
+
+
 rule la_and_vcf_done:
 	input:
 		[f'results/local_ancestry/{u.model_name}/{u.sim_name}/{u.anal_name}.true_local_ancestry.tracts.hdf' for u in units.itertuples()],
@@ -17,11 +83,15 @@ rule vcfs_done:
 
 rule write_vcfs:
 	input:
-		site_ts = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.filter.tsz',
 		site_matrix = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.true_local_ancestry.site_matrix.npz',
+		site_ts = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.filter.tsz',
 	output:
 		phased_ancestry_vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.la_true.vcf.gz',
 		phased_genotype_vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.vcf.gz',
+		genetic_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genetic_map.txt',
+		sample_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.sample_map.txt',
+		reference_inds = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.reference_inds.txt',
+		target_inds = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.target_inds.txt',
 	params:
 		base_path = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}',
 		chrom_id = lambda w: units.loc[(w.sim_name, w.anal_name)].chr,
@@ -82,7 +152,7 @@ rule sims_done:
 
 rule simulate_admixture:
 	output:
-		temp("results/simulations/{model_name}/{sim_name}/from_slim.trees",)
+		"results/simulations/{model_name}/{sim_name}/from_slim.trees"
 	params:
 		slim_path = config["PATHS"]["SLiM"],
 		sim_seed = lambda w: simulations.loc[w.sim_name].sim_seed,

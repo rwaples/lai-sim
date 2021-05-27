@@ -54,8 +54,9 @@ nref_total = (npops-1) * nind_ref
 
 
 ## write file mapping inds to populations
+# only for the reference individuals
 with open(base_path + '.sample_map.txt', 'w') as OUTFILE:
-    for ind_string in ind_labels:
+    for ind_string in ind_labels[:nref_total]:
         pop = ind_string.split('-')[0]
         OUTFILE.write(f'{ind_string}\t{pop}\n')
 
@@ -65,7 +66,7 @@ with open(base_path + '.reference_inds.txt', 'w') as OUTFILE:
         pop = ind_string.split('-')[0]
         OUTFILE.write(f'{ind_string}\n')
 
-with open(base_path + '.admixed_inds.txt', 'w') as OUTFILE:
+with open(base_path + '.target_inds.txt', 'w') as OUTFILE:
     for ind_string in ind_labels[nref_total:]:
         pop = ind_string.split('-')[0]
         OUTFILE.write(f'{ind_string}\n')
@@ -130,7 +131,6 @@ subprocess.run([
 	'--output', f'{base_path}.la_true.vcf.gz',
 	f'{base_path}.la_true.vcf'
 	])
-
 
 
 subprocess.run([
