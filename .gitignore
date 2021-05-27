@@ -5,6 +5,7 @@ programs/*
 results/*
 .snakemake/
 *.log
+workflow/notebooks/Untitled.ipynb
 
 
 # Byte-compiled / optimized / DLL files
