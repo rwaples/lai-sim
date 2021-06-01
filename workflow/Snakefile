@@ -6,10 +6,50 @@ wildcard_constraints:
     anal_name="\w+"
 
 
-rule temp:
+rule done:
 	input:
-		[f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}.rfmix2.fb.tsv' for u in units.itertuples()]
+		rfmix2 = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}.rfmix2.fb.tsv' for u in units.itertuples()],
+		rfmix = [f'results/RFMix/{u.model_name}/{u.sim_name}/{u.anal_name}.Viterbi.txt' for u in units.itertuples()]
 
+
+rule run_RFMix:
+	input:
+		alleles_file = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.alleles_file.txt',
+		classes_file = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.classes_file.txt',
+		positions_file = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.positions_file.txt',
+	output:
+		viterbi = 'results/RFMix/{model_name}/{sim_name}/{anal_name}.Viterbi.txt'
+	params:
+		rfmix = config['PATHS']['RFMix'],
+		prefix = 'results/RFMix/{model_name}/{sim_name}/{anal_name}',
+		n_threads = 8,
+	shell:
+		"""
+		cd programs/RFmix/RFMix_v1.5.4
+		"""
+		"python2 RunRFMix.py PopPhased "
+		"--num-threads {params.n_threads} "
+		"../../../{input.alleles_file} ../../../{input.classes_file} ../../../{input.positions_file} "
+		"-o ../../../{params.prefix} "
+
+
+
+rule make_rfmix_input:
+	input:
+		site_ts = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.filter.tsz',
+		genetic_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genetic_map.txt',
+	output:
+		alleles_file = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.alleles_file.txt',
+		classes_file = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.classes_file.txt',
+		positions_file = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.positions_file.txt',
+	params:
+		nind_ref = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_ref,
+		nind_admixed = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_admixed,
+
+
+
+	script:
+		'scripts/make_rfmix_input.py'
 
 
 rule run_RFMix2:
@@ -34,9 +74,6 @@ rule run_RFMix2:
 		"-m {input.sample_map} -g {input.genetic_map} -o {params.output} "
 		"--reanalyze-reference "
 		"--nthreads {params.n_threads} --chromosome={params.chr}"
-
-
-
 
 
 rule split_vcf:
@@ -150,17 +187,6 @@ rule sims_done:
 		[f'results/simulations/{s.model_name}/{s.sim_name}/full.tsz' for s in simulations.itertuples()]
 
 
-rule simulate_admixture:
-	output:
-		"results/simulations/{model_name}/{sim_name}/from_slim.trees"
-	params:
-		slim_path = config["PATHS"]["SLiM"],
-		sim_seed = lambda w: simulations.loc[w.sim_name].sim_seed,
-		slim_script = lambda w: simulations.loc[w.sim_name].slim_script_path,
-	shell:
-		"""{params.slim_path} -seed {params.sim_seed} -d 'trees_file="{output}"' {params.slim_script} > {output}.log"""
-
-
 rule recap_and_mutate:
 	input:
 		"results/simulations/{model_name}/{sim_name}/from_slim.trees",
@@ -175,3 +201,18 @@ rule recap_and_mutate:
 		sim_seed = lambda w: simulations.loc[w.sim_name].sim_seed,
 	script:
 		"scripts/recap_and_mutate.py"
+
+
+rule simulate_admixture:
+	output:
+		"results/simulations/{model_name}/{sim_name}/from_slim.trees"
+	params:
+		slim_path = config["PATHS"]["SLiM"],
+		sim_seed = lambda w: simulations.loc[w.sim_name].sim_seed,
+		slim_script = lambda w: simulations.loc[w.sim_name].slim_script_path,
+	shell:
+		"""{params.slim_path} -seed {params.sim_seed} -d 'trees_file="{output}"' {params.slim_script} > {output}.log"""
+
+rule slim_scripts_present:
+	input:
+		[s.slim_script_path for s in simulations.itertuples()]
