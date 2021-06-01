@@ -9,7 +9,60 @@ wildcard_constraints:
 rule done:
 	input:
 		rfmix2 = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}.rfmix2.fb.tsv' for u in units.itertuples()],
-		rfmix = [f'results/RFMix/{u.model_name}/{u.sim_name}/{u.anal_name}.Viterbi.txt' for u in units.itertuples()]
+		rfmix = [f'results/RFMix/{u.model_name}/{u.sim_name}/{u.anal_name}.0.Viterbi.txt' for u in units.itertuples()],
+		mosaic = [f'results/MOSAIC/{u.model_name}/{u.sim_name}/{u.anal_name}.results.txt' for u in units.itertuples()],
+
+
+rule run_mosaic:
+	input:
+		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixed.genotfile.chr22'
+	output:
+		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}.results.txt'
+	params:
+		mosiac=config['PATHS']['MOSAIC'],
+		folder='results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input'
+	shell:
+		"""
+		Rscript {params.mosaic} --ancestries 3 admixed {params.folder}
+		"""
+
+
+rule make_mosaic_input:
+	input:
+		target_phased_vcf='results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.target_inds.vcf.gz',
+		reference_vcf='results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.reference_inds.vcf.gz',
+		plink_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.plink_map.txt',
+		site_ts = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.filter.tsz',
+	output:
+		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixed.genotfile.chr22'
+	params:
+		folder = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input',
+		chrom_id = lambda w: units.loc[(w.sim_name, w.anal_name)].chr,
+		nind_ref = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_ref,
+	script:
+		'scripts/make_mosaic_inputs.py'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 rule run_RFMix:
@@ -18,7 +71,7 @@ rule run_RFMix:
 		classes_file = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.classes_file.txt',
 		positions_file = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.positions_file.txt',
 	output:
-		viterbi = 'results/RFMix/{model_name}/{sim_name}/{anal_name}.Viterbi.txt'
+		viterbi = 'results/RFMix/{model_name}/{sim_name}/{anal_name}.0.Viterbi.txt'
 	params:
 		rfmix = config['PATHS']['RFMix'],
 		prefix = 'results/RFMix/{model_name}/{sim_name}/{anal_name}',
@@ -27,7 +80,7 @@ rule run_RFMix:
 		"""
 		cd programs/RFmix/RFMix_v1.5.4
 		"""
-		"python2 RunRFMix.py PopPhased "
+		"python2 RunRFMix.py TrioPhased "
 		"--num-threads {params.n_threads} "
 		"../../../{input.alleles_file} ../../../{input.classes_file} ../../../{input.positions_file} "
 		"-o ../../../{params.prefix} "
@@ -45,16 +98,13 @@ rule make_rfmix_input:
 	params:
 		nind_ref = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_ref,
 		nind_admixed = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_admixed,
-
-
-
 	script:
 		'scripts/make_rfmix_input.py'
 
 
 rule run_RFMix2:
 	input:
-		target_vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.target_inds.vcf.gz',
+		target_vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.target_inds.vcf.gz',
 		reference_vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.reference_inds.vcf.gz',
 		sample_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.sample_map.txt',
 		genetic_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genetic_map.txt',
@@ -73,7 +123,7 @@ rule run_RFMix2:
 		"{params.rfmix2} -f {input.target_vcf} -r {input.reference_vcf} "
 		"-m {input.sample_map} -g {input.genetic_map} -o {params.output} "
 		"--reanalyze-reference "
-		"--nthreads {params.n_threads} --chromosome={params.chr}"
+		"--n-threads {params.n_threads} --chromosome={params.chr}"
 
 
 rule split_vcf:
@@ -105,6 +155,34 @@ rule split_bcf:
 
 
 
+
+rule phasing:
+	input:
+		[f'results/local_ancestry/{u.model_name}/{u.sim_name}/{u.anal_name}.phased.target_inds.vcf.gz' for u in units.itertuples()]
+
+
+rule run_beagle:
+	input:
+		gt = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.target_inds.vcf.gz',
+		ref = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.reference_inds.vcf.gz',
+		map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.plink_map.txt',
+	output:
+		vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.target_inds.vcf.gz',
+	params:
+		prefix = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.target_inds',
+		bcftools = config['PATHS']['BCFTOOLS']
+	shell:
+		"java -jar programs/BEAGLE/beagle.29May21.d6d.jar "
+		"gt={input.gt} "
+		"ref={input.ref} "
+		"map={input.map} "
+		"out={params.prefix}"
+		"""
+		{params.bcftools} index {output.vcf}
+		"""
+
+
+
 rule la_and_vcf_done:
 	input:
 		[f'results/local_ancestry/{u.model_name}/{u.sim_name}/{u.anal_name}.true_local_ancestry.tracts.hdf' for u in units.itertuples()],
@@ -126,6 +204,7 @@ rule write_vcfs:
 		phased_ancestry_vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.la_true.vcf.gz',
 		phased_genotype_vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.vcf.gz',
 		genetic_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genetic_map.txt',
+		plink_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.plink_map.txt',
 		sample_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.sample_map.txt',
 		reference_inds = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.reference_inds.txt',
 		target_inds = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.target_inds.txt',

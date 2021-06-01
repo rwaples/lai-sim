@@ -84,6 +84,10 @@ with open(base_path + '.genetic_map.txt', 'w') as OUTFILE:
     for i in range(len(positions)):
         OUTFILE.write(f"{chrom_id}\t{positions[i]}\t{cM_pos[i]:0.6f}\n")
 
+with open(base_path + '.plink_map.txt', 'w') as OUTFILE:
+    for i in range(len(positions)):
+        OUTFILE.write(f"{chrom_id}\t.\t{cM_pos[i]:0.6f}\t{positions[i]}\n")
+
 
 ## write vcfs with true local ancestry
 la_mat = np.load(file = site_matrix)['arr']

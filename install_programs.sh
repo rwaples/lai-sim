@@ -1,6 +1,11 @@
 mkdir ./programs
 
 
+## BEAGEL 5.2
+mkdir programs/BEAGLE
+cd programs/RFmix
+wget http://faculty.washington.edu/browning/beagle/beagle.29May21.d6d.jar
+
 
 ## RFMIX version 1 (1.5.4)
 mkdir ./programs/RFmix
@@ -53,7 +58,10 @@ install.packages("mosaic-master.tar.gz")
 tar -xvf mosaic-master.tar.gz
 cd mosaic-master/
 
-
+# MOSAIC
+cd ./programs/MOSAIC/mosaic-master
+Rscript mosaic.R Moroccan example_data/ -a 2 -n 2 -c 18:22
+cd ../../..
 
 
 # test installations
@@ -62,7 +70,10 @@ cd ./programs/RFmix/RFMix_v1.5.4
 python2 RunRFMix.py TrioPhased ./TestData/alleles1.txt ./TestData/classes.txt ./TestData/markerLocationsChr1.txt -o outputTrioPhased
 cd ../../..
 
-# MOSAIC
-cd ./programs/MOSAIC/mosaic-master
-Rscript mosaic.R Moroccan example_data/ -a 2 -n 2 -c 18:22
-cd ../../..
+
+## BEAGLE
+java -jar programs/BEAGLE/beagle.29May21.d6d.jar \
+gt=results/local_ancestry/AmericanAdmixture_4B11/AA_42/test_anal_1.genotypes.target_inds.vcf.gz \
+ref=results/local_ancestry/AmericanAdmixture_4B11/AA_42/test_anal_1.genotypes.reference_inds.vcf.gz \
+map=results/local_ancestry/AmericanAdmixture_4B11/AA_42/test_anal_1.genetic_map.txt \
+out=~/temp

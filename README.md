@@ -9,5 +9,5 @@
 'TODO'
 
 # TODO
-phasing
-RFMIX popphased
+RFMIX popphased vs TrioPhased
+RFMIX input after phasing
