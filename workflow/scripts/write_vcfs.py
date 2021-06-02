@@ -63,13 +63,18 @@ with open(base_path + '.sample_map.txt', 'w') as OUTFILE:
 ## write files with inds from the reference and admixed populations
 with open(base_path + '.reference_inds.txt', 'w') as OUTFILE:
     for ind_string in ind_labels[:nref_total]:
-        pop = ind_string.split('-')[0]
+        #pop = ind_string.split('-')[0]
         OUTFILE.write(f'{ind_string}\n')
 
 with open(base_path + '.target_inds.txt', 'w') as OUTFILE:
     for ind_string in ind_labels[nref_total:]:
-        pop = ind_string.split('-')[0]
+        #pop = ind_string.split('-')[0]
         OUTFILE.write(f'{ind_string}\n')
+
+for pop in
+with open(base_path)
+
+
 
 
 ## write a genetic map file

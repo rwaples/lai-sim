@@ -1,7 +1,7 @@
-name: lai-sim
 channels:
   - conda-forge
   - bioconda
+  - r
 dependencies:
   - python
   - snakemake
@@ -18,3 +18,11 @@ dependencies:
   - jupyter
   - notebook
   - openjdk
+  - r-base
+  - r-essentials
+  - r-Rcpp
+  - r-ff
+  - r-combinat
+  - r-LaF
+  - r-argparser
+  - r-doParallel
