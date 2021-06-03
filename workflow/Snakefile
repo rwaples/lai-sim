@@ -21,19 +21,21 @@ rule done:
 
 rule run_mosaic:
 	input:
-		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixed.genofile.chr22'
+		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixedgenofile.22'
 	output:
 		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}.results.txt'
 	params:
-		mosaic=config['PATHS']['MOSAIC'],
-		folder='results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/'
+		mosaic = config['PATHS']['MOSAIC'],
+		input_folder = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/',
+		results_folder = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/'
 	conda:
 		'../r-environment.yml'
 	shell:
 		"""
-		echo Rscript {params.mosaic} --ancestries 3 admixed {params.folder}
-
-		Rscript {params.mosaic} --chromosomes 22 --ancestries 3 admixed {params.folder}
+		Rscript {params.mosaic} --chromosomes 22:22 --ancestries 3 admixed {params.input_folder}
+		mv MOSAIC_RESULTS/ {params.results_folder}
+		mv MOSAIC_PLOTS/ {params.results_folder}
+		mc FREQS/ {params.results_folder}
 		"""
 
 
@@ -46,7 +48,7 @@ rule make_mosaic_input:
 		plink_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.plink_map.txt',
 		site_ts = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.filter.tsz',
 	output:
-		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixed.genofile.chr22'
+		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixedgenofile.22'
 	params:
 		folder = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input',
 		chrom_id = lambda w: units.loc[(w.sim_name, w.anal_name)].chr,

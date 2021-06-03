@@ -79,7 +79,7 @@ subprocess.run([
 # write genofiles
 for p in range(npops-1):
 	pop = 'pop_' + (str(p))
-	prefix = os.path.join(folder, f'{pop}.genofile.{chrom_id}')
+	prefix = os.path.join(folder, f'{pop}genofile.{chrom_id}')
 	subprocess.run([
 		snakemake.config['PATHS']['BCFTOOLS'],
 		'convert',
@@ -92,7 +92,7 @@ for p in range(npops-1):
 
 
 pop = 'admixed'
-prefix = os.path.join(folder, f'{pop}.genofile.{chrom_id}')
+prefix = os.path.join(folder, f'{pop}genofile.{chrom_id}')
 subprocess.run([
 	snakemake.config['PATHS']['BCFTOOLS'],
 	'convert',
