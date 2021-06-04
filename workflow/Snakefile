@@ -16,7 +16,7 @@ rule done:
 	input:
 		rfmix2 = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}.rfmix2.fb.tsv' for u in units.itertuples()],
 		rfmix = [f'results/RFMix/{u.model_name}/{u.sim_name}/{u.anal_name}.0.Viterbi.txt' for u in units.itertuples()],
-		mosaic = [f'results/MOSAIC/{u.model_name}/{u.sim_name}/{u.anal_name}.results.txt' for u in units.itertuples()],
+		mosaic = [f'results/MOSAIC/{u.model_name}/{u.sim_name}/{u.anal_name}/FREQS/pop_0_freqs.rdata' for u in units.itertuples()],
 
 
 rule done_rfmix:
@@ -28,7 +28,7 @@ rule run_mosaic:
 		'programs/MOSAIC/MOSAIC/mosaic.R',
 		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixedgenofile.22'
 	output:
-		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}.results.txt'
+		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/FREQS/pop_0_freqs.rdata'
 	params:
 		mosaic = config['PATHS']['MOSAIC'],
 		input_folder = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/',

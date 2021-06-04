@@ -16,7 +16,7 @@ rule recap_and_mutate:
 		mutation_rate = lambda w: simulations.loc[w.sim_name].mutation_rate,
 		sim_seed = lambda w: simulations.loc[w.sim_name].sim_seed,
 	script:
-		"scripts/recap_and_mutate.py"
+		"../scripts/recap_and_mutate.py"
 
 
 rule simulate_admixture:

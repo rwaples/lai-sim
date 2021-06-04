@@ -71,11 +71,6 @@ with open(base_path + '.target_inds.txt', 'w') as OUTFILE:
         #pop = ind_string.split('-')[0]
         OUTFILE.write(f'{ind_string}\n')
 
-for pop in
-with open(base_path)
-
-
-
 
 ## write a genetic map file
 species = stdpopsim.get_species("HomSap")

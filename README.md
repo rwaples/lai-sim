@@ -5,7 +5,7 @@
 `mamba env create -f environment.yml --prefix ./env`
 
 # install MOSAIC
-snakemake --cores 1 install_mosaic
+snakemake --cores 1 --force install_mosaic
 
 # test mosaic:
 #### run from programs/MOSAIC/MOSAIC

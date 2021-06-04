@@ -29,7 +29,7 @@ rule write_vcfs:
 		nind_ref = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_ref,
 		chr_len = lambda w: units.loc[w.sim_name, w.anal_name].chr_len,
 	script:
-		'scripts/write_vcfs.py'
+		'../scripts/write_vcfs.py'
 
 
 rule split_vcf:
@@ -72,7 +72,7 @@ rule true_local_ancestry:
 	params:
 		admixture_time = lambda w: units.loc[(w.sim_name, w.anal_name)].admixture_time
 	script:
-		'scripts/true_local_ancestry.py'
+		'../scripts/true_local_ancestry.py'
 
 
 rule sample_sites:
@@ -86,7 +86,7 @@ rule sample_sites:
 		anal_seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed,
 		admixture_time = lambda w: units.loc[(w.sim_name, w.anal_name)].admixture_time
 	script:
-		"scripts/sample.py"
+		"../scripts/sample.py"
 
 
 rule filter_inds:
@@ -100,4 +100,4 @@ rule filter_inds:
 		max_snps = lambda w: units.loc[(w.sim_name, w.anal_name)].max_snps,
 		anal_seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed
 	script:
-		"scripts/filter.py"
+		"../scripts/filter.py"
