@@ -5,11 +5,11 @@ include: "rules/install.smk"
 include: "rules/phasing.smk"
 include: "rules/simulate.smk"
 include: "rules/la_and_vcf.smk"
-
-
-
 wildcard_constraints:
     anal_name="\w+"
+
+
+
 
 
 rule done:
@@ -19,8 +19,13 @@ rule done:
 		mosaic = [f'results/MOSAIC/{u.model_name}/{u.sim_name}/{u.anal_name}.results.txt' for u in units.itertuples()],
 
 
+rule done_rfmix:
+	input:
+		[f'results/RFMix/{u.model_name}/{u.sim_name}/{u.anal_name}.0.Viterbi.txt' for u in units.itertuples()],
+
 rule run_mosaic:
 	input:
+		'programs/MOSAIC/MOSAIC/mosaic.R',
 		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixedgenofile.22'
 	output:
 		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}.results.txt'
@@ -33,12 +38,16 @@ rule run_mosaic:
 	shell:
 		"""
 		Rscript {params.mosaic} --chromosomes 22:22 --ancestries 3 admixed {params.input_folder}
-		mv MOSAIC_RESULTS/ {params.results_folder}
-		mv MOSAIC_PLOTS/ {params.results_folder}
-		mc FREQS/ {params.results_folder}
+		mkdir -p {params.results_folder}/MOSAIC_RESULTS
+		mkdir -p {params.results_folder}/MOSAIC_PLOTS
+		mkdir -p {params.results_folder}/FREQS
+		mv MOSAIC_RESULTS/* {params.results_folder}/MOSAIC_RESULTS
+		mv MOSAIC_PLOTS/* {params.results_folder}/MOSAIC_PLOTS
+		mv FREQS/* {params.results_folder}/FREQS
+		rmdir MOSAIC_RESULTS
+		rmdir MOSAIC_PLOTS
+		rmdir FREQS
 		"""
-
-
 
 
 rule make_mosaic_input:
@@ -59,7 +68,8 @@ rule make_mosaic_input:
 
 rule run_RFMix:
 	input:
-		alleles_file = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.alleles_file.txt',
+		#alleles_file = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.alleles_file.txt',
+		alleles_file = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixedgenofile.22',
 		classes_file = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.classes_file.txt',
 		positions_file = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.positions_file.txt',
 	output:
@@ -76,7 +86,6 @@ rule run_RFMix:
 		"--num-threads {params.n_threads} "
 		"../../../{input.alleles_file} ../../../{input.classes_file} ../../../{input.positions_file} "
 		"-o ../../../{params.prefix} "
-
 
 
 rule make_rfmix_input:

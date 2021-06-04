@@ -7,6 +7,13 @@ rule download_mosaic:
 
 
 rule install_mosaic:
-	input: "programs/MOSAIC/MOSAIC_1.3.7.tar.gz"
+	input:
+		"programs/MOSAIC/MOSAIC_1.3.7.tar.gz"
+	output:
+		'programs/MOSAIC/MOSAIC/mosaic.R'
 	shell:
-		"R CMD INSTALL programs/MOSAIC/MOSAIC_1.3.7.tar.gz"
+		"""
+		R CMD INSTALL programs/MOSAIC/MOSAIC_1.3.7.tar.gz
+
+		tar -xvf programs/MOSAIC/MOSAIC_1.3.7.tar.gz --directory programs/MOSAIC
+		"""

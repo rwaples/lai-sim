@@ -10,7 +10,8 @@ PATHS:
     RFMix: programs/RFmix/RFMix_v1.5.4/RunRFMix.py
     RFMix2: programs/RFmix2/rfmix
     ELAI: /path/to/file
-    MOSAIC: programs/MOSAIC/mosaic-master/mosaic.R
+    MOSAIC: programs/MOSAIC/MOSAIC/mosaic.R
+
 
 diagnostic_plots: True
 
