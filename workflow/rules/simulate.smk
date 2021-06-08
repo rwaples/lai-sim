@@ -22,12 +22,14 @@ rule recap_and_mutate:
 rule simulate_admixture:
 	output:
 		"results/simulations/{model_name}/{sim_name}/from_slim.trees"
+	log:
+		"results/simulations/{model_name}/{sim_name}/from_slim.trees.log"
 	params:
 		slim_path = config["PATHS"]["SLiM"],
 		sim_seed = lambda w: simulations.loc[w.sim_name].sim_seed,
 		slim_script = lambda w: simulations.loc[w.sim_name].slim_script_path,
 	shell:
-		"""{params.slim_path} -seed {params.sim_seed} -d 'trees_file="{output}"' {params.slim_script} > {output}.log"""
+		"""{params.slim_path} -seed {params.sim_seed} -d 'trees_file="{output}"' {params.slim_script} 2>&1 | tee {log}"""
 
 rule slim_scripts_present:
 	input:

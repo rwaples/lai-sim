@@ -9,13 +9,10 @@ wildcard_constraints:
     anal_name="\w+"
 
 
-
-
-
 rule done:
 	input:
 		rfmix2 = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}.rfmix2.fb.tsv' for u in units.itertuples()],
-		rfmix = [f'results/RFMix/{u.model_name}/{u.sim_name}/{u.anal_name}.0.Viterbi.txt' for u in units.itertuples()],
+		#rfmix = [f'results/RFMix/{u.model_name}/{u.sim_name}/{u.anal_name}.0.Viterbi.txt' for u in units.itertuples()],
 		mosaic = [f'results/MOSAIC/{u.model_name}/{u.sim_name}/{u.anal_name}/FREQS/pop_0_freqs.rdata' for u in units.itertuples()],
 
 
@@ -29,6 +26,8 @@ rule run_mosaic:
 		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixedgenofile.22'
 	output:
 		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/FREQS/pop_0_freqs.rdata'
+	log:
+		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/mosaic.log'
 	params:
 		mosaic = config['PATHS']['MOSAIC'],
 		input_folder = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/',
@@ -37,7 +36,8 @@ rule run_mosaic:
 		'../r-environment.yml'
 	shell:
 		"""
-		Rscript {params.mosaic} --chromosomes 22:22 --ancestries 3 admixed {params.input_folder}
+		Rscript {params.mosaic} --chromosomes 22:22 --ancestries 3 admixed {params.input_folder} 2>&1 | tee {log}
+		# move the results into the results_folder
 		mkdir -p {params.results_folder}/MOSAIC_RESULTS
 		mkdir -p {params.results_folder}/MOSAIC_PLOTS
 		mkdir -p {params.results_folder}/FREQS
@@ -111,6 +111,8 @@ rule run_RFMix2:
 		genetic_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genetic_map.txt',
 	output:
 		fb = 'results/RFMix2/{model_name}/{sim_name}/{anal_name}.rfmix2.fb.tsv',
+	log:
+		'results/RFMix2/{model_name}/{sim_name}/{anal_name}.rfmix2.log',
 	params:
 		rfmix2 = config['PATHS']['RFMix2'],
 		bcftools = config['PATHS']['BCFTOOLS'],
@@ -124,4 +126,4 @@ rule run_RFMix2:
 		"{params.rfmix2} -f {input.target_vcf} -r {input.reference_vcf} "
 		"-m {input.sample_map} -g {input.genetic_map} -o {params.output} "
 		"--reanalyze-reference "
-		"--n-threads={params.n_threads} --chromosome={params.chr}"
+		"--n-threads={params.n_threads} --chromosome={params.chr} 2>&1 | tee {log}"

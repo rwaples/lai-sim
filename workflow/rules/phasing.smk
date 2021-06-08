@@ -13,6 +13,8 @@ rule run_beagle:
 	output:
 		vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.target_inds.vcf.gz',
 		index = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.target_inds.vcf.gz.csi',
+	log:
+		'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.target_inds.vcf.beagle.log',
 	params:
 		prefix = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.target_inds',
 		bcftools = config['PATHS']['BCFTOOLS']
@@ -21,7 +23,7 @@ rule run_beagle:
 		"gt={input.gt} "
 		"ref={input.ref} "
 		"map={input.map} "
-		"out={params.prefix}"
+		"out={params.prefix} 2>&1 | tee {log}"
 
 		"""
 
