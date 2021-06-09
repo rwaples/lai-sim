@@ -25,10 +25,10 @@ nref_total = (npops-1) * nind_ref
 with open(os.path.join(folder, 'sample.names'), 'w') as OUTFILE:
 	for ind_string in ind_labels[:nref_total]:
 		pop = ind_string.split('-')[0]
-		OUTFILE.write(f'{pop}\t{ind_string}\n')
+		OUTFILE.write(f'{pop} {ind_string} 0 0 0 2 -9\n')
 	for ind_string in ind_labels[nref_total:]:
 		pop = 'admixed'
-		OUTFILE.write(f'{pop}\t{ind_string}\n')
+		OUTFILE.write(f'{pop} {ind_string} 0 0 0 2 -9\n')
 
 # needed to subset vcf files
 for p in range(npops-1):
@@ -111,9 +111,13 @@ subprocess.run(
 gmap = pd.read_csv(plink_map, sep ='\t', header=None)
 gmap.columns = ['chr', 'rsID', 'cM', 'bp']
 snpfile = gmap[['rsID' , 'chr', 'cM', 'bp']].copy()
+snpfile['rsID'] = [f'        mosaic_SNP_{i}' for i in range(len(snpfile))]
+snpfile['chr'] = [f'{c[3:]}' for c in snpfile['chr']]
 snpfile['A1'] = 'A'
 snpfile['A2'] = 'T'
-snpfile.to_csv(os.path.join(folder, f'snpfile.{chrom_id}'), sep ='\t', index = None, header=None)
+import csv
+snpfile.to_csv(os.path.join(folder, f'snpfile.{chrom_id}'), sep =' ',
+	index=None, header=None, quoting=csv.QUOTE_NONE, escapechar = ' ')
 
 
 # write rates

@@ -76,15 +76,13 @@ rule sample_sites:
 		'results/simulations/{model_name}/{sim_name}/full.tsz'
 	output:
 		'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.tsz'
-	log:
-		'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.longer'
 	params:
 		nind_admixed = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_admixed,
 		nind_ref = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_ref,
 		anal_seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed,
 		admixture_time = lambda w: units.loc[(w.sim_name, w.anal_name)].admixture_time
 	script:
-		"../scripts/sample.py 2>&1 | tee {log}"
+		"../scripts/sample.py"
 
 
 rule filter_inds:
@@ -93,11 +91,9 @@ rule filter_inds:
 	output:
 		tsz = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.filter.tsz',
 		node_mapping = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.filter.node_mapping.npy'
-	log:
-		tsz = 'results/simulations/{model_name}/{sim_name}/{anal_name}.filter.log',
 	params:
 		MAC_filter = lambda w: units.loc[(w.sim_name, w.anal_name)].MAC_filter,
 		max_snps = lambda w: units.loc[(w.sim_name, w.anal_name)].max_snps,
 		anal_seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed
 	script:
-		"../scripts/filter.py 2>&1 | tee {log}"
+		"../scripts/filter.py"

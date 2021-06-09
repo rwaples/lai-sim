@@ -59,7 +59,7 @@ tar -xvf mosaic-master.tar.gz
 cd mosaic-master/
 
 # MOSAIC
-cd ./programs/MOSAIC/mosaic-master
+cd ./programs/MOSAIC/MOSAIC
 Rscript mosaic.R Moroccan example_data/ -a 2 -n 2 -c 18:22
 cd ../../..
 
