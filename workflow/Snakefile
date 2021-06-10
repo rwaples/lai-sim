@@ -36,6 +36,8 @@ rule run_mosaic:
 		'../r-environment.yml'
 	shell:
 		"""
+		#echo Rscript {params.mosaic} --chromosomes 22:22 --ancestries 2 -n 2 admixed {params.input_folder}
+
 		Rscript {params.mosaic} --chromosomes 22:22 --ancestries 3 admixed {params.input_folder} 2>&1 | tee {log}
 		# move the results into the results_folder
 		mkdir -p {params.results_folder}/MOSAIC_RESULTS

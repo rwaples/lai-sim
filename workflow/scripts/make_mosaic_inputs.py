@@ -80,6 +80,7 @@ subprocess.run([
 for p in range(npops-1):
 	pop = 'pop_' + (str(p))
 	prefix = os.path.join(folder, f'{pop}genofile.{chrom_id}')
+	output = os.path.join(folder, f'{pop}.phased.vcf.gz')
 	subprocess.run([
 		snakemake.config['PATHS']['BCFTOOLS'],
 		'convert',
@@ -93,6 +94,7 @@ for p in range(npops-1):
 
 pop = 'admixed'
 prefix = os.path.join(folder, f'{pop}genofile.{chrom_id}')
+output = os.path.join(folder, f'{pop}.phased.vcf.gz')
 subprocess.run([
 	snakemake.config['PATHS']['BCFTOOLS'],
 	'convert',
