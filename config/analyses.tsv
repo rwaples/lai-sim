@@ -1,2 +1,2 @@
 anal_name	sim_name	nind_admixed	nind_ref	MAC_filter	max_snps	admixture_time	anal_seed
-test_anal_1	AA_42	150	100	3	40000	20	99
+test_anal_1	AA_42	200	200	5	100000	20	99

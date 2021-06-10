@@ -20,14 +20,14 @@ initialize() {
     defineConstant("burn_in", 10.0);
     defineConstant("generation_time", 25);
     defineConstant("mutation_rate", Q * 0);
-    defineConstant("chromosome_length", 12826142);
+    defineConstant("chromosome_length", 51304566);
     //defineConstant("trees_file", "results/sims/AmericanAdmixture_4B11/AmericanAdmixture_4B11.from_slim.trees");
     defineConstant("pop_names", c("AFR", "EUR", "ASIA", "ADMIX"));
 
     _recombination_rates = c(
         4.333506830336468e-08);
     _recombination_ends = c(
-        12826142);
+        51304566);
     defineConstant("recombination_rates", (1-(1-2*_recombination_rates)^Q)/2);
     defineConstant("recombination_ends", _recombination_ends);
 
