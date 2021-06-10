@@ -23,9 +23,9 @@ rule done_rfmix:
 rule run_mosaic:
 	input:
 		'programs/MOSAIC/MOSAIC/mosaic.R',
-		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixedgenofile.22'
+		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixedgenofile.{CHR}'
 	output:
-		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/FREQS/pop_0_freqs.rdata'
+		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/FREQS/pop_0_freqs.rdata',
 	log:
 		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/mosaic.log'
 	params:
@@ -33,12 +33,12 @@ rule run_mosaic:
 		input_folder = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/',
 		results_folder = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/',
 		seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed,
+		nthreads = 8,
 	conda:
 		'../r-environment.yml'
 	shell:
 		"""
-
-		Rscript {params.mosaic} --seed {params.seed} --maxcores 10 --chromosomes 22:22 --ancestries 3 admixed {params.input_folder} 2>&1 | tee {log}
+		Rscript {params.mosaic} --seed {params.seed} --maxcores {params.nthreads} --chromosomes 22:22 --ancestries 3 admixed {params.input_folder} 2>&1 | tee {log}
 		# move the results into the results_folder
 		mkdir -p {params.results_folder}/MOSAIC_RESULTS
 		mkdir -p {params.results_folder}/MOSAIC_PLOTS
@@ -59,7 +59,7 @@ rule make_mosaic_input:
 		plink_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.plink_map.txt',
 		site_ts = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.filter.tsz',
 	output:
-		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixedgenofile.22'
+		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixedgenofile.{CHR}'
 	params:
 		folder = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input',
 		chrom_id = lambda w: units.loc[(w.sim_name, w.anal_name)].chr,
@@ -119,8 +119,9 @@ rule run_RFMix2:
 		rfmix2 = config['PATHS']['RFMix2'],
 		bcftools = config['PATHS']['BCFTOOLS'],
 		output = 'results/RFMix2/{model_name}/{sim_name}/{anal_name}.rfmix2',
-		n_threads = 8,
+		n_hreads = 8,
 		chr = lambda w: simulations.loc[w.sim_name].chr,
+		seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed,
 	shell:
 		"""
 		export PATH="{params.bcftools}:$PATH"
@@ -128,4 +129,5 @@ rule run_RFMix2:
 		"{params.rfmix2} -f {input.target_vcf} -r {input.reference_vcf} "
 		"-m {input.sample_map} -g {input.genetic_map} -o {params.output} "
 		"--reanalyze-reference "
-		"--n-threads={params.n_threads} --chromosome={params.chr} 2>&1 | tee {log}"
+		"--n-threads={params.nthreads} --chromosome={params.chr} "
+		"--random-seed={params.seed} 2>&1 | tee {log}"

@@ -18,11 +18,13 @@ rule run_beagle:
 	params:
 		prefix = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.target_inds',
 		bcftools = config['PATHS']['BCFTOOLS']
+		seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed,
 	shell:
 		"java -jar programs/BEAGLE/beagle.29May21.d6d.jar "
 		"gt={input.gt} "
 		"ref={input.ref} "
 		"map={input.map} "
+		"seed={params.seed} "
 		"out={params.prefix} 2>&1 | tee {log}"
 
 		"""
