@@ -16,4 +16,8 @@ rule install_mosaic:
 		R CMD INSTALL programs/MOSAIC/MOSAIC_1.3.7.tar.gz
 
 		tar -xvf programs/MOSAIC/MOSAIC_1.3.7.tar.gz --directory programs/MOSAIC
+
+		# patch mosaic to allow setting seed on the cmd line
+		patch -b programs/MOSAIC/MOSAIC/mosaic.R ./mosaic.patchfile
+
 		"""

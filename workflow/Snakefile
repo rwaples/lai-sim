@@ -31,14 +31,14 @@ rule run_mosaic:
 	params:
 		mosaic = config['PATHS']['MOSAIC'],
 		input_folder = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/',
-		results_folder = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/'
+		results_folder = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/',
+		seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed,
 	conda:
 		'../r-environment.yml'
 	shell:
 		"""
-		#echo Rscript {params.mosaic} --chromosomes 22:22 --ancestries 2 -n 2 admixed {params.input_folder}
 
-		Rscript {params.mosaic} --chromosomes 22:22 --ancestries 3 admixed {params.input_folder} 2>&1 | tee {log}
+		Rscript {params.mosaic} --seed {params.seed} --maxcores 10 --chromosomes 22:22 --ancestries 3 admixed {params.input_folder} 2>&1 | tee {log}
 		# move the results into the results_folder
 		mkdir -p {params.results_folder}/MOSAIC_RESULTS
 		mkdir -p {params.results_folder}/MOSAIC_PLOTS
