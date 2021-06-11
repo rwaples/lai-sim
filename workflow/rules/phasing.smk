@@ -17,7 +17,7 @@ rule run_beagle:
 		'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.target_inds.vcf.beagle.log',
 	params:
 		prefix = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.target_inds',
-		bcftools = config['PATHS']['BCFTOOLS']
+		bcftools = config['PATHS']['BCFTOOLS'],
 		seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed,
 	shell:
 		"java -jar programs/BEAGLE/beagle.29May21.d6d.jar "

@@ -9,21 +9,23 @@ wildcard_constraints:
     anal_name="\w+"
 
 
-rule done:
+rule short_run:
+	input:
+		rfmix2 = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}.rfmix2.fb.tsv' for u in units.query('anal_name == "test_anal_2"').itertuples()],
+		#rfmix = [f'results/RFMix/{u.model_name}/{u.sim_name}/{u.anal_name}.0.Viterbi.txt' for u in units.itertuples()],
+		mosaic = [f'results/MOSAIC/{u.model_name}/{u.sim_name}/{u.anal_name}/FREQS/pop_0_freqs.rdata' for u in units.query('anal_name == "test_anal_2"').itertuples()],
+
+rule long_run:
 	input:
 		rfmix2 = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}.rfmix2.fb.tsv' for u in units.itertuples()],
 		#rfmix = [f'results/RFMix/{u.model_name}/{u.sim_name}/{u.anal_name}.0.Viterbi.txt' for u in units.itertuples()],
 		mosaic = [f'results/MOSAIC/{u.model_name}/{u.sim_name}/{u.anal_name}/FREQS/pop_0_freqs.rdata' for u in units.itertuples()],
 
 
-rule done_rfmix:
-	input:
-		[f'results/RFMix/{u.model_name}/{u.sim_name}/{u.anal_name}.0.Viterbi.txt' for u in units.itertuples()],
-
 rule run_mosaic:
 	input:
 		'programs/MOSAIC/MOSAIC/mosaic.R',
-		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixedgenofile.{CHR}'
+		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixedgenofile.22'
 	output:
 		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/FREQS/pop_0_freqs.rdata',
 	log:
@@ -119,7 +121,7 @@ rule run_RFMix2:
 		rfmix2 = config['PATHS']['RFMix2'],
 		bcftools = config['PATHS']['BCFTOOLS'],
 		output = 'results/RFMix2/{model_name}/{sim_name}/{anal_name}.rfmix2',
-		n_hreads = 8,
+		nthreads = 8,
 		chr = lambda w: simulations.loc[w.sim_name].chr,
 		seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed,
 	shell:
