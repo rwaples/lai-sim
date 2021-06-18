@@ -5,6 +5,7 @@ include: "rules/install.smk"
 include: "rules/phasing.smk"
 include: "rules/simulate.smk"
 include: "rules/la_and_vcf.smk"
+include: "rules/diagnostic_plots.smk"
 wildcard_constraints:
     anal_name="\w+"
 
@@ -15,11 +16,13 @@ rule short_run:
 		#rfmix = [f'results/RFMix/{u.model_name}/{u.sim_name}/{u.anal_name}.0.Viterbi.txt' for u in units.itertuples()],
 		mosaic = [f'results/MOSAIC/{u.model_name}/{u.sim_name}/{u.anal_name}/FREQS/pop_0_freqs.rdata' for u in units.query('anal_name == "short_run"').itertuples()],
 
+
 rule long_run:
 	input:
 		rfmix2 = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}.rfmix2.fb.tsv' for u in units.itertuples()],
 		#rfmix = [f'results/RFMix/{u.model_name}/{u.sim_name}/{u.anal_name}.0.Viterbi.txt' for u in units.itertuples()],
 		mosaic = [f'results/MOSAIC/{u.model_name}/{u.sim_name}/{u.anal_name}/FREQS/pop_0_freqs.rdata' for u in units.itertuples()],
+
 
 rule diagnostic_plots:
 	input:
@@ -28,31 +31,18 @@ rule diagnostic_plots:
 		true_local_ancestry = [f'results/DIAGNOSTIC/{u.model_name}/{u.sim_name}/{u.anal_name}/true_local_ancestry.png' for u in units.itertuples()]
 
 
-rule plot_pop_coal_time:
+
+rule eval_rfmix2:
 	input:
-		site_ts = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.filter.tsz'
+		true_la = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.true_local_ancestry.site_matrix.npz'
+		inferred_la = 'results/RFMix2/{model_name}/{sim_name}/{anal_name}.rfmix2.fb.tsv'
 	output:
-		plot = 'results/DIAGNOSTIC/{model_name}/{sim_name}/{anal_name}/pop_coal_time.png'
+		stats = 'results/RFMix2/{model_name}/{sim_name}/{anal_name}/eval/rfmix2.la_stats.hdf'
+		plot = 'results/RFMix2/{model_name}/{sim_name}/{anal_name}/eval/rfmix2.la_plot.png'
+	params:
+		threshold = 0.9
 	script:
-		'scripts/plot_pop_coal_time.py'
-
-
-rule plot_pairwise_Fst:
-	input:
-		site_ts = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.filter.tsz'
-	output:
-		plot = 'results/DIAGNOSTIC/{model_name}/{sim_name}/{anal_name}/pairwise_Fst.png'
-	script:
-		'scripts/plot_pairwise_Fst.py'
-
-
-rule plot_local_ancestry:
-	input:
-		la_mat = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.true_local_ancestry.site_matrix.npz'
-	output:
-		plot = 'results/DIAGNOSTIC/{model_name}/{sim_name}/{anal_name}/true_local_ancestry.png'
-	script:
-		'scripts/plot_true_local_ancestry.py'
+		"scripts/eval_rfmix2.py"
 
 
 rule run_mosaic:
