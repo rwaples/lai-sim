@@ -5,6 +5,16 @@
 ## requires mamba
 `mamba env create -f environment.yml --prefix ./env`
 
+# activate conda environment
+`conda activate ./env`
+
+# run the full pipeline
+`snakemake --cores 1`
+
+# view a graph of the DAG
+`snakemake --dag | dot | display`
+
+
 # re-install MOSAIC
 snakemake --cores 1 --force install_mosaic
 
@@ -16,4 +26,4 @@ Rscript ./mosaic.R simulated ./example_data/ -c 18:22 -n 3 -p "English Mandenka"
 # TODO
 	- figure out the 'distance' column in mosaic input
 	-	summarize LAI output
-	- ELAI 
+	- ELAI

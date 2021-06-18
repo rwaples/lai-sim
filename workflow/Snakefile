@@ -13,13 +13,36 @@ rule short_run:
 	input:
 		rfmix2 = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}.rfmix2.fb.tsv' for u in units.query('anal_name == "test_anal_2"').itertuples()],
 		#rfmix = [f'results/RFMix/{u.model_name}/{u.sim_name}/{u.anal_name}.0.Viterbi.txt' for u in units.itertuples()],
-		mosaic = [f'results/MOSAIC/{u.model_name}/{u.sim_name}/{u.anal_name}/FREQS/pop_0_freqs.rdata' for u in units.query('anal_name == "test_anal_2"').itertuples()],
+		mosaic = [f'results/MOSAIC/{u.model_name}/{u.sim_name}/{u.anal_name}/FREQS/pop_0_freqs.rdata' for u in units.query('anal_name == "short_run"').itertuples()],
 
 rule long_run:
 	input:
 		rfmix2 = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}.rfmix2.fb.tsv' for u in units.itertuples()],
 		#rfmix = [f'results/RFMix/{u.model_name}/{u.sim_name}/{u.anal_name}.0.Viterbi.txt' for u in units.itertuples()],
 		mosaic = [f'results/MOSAIC/{u.model_name}/{u.sim_name}/{u.anal_name}/FREQS/pop_0_freqs.rdata' for u in units.itertuples()],
+
+rule diagnostic_plots:
+	input:
+		pop_coal_time = [f'results/DIAGNOSTIC/{u.model_name}/{u.sim_name}/{u.anal_name}/pop_coal_time.png' for u in units.itertuples()],
+		pairwise_Fst = [f'results/DIAGNOSTIC/{u.model_name}/{u.sim_name}/{u.anal_name}/pairwise_Fst.png' for u in units.itertuples()]
+
+
+rule plot_pop_coal_time:
+	input:
+		site_ts = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.filter.tsz'
+	output:
+		plot = 'results/DIAGNOSTIC/{model_name}/{sim_name}/{anal_name}/pop_coal_time.png'
+	script:
+		'scripts/plot_pop_coal_time.py'
+
+
+rule plot_pairwise_Fst:
+	input:
+		site_ts = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.filter.tsz'
+	output:
+		plot = 'results/DIAGNOSTIC/{model_name}/{sim_name}/{anal_name}/pairwise_Fst.png'
+	script:
+		'scripts/plot_pairwise_Fst.py'
 
 
 rule run_mosaic:
