@@ -24,7 +24,8 @@ rule long_run:
 rule diagnostic_plots:
 	input:
 		pop_coal_time = [f'results/DIAGNOSTIC/{u.model_name}/{u.sim_name}/{u.anal_name}/pop_coal_time.png' for u in units.itertuples()],
-		pairwise_Fst = [f'results/DIAGNOSTIC/{u.model_name}/{u.sim_name}/{u.anal_name}/pairwise_Fst.png' for u in units.itertuples()]
+		pairwise_Fst = [f'results/DIAGNOSTIC/{u.model_name}/{u.sim_name}/{u.anal_name}/pairwise_Fst.png' for u in units.itertuples()],
+		true_local_ancestry = [f'results/DIAGNOSTIC/{u.model_name}/{u.sim_name}/{u.anal_name}/true_local_ancestry.png' for u in units.itertuples()]
 
 
 rule plot_pop_coal_time:
@@ -43,6 +44,15 @@ rule plot_pairwise_Fst:
 		plot = 'results/DIAGNOSTIC/{model_name}/{sim_name}/{anal_name}/pairwise_Fst.png'
 	script:
 		'scripts/plot_pairwise_Fst.py'
+
+
+rule plot_local_ancestry:
+	input:
+		la_mat = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.true_local_ancestry.site_matrix.npz'
+	output:
+		plot = 'results/DIAGNOSTIC/{model_name}/{sim_name}/{anal_name}/true_local_ancestry.png'
+	script:
+		'scripts/plot_true_local_ancestry.py'
 
 
 rule run_mosaic:

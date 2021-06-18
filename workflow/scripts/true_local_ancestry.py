@@ -30,13 +30,7 @@ mapping = np.load(file=node_mapping)
 site_matrix, sample_order = get_la_mat(ts, df=local_ancestry_df, mapping=mapping)
 
 
-if snakemake.config["diagnostic_plots"] == True:
-	from matplotlib import pyplot as plt
-	import seaborn as sns
-	fig, ax = plt.subplots(figsize = (16,16))
-	ax = sns.heatmap(site_matrix[::100].T)
-	fig.savefig(site_matrix_path.replace('.npz', '.png'))   # save the figure to file
-	plt.close(fig)    # close the figure window
+
 
 
 
