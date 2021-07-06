@@ -18,6 +18,9 @@ dependencies:
   - jupyter
   - notebook
   - openjdk
+  - xarray
+  - pip:
+    - pyreadr
   - r-base=3.6.3
   - r-essentials
   - r-Rcpp

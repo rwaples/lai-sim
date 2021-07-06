@@ -12,9 +12,11 @@ wildcard_constraints:
 
 rule short_run:
 	input:
-		rfmix2 = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}.rfmix2.fb.tsv' for u in units.query('anal_name == "test_anal_2"').itertuples()],
+		rfmix2 = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}.rfmix2.fb.tsv' for u in units.query('anal_name == "short_run"').itertuples()],
+		rfmix2_diploid = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}/diploid_la.hdf' for u in units.query('anal_name == "short_run"').itertuples()],
 		#rfmix = [f'results/RFMix/{u.model_name}/{u.sim_name}/{u.anal_name}.0.Viterbi.txt' for u in units.itertuples()],
 		mosaic = [f'results/MOSAIC/{u.model_name}/{u.sim_name}/{u.anal_name}/FREQS/pop_0_freqs.rdata' for u in units.query('anal_name == "short_run"').itertuples()],
+		more = [f'results/MOSAIC/{u.model_name}/{u.sim_name}/{u.anal_name}/la_probabilites.RData' for u in units.query('anal_name == "short_run"').itertuples()],
 
 
 rule long_run:
@@ -32,17 +34,37 @@ rule diagnostic_plots:
 
 
 
-rule eval_rfmix2:
+rule export_mosaic:
 	input:
-		true_la = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.true_local_ancestry.site_matrix.npz',
+		model_results = "results/MOSAIC/{model_name}/{sim_name}/{anal_name}/MOSAIC_RESULTS/admixed_3way_1-2_22-22_1204_60_0.99_100.RData",
+		la_results = "results/MOSAIC/{model_name}/{sim_name}/{anal_name}/MOSAIC_RESULTS/localanc_admixed_3way_1-2_22-22_1204_60_0.99_100.RData"
+	output:
+		path = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/la_probabilites.RData',
+	params:
+		input_dir = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/',
+	script:
+		"scripts/export_mosaic_results.R"
+
+
+rule summarize_rfmix2:
+	input:
 		inferred_la = 'results/RFMix2/{model_name}/{sim_name}/{anal_name}.rfmix2.fb.tsv'
 	output:
-		stats = 'results/RFMix2/{model_name}/{sim_name}/{anal_name}/eval/rfmix2.la_stats.hdf',
-		plot = 'results/RFMix2/{model_name}/{sim_name}/{anal_name}/eval/rfmix2.la_plot.png'
+		diploid = 'results/RFMix2/{model_name}/{sim_name}/{anal_name}/diploid_la.hdf',
 	params:
 		threshold = 0.9
 	script:
-		"scripts/eval_rfmix2.py"
+		"scripts/summarize_rfmix2.py"
+
+rule summarize_mosaic:
+	input:
+		inferred_la = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/FREQS/pop_0_freqs.rdata'
+	output:
+		diploid = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/diploid_la.hdf',
+	params:
+		threshold = 0.9
+	script:
+		"scripts/summarize_mosaic.py"
 
 
 rule run_mosaic:
@@ -50,7 +72,9 @@ rule run_mosaic:
 		'programs/MOSAIC/MOSAIC/mosaic.R',
 		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixedgenofile.22'
 	output:
-		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/FREQS/pop_0_freqs.rdata',
+		freqs = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/FREQS/pop_0_freqs.rdata',
+		model_results = "results/MOSAIC/{model_name}/{sim_name}/{anal_name}/MOSAIC_RESULTS/admixed_3way_1-2_22-22_1204_60_0.99_100.RData",
+		la_results = "results/MOSAIC/{model_name}/{sim_name}/{anal_name}/MOSAIC_RESULTS/localanc_admixed_3way_1-2_22-22_1204_60_0.99_100.RData"
 	log:
 		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/mosaic.log'
 	params:
