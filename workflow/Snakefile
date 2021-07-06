@@ -34,10 +34,10 @@ rule diagnostic_plots:
 
 rule eval_rfmix2:
 	input:
-		true_la = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.true_local_ancestry.site_matrix.npz'
+		true_la = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.true_local_ancestry.site_matrix.npz',
 		inferred_la = 'results/RFMix2/{model_name}/{sim_name}/{anal_name}.rfmix2.fb.tsv'
 	output:
-		stats = 'results/RFMix2/{model_name}/{sim_name}/{anal_name}/eval/rfmix2.la_stats.hdf'
+		stats = 'results/RFMix2/{model_name}/{sim_name}/{anal_name}/eval/rfmix2.la_stats.hdf',
 		plot = 'results/RFMix2/{model_name}/{sim_name}/{anal_name}/eval/rfmix2.la_plot.png'
 	params:
 		threshold = 0.9
