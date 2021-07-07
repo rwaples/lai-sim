@@ -15,8 +15,8 @@ rule short_run:
 		rfmix2 = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}.rfmix2.fb.tsv' for u in units.query('anal_name == "short_run"').itertuples()],
 		rfmix2_diploid = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}/diploid_la.hdf' for u in units.query('anal_name == "short_run"').itertuples()],
 		#rfmix = [f'results/RFMix/{u.model_name}/{u.sim_name}/{u.anal_name}.0.Viterbi.txt' for u in units.itertuples()],
-		mosaic = [f'results/MOSAIC/{u.model_name}/{u.sim_name}/{u.anal_name}/FREQS/pop_0_freqs.rdata' for u in units.query('anal_name == "short_run"').itertuples()],
-		more = [f'results/MOSAIC/{u.model_name}/{u.sim_name}/{u.anal_name}/la_probabilites.RData' for u in units.query('anal_name == "short_run"').itertuples()],
+		#more = [f'results/MOSAIC/{u.model_name}/{u.sim_name}/{u.anal_name}/la_probabilites.RData' for u in units.query('anal_name == "short_run"').itertuples()],
+		even_more = 'results/MOSAIC/AmericanAdmixture_4B11/AA_42/short_run/la_probabilites.3way_1-2_22-22_1204_60_0.99_100.RData'
 
 
 rule long_run:
@@ -33,13 +33,12 @@ rule diagnostic_plots:
 		true_local_ancestry = [f'results/DIAGNOSTIC/{u.model_name}/{u.sim_name}/{u.anal_name}/true_local_ancestry.png' for u in units.itertuples()]
 
 
-
 rule export_mosaic:
 	input:
-		model_results = "results/MOSAIC/{model_name}/{sim_name}/{anal_name}/MOSAIC_RESULTS/admixed_3way_1-2_22-22_1204_60_0.99_100.RData",
-		la_results = "results/MOSAIC/{model_name}/{sim_name}/{anal_name}/MOSAIC_RESULTS/localanc_admixed_3way_1-2_22-22_1204_60_0.99_100.RData"
+		la_results = "results/MOSAIC/{model_name}/{sim_name}/{anal_name}/MOSAIC_RESULTS/localanc_admixed_{nsource}way_1-{naming_mess}.RData",
+		model_results = "results/MOSAIC/{model_name}/{sim_name}/{anal_name}/MOSAIC_RESULTS/admixed_{nsource}way_1-{naming_mess}.RData",
 	output:
-		path = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/la_probabilites.RData',
+		path = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/la_probabilites.{nsource}way_1-{naming_mess}.RData',
 	params:
 		input_dir = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/',
 	script:
@@ -56,35 +55,22 @@ rule summarize_rfmix2:
 	script:
 		"scripts/summarize_rfmix2.py"
 
-rule summarize_mosaic:
-	input:
-		inferred_la = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/FREQS/pop_0_freqs.rdata'
-	output:
-		diploid = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/diploid_la.hdf',
-	params:
-		threshold = 0.9
-	script:
-		"scripts/summarize_mosaic.py"
-
 
 rule run_mosaic:
 	input:
 		'programs/MOSAIC/MOSAIC/mosaic.R',
 		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixedgenofile.22'
 	output:
-		freqs = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/FREQS/pop_0_freqs.rdata',
-		model_results = "results/MOSAIC/{model_name}/{sim_name}/{anal_name}/MOSAIC_RESULTS/admixed_3way_1-2_22-22_1204_60_0.99_100.RData",
-		la_results = "results/MOSAIC/{model_name}/{sim_name}/{anal_name}/MOSAIC_RESULTS/localanc_admixed_3way_1-2_22-22_1204_60_0.99_100.RData"
+		la_results = "results/MOSAIC/{model_name}/{sim_name}/{anal_name}/MOSAIC_RESULTS/localanc_admixed_{nsource}way_1-{naming_mess}.RData",
+		model_results = "results/MOSAIC/{model_name}/{sim_name}/{anal_name}/MOSAIC_RESULTS/admixed_{nsource}way_1-{naming_mess}.RData",
 	log:
-		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/mosaic.log'
+		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/mosaic.{nsource}way_1-{naming_mess}.log'
 	params:
 		mosaic = config['PATHS']['MOSAIC'],
 		input_folder = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/',
 		results_folder = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/',
 		seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed,
 		nthreads = 8,
-	conda:
-		'../r-environment.yml'
 	shell:
 		"""
 		Rscript {params.mosaic} --seed {params.seed} --maxcores {params.nthreads} --chromosomes 22:22 --ancestries 3 admixed {params.input_folder} 2>&1 | tee {log}
@@ -177,6 +163,6 @@ rule run_RFMix2:
 		"""
 		"{params.rfmix2} -f {input.target_vcf} -r {input.reference_vcf} "
 		"-m {input.sample_map} -g {input.genetic_map} -o {params.output} "
-		"--reanalyze-reference "
+		"--reanalyze-reference -e 5 "
 		"--n-threads={params.nthreads} --chromosome={params.chr} "
 		"--random-seed={params.seed} 2>&1 | tee {log}"

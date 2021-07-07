@@ -18,6 +18,7 @@ dependencies:
   - jupyter
   - notebook
   - openjdk
+  - pip
   - xarray
   - pip:
     - pyreadr

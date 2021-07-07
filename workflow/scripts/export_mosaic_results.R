@@ -7,10 +7,12 @@ output_path = snakemake@output[["path"]]
 
 load(model_results)
 load(la_results)
-# get local ancestry at each SNP
+# localanc gives the local ancestry at each grid point
+# get local ancestry probabilities at each SNP
 local_pos=grid_to_pos(localanc, mosaic_input_dir, g.loc, chrnos)
+dims = dim(local_pos[[1]])
 # convert to array and then export
-arr = array(unlist(local_pos, use.names=FALSE), c(3, 4, 20000))
+arr = array(unlist(local_pos, use.names=FALSE), dims)
 save(arr, file = output_path)
 
 

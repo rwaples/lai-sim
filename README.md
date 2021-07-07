@@ -14,7 +14,6 @@
 # view a graph of the DAG
 `snakemake --dag | dot | display`
 
-
 # re-install MOSAIC
 snakemake --cores 1 --force install_mosaic
 
@@ -24,6 +23,6 @@ Rscript ./mosaic.R simulated ./example_data/ -c 18:22 -n 3 -p "English Mandenka"
 
 
 # TODO
-	- figure out the 'distance' column in mosaic input
 	-	summarize LAI output
+	- update MOSAIC to 1.38
 	- ELAI
