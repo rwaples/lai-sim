@@ -1,8 +1,7 @@
 # lai-sim
 
-
 # create the conda environment
-## requires mamba
+## requires mamba, as suggested by Snakemake
 `mamba env create -f environment.yml --prefix ./env`
 
 # activate conda environment (from base directory)
@@ -17,7 +16,7 @@
 # re-install MOSAIC
 snakemake --cores 1 --force install_mosaic
 
-# test mosaic:
+# test MOSAIC:
 #### run from programs/MOSAIC/MOSAIC
 Rscript ./mosaic.R simulated ./example_data/ -c 18:22 -n 3 -p "English Mandenka" --gens "30"
 

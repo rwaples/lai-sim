@@ -14,16 +14,14 @@ rule short_run:
 	input:
 		rfmix2 = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}.rfmix2.fb.tsv' for u in units.query('anal_name == "short_run"').itertuples()],
 		rfmix2_diploid = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}/diploid_la.hdf' for u in units.query('anal_name == "short_run"').itertuples()],
-		#rfmix = [f'results/RFMix/{u.model_name}/{u.sim_name}/{u.anal_name}.0.Viterbi.txt' for u in units.itertuples()],
-		#more = [f'results/MOSAIC/{u.model_name}/{u.sim_name}/{u.anal_name}/la_probabilites.RData' for u in units.query('anal_name == "short_run"').itertuples()],
 		even_more = 'results/MOSAIC/AmericanAdmixture_4B11/AA_42/short_run/la_probabilites.3way_1-2_22-22_1204_60_0.99_100.RData'
 
 
 rule long_run:
 	input:
-		rfmix2 = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}.rfmix2.fb.tsv' for u in units.itertuples()],
-		#rfmix = [f'results/RFMix/{u.model_name}/{u.sim_name}/{u.anal_name}.0.Viterbi.txt' for u in units.itertuples()],
-		mosaic = [f'results/MOSAIC/{u.model_name}/{u.sim_name}/{u.anal_name}/FREQS/pop_0_freqs.rdata' for u in units.itertuples()],
+		rfmix2 = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}.rfmix2.fb.tsv' for u in units.query('anal_name == "long_run"').itertuples()],
+		rfmix2_diploid = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}/diploid_la.hdf' for u in units.query('anal_name == "long_run"').itertuples()],
+		even_more = 'results/MOSAIC/AmericanAdmixture_4B11/AA_42/long_run/la_probabilites.3way_1-200_22-22_1600_60_0.99_100.RData'
 
 
 rule diagnostic_plots:
