@@ -1,8 +1,7 @@
-
 simulations: config/simulations.tsv
 analyses: config/analyses.tsv
 
-# put full paths in here, dont use '~' for your home directory, not sure why
+# put full paths in here, dont use '~' for your home directory (not sure why)
 PATHS:
     SLiM: /usr/bin/slim
     BCFTOOLS: /home/kele/programs/bcftools/bcftools-1.11/bcftools
@@ -11,7 +10,6 @@ PATHS:
     RFMix2: programs/RFmix2/rfmix
     ELAI: /path/to/file
     MOSAIC: programs/MOSAIC/MOSAIC/mosaic.R
-
 
 diagnostic_plots: True
 
