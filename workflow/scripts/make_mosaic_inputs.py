@@ -106,9 +106,6 @@ subprocess.run(
 	f"zcat {prefix+'.hap.gz'} | tr -d ' ' > {prefix}", shell=True)
 
 
-
-
-
 # write snpfile
 gmap = pd.read_csv(plink_map, sep ='\t', header=None)
 gmap.columns = ['chr', 'rsID', 'cM', 'bp']
