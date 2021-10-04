@@ -8,9 +8,10 @@ rule add_geno_error:
 		index = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.witherror.vcf.gz.csi',
 	params:
 		bcftools = config['PATHS']['BCFTOOLS'],
+		ADD_ERR = config['PATHS']['ADD_ERR'],
 		gt_err = lambda w: units.loc[(w.sim_name, w.anal_name)].gt_err,
 	shell:
 		"""
-		java -jar /projects/browning/software/add-err.jar {input.gt_err} | gzip > {output.vcf}
+		zcat {input.gt} | java -jar {params.ADD_ERR} {params.gt_err} | bgzip > {output.vcf}
 		{params.bcftools} index {output.vcf}
 		"""

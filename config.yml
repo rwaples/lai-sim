@@ -5,11 +5,13 @@ analyses: config/analyses.tsv
 PATHS:
     SLiM: /usr/bin/slim
     BCFTOOLS: /home/kele/programs/bcftools/bcftools-1.11/bcftools
-    BEAGLE: programs/BEAGLE/beagle.29May21.d6d.jar
+    BEAGLE: programs/BEAGLE/beagle.28Jun21.220.jar
     RFMix: programs/RFmix/RFMix_v1.5.4/RunRFMix.py
     RFMix2: programs/RFmix2/rfmix
-    ELAI: /path/to/file
     MOSAIC: programs/MOSAIC/MOSAIC/mosaic.R
+    BMIX: programs/bmix/bmix.v42.jar
+    ADD_ERR: programs/add_err/add-err.jar
+    ELAI: /path/to/file
 
 diagnostic_plots: True
 

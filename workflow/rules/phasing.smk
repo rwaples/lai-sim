@@ -24,7 +24,7 @@ rule run_beagle:
 		"gt={input.gt} "
 		"map={input.map} "
 		"seed={params.seed} "
-		"out={params.prefix} 2>&1 | tee {log}"
+		"out={params.prefix} 2>&1 | tee {log} "
 
 		"""
 
