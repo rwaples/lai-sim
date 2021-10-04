@@ -4,7 +4,7 @@ rule la_and_vcf_done:
 		[f'results/local_ancestry/{u.model_name}/{u.sim_name}/{u.anal_name}.true_local_ancestry.site_matrix.npz' for u in units.itertuples()],
 		[f'results/local_ancestry/{u.model_name}/{u.sim_name}/{u.anal_name}.true_local_ancestry.samples.txt' for u in units.itertuples()],
 		[f'results/local_ancestry/{u.model_name}/{u.sim_name}/{u.anal_name}.la_true.vcf.gz' for u in units.itertuples()],
-		[f'results/local_ancestry/{u.model_name}/{u.sim_name}/{u.anal_name}.genotypes.vcf.gz' for u in units.itertuples()],
+		[f'results/local_ancestry/{u.model_name}/{u.sim_name}/{u.anal_name}.genotypes.witherror.vcf.gz' for u in units.itertuples()],
 
 
 rule write_vcfs:
@@ -29,11 +29,12 @@ rule write_vcfs:
 
 
 rule split_vcf:
+	# split vcfs after phasing
 	input:
-		vcf =  'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.vcf.gz',
-		samples = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.{sample_group}.txt'
+		vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.vcf.gz',
+		samples = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.{sample_group}.txt',
 	output:
-		vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.{sample_group}.vcf.gz',
+		vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.{sample_group}.vcf.gz',
 	params:
 		bcftools = config['PATHS']['BCFTOOLS']
 	shell:
@@ -44,15 +45,16 @@ rule split_vcf:
 
 rule split_bcf:
 	input:
-		vcf =  'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.vcf.gz',
+		vcf =  'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.vcf.gz',
 		samples = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.{sample_group}.txt'
 	output:
-		bcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.{sample_group}.bcf',
+		bcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.{sample_group}.bcf',
 	params:
 		bcftools = config['PATHS']['BCFTOOLS']
 	shell:
 		"""
-		{params.bcftools} view --samples-file {input.samples} --output {output.bcf} --output-type u {input.vcf}
+		{params.bcftools} view --samples-file {input.samples} --output {output.bcf} --output-type b {input.vcf}
+		{params.bcftools} index {output.bcf}
 		"""
 
 

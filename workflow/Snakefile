@@ -2,6 +2,7 @@ snakemake.utils.min_version("6.3")
 configfile: "config.yml"
 include: "rules/common.smk"
 include: "rules/install.smk"
+include: "rules/genotype_error.smk"
 include: "rules/phasing.smk"
 include: "rules/simulate.smk"
 include: "rules/la_and_vcf.smk"
@@ -88,7 +89,7 @@ rule run_mosaic:
 rule make_mosaic_input:
 	input:
 		target_phased_vcf='results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.target_inds.vcf.gz',
-		reference_vcf='results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.reference_inds.vcf.gz',
+		reference_vcf='results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.reference_inds.vcf.gz',
 		plink_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.plink_map.txt',
 		site_ts = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.filter.tsz',
 	output:
@@ -141,7 +142,7 @@ rule make_rfmix_input:
 rule run_RFMix2:
 	input:
 		target_vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.target_inds.vcf.gz',
-		reference_vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.reference_inds.vcf.gz',
+		reference_vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.reference_inds.vcf.gz',
 		sample_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.sample_map.txt',
 		genetic_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genetic_map.txt',
 	output:

@@ -17,7 +17,7 @@ chrom_id = str(snakemake.params.chrom_id)
 nind_ref = int(snakemake.params.nind_ref)
 chr_len = float(snakemake.params.chr_len)
 
-# remove the existing 'individuals'  a ts for exporting with inds removed
+# remove the existing 'individuals', make a ts for exporting with inds removed
 ts = tszip.decompress(site_ts)
 tables = ts.tables
 tables.individuals.clear()

@@ -23,3 +23,4 @@ Rscript ./mosaic.R simulated ./example_data/ -c 18:22 -n 3 -p "English Mandenka"
 
 # TODO
 	- ELAI
+	- add seed to add-err.jar
