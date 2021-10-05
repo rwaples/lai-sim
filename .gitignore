@@ -1,5 +1,5 @@
 src/
-env/
+env*/
 r-env/
 env-*
 programs/*

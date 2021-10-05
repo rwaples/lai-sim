@@ -40,7 +40,7 @@ export_ts = tables.tree_sequence()
 
 ind_labels = make_ind_labels(export_ts)
 
-with open(base_path + '.genotypes.vcf', "w") as vcf_file:
+with open(os.path.join(base_path, 'genotypes.vcf'), "w") as vcf_file:
 	export_ts.write_vcf(
 		vcf_file,
 		ploidy=2,
@@ -55,18 +55,18 @@ nref_total = (npops-1) * nind_ref
 
 ## write file mapping inds to populations
 # only for the reference individuals
-with open(base_path + '.sample_map.txt', 'w') as OUTFILE:
+with open(os.path.join(base_path, 'sample_map.txt'), 'w') as OUTFILE:
     for ind_string in ind_labels[:nref_total]:
         pop = ind_string.split('-')[0]
         OUTFILE.write(f'{ind_string}\t{pop}\n')
 
 ## write files with inds from the reference and admixed populations
-with open(base_path + '.reference_inds.txt', 'w') as OUTFILE:
+with open(os.path.join(base_path, 'reference_inds.txt'), 'w') as OUTFILE:
     for ind_string in ind_labels[:nref_total]:
         #pop = ind_string.split('-')[0]
         OUTFILE.write(f'{ind_string}\n')
 
-with open(base_path + '.target_inds.txt', 'w') as OUTFILE:
+with open(os.path.join(base_path, 'target_inds.txt'), 'w') as OUTFILE:
     for ind_string in ind_labels[nref_total:]:
         #pop = ind_string.split('-')[0]
         OUTFILE.write(f'{ind_string}\n')
@@ -76,15 +76,15 @@ with open(base_path + '.target_inds.txt', 'w') as OUTFILE:
 species = stdpopsim.get_species("HomSap")
 contig = species.get_contig(chrom_id, length_multiplier=chr_len)
 rate = contig.recombination_map.get_rates()[0] * 100 # convert to cM
-vcf_df = pd.read_csv(base_path + '.genotypes.vcf', comment='#', sep='\t', header=None)
+vcf_df = pd.read_csv(os.path.join(base_path, 'genotypes.vcf'), comment='#', sep='\t', header=None)
 positions = vcf_df[1].tolist()
 del vcf_df
 cM_pos = [pos*rate for pos in positions]
-with open(base_path + '.genetic_map.txt', 'w') as OUTFILE:
+with open(os.path.join(base_path, 'genetic_map.txt'), 'w') as OUTFILE:
     for i in range(len(positions)):
         OUTFILE.write(f"{chrom_id}\t{positions[i]}\t{cM_pos[i]:0.6f}\n")
 
-with open(base_path + '.plink_map.txt', 'w') as OUTFILE:
+with open(os.path.join(base_path, 'plink_map.txt'), 'w') as OUTFILE:
     for i in range(len(positions)):
         OUTFILE.write(f"{chrom_id}\t.\t{cM_pos[i]:0.6f}\t{positions[i]}\n")
 
@@ -112,7 +112,7 @@ header = vcfheader(
 	ind_labels=ind_labels
 	)
 
-output_VCF = base_path + ".la_true.vcf"
+output_VCF = os.path.join(base_path, 'la_true.vcf')
 with open(output_VCF, 'w') as vcf:
     vcf.write(header)
 
@@ -124,31 +124,31 @@ subprocess.run([
 	snakemake.config['PATHS']['BCFTOOLS'],
 	'view',
 	'-O', 'z',
-	'--output', f'{base_path}.genotypes.vcf.gz',
-	f'{base_path}.genotypes.vcf'
+	'--output', f'{os.path.join(base_path, "genotypes.vcf.gz")}',
+	f'{os.path.join(base_path, "genotypes.vcf")}'
 	])
 
 subprocess.run([
 	snakemake.config['PATHS']['BCFTOOLS'],
 	'view',
 	'-O', 'z',
-	'--output', f'{base_path}.la_true.vcf.gz',
-	f'{base_path}.la_true.vcf'
+	'--output', f'{os.path.join(base_path, "la_true.vcf.gz")}',
+	f'{os.path.join(base_path, "la_true.vcf")}'
 	])
 
 
 subprocess.run([
 	snakemake.config['PATHS']['BCFTOOLS'],
 	'index',
-	f'{base_path}.genotypes.vcf.gz'
+	f'{os.path.join(base_path, "genotypes.vcf.gz")}'
 	])
 
 subprocess.run([
 	snakemake.config['PATHS']['BCFTOOLS'],
 	'index',
-	f'{base_path}.la_true.vcf.gz'
+	f'{os.path.join(base_path, "la_true.vcf.gz")}'
 	])
 
 ## delete the raw vcf files
-os.remove(f'{base_path}.genotypes.vcf')
-os.remove(f'{base_path}.la_true.vcf')
+os.remove(f'{os.path.join(base_path, "genotypes.vcf")}')
+os.remove(f'{os.path.join(base_path, "la_true.vcf")}')

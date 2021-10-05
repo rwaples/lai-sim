@@ -13,19 +13,23 @@ chr_len = float(snakemake.params.chr_len)
 mutation_rate = float(snakemake.params.mutation_rate)
 sim_seed = int(snakemake.params.sim_seed)
 
-assert(mutation_rate < 1e-7) # make sure mutation rate is small
+assert(mutation_rate <= 1e-7) # make sure mutation rate is not crazy high
 
 ts = tskit.load(ts_path)
 
 species = stdpopsim.get_species("HomSap")
 contig = species.get_contig(chr, length_multiplier=chr_len)
 
+
+# recombination map used for recapitation
 recapmap = msprime.RecombinationMap(
     positions=[0.0, ts.get_sequence_length()],
     rates=contig.recombination_map.get_rates(),
     num_loci=int(ts.get_sequence_length())
 )
 
+
+# recapitate
 coalesced_ts = msprime.simulate(
     Ne=ancestral_Ne,
     from_ts=ts,
@@ -35,5 +39,8 @@ coalesced_ts = msprime.simulate(
     migration_matrix=None
 )
 
+
+# add mutations
 mut_ts = msprime.mutate(tree_sequence=coalesced_ts, random_seed=sim_seed, rate=mutation_rate)
+# compress the ts with tszip
 tszip.compress(mut_ts, out_path)

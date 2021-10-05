@@ -1,13 +1,13 @@
 rule sims_done:
 	input:
-		[f'results/simulations/{s.model_name}/{s.sim_name}/full.tsz' for s in simulations.itertuples()]
+		[f'results/{s.model_name}/{s.sim_name}/full.tsz' for s in simulations.itertuples()]
 
 
 rule recap_and_mutate:
 	input:
-		"results/simulations/{model_name}/{sim_name}/from_slim.trees",
+		"results/{model_name}/{sim_name}/from_slim.trees",
 	output:
-		'results/simulations/{model_name}/{sim_name}/full.tsz'
+		'results/{model_name}/{sim_name}/full.tsz'
 	params:
 		# params are used by the script
 		ancestral_Ne = lambda w: simulations.loc[w.sim_name].ancestral_Ne,
@@ -21,15 +21,16 @@ rule recap_and_mutate:
 
 rule simulate_admixture:
 	output:
-		"results/simulations/{model_name}/{sim_name}/from_slim.trees"
+		"results/{model_name}/{sim_name}/from_slim.trees"
 	log:
-		"results/simulations/{model_name}/{sim_name}/from_slim.trees.log"
+		"results/{model_name}/{sim_name}/from_slim.trees.log"
 	params:
 		slim_path = config["PATHS"]["SLiM"],
 		sim_seed = lambda w: simulations.loc[w.sim_name].sim_seed,
 		slim_script = lambda w: simulations.loc[w.sim_name].slim_script_path,
 	shell:
 		"""{params.slim_path} -seed {params.sim_seed} -d 'trees_file="{output}"' {params.slim_script} 2>&1 | tee {log}"""
+
 
 rule slim_scripts_present:
 	input:

@@ -2,10 +2,10 @@ configfile: "./config.yml"
 
 rule add_geno_error:
 	input:
-		gt = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.vcf.gz',
+		gt = 'results/{model_name}/{sim_name}/{anal_name}/genotypes.vcf.gz',
 	output:
-		vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.witherror.vcf.gz',
-		index = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genotypes.witherror.vcf.gz.csi',
+		vcf = 'results/{model_name}/{sim_name}/{anal_name}/genotypes.witherror.vcf.gz',
+		index = 'results/{model_name}/{sim_name}/{anal_name}/genotypes.witherror.vcf.gz.csi',
 	params:
 		bcftools = config['PATHS']['BCFTOOLS'],
 		ADD_ERR = config['PATHS']['ADD_ERR'],

@@ -30,11 +30,5 @@ mapping = np.load(file=node_mapping)
 site_matrix, sample_order = get_la_mat(ts, df=local_ancestry_df, mapping=mapping)
 
 
-
-
-
-
-
-
-np.savez_compressed(file = site_matrix_path, arr = site_matrix)
+np.savez_compressed(file=site_matrix_path, arr=site_matrix)
 np.savetxt(fname=samples_path, X=sample_order, fmt='%i', delimiter="\t")

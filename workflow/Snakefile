@@ -2,10 +2,11 @@ snakemake.utils.min_version("6.3")
 configfile: "config.yml"
 include: "rules/common.smk"
 include: "rules/install.smk"
-include: "rules/genotype_error.smk"
-include: "rules/phasing.smk"
 include: "rules/simulate.smk"
 include: "rules/la_and_vcf.smk"
+include: "rules/genotype_error.smk"
+include: "rules/phasing.smk"
+include: "rules/analysis.smk"
 include: "rules/diagnostic_plots.smk"
 wildcard_constraints:
     anal_name="\w+"
@@ -13,183 +14,25 @@ wildcard_constraints:
 
 rule short_run:
 	input:
-		rfmix2 = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}.rfmix2.fb.tsv' for u in units.query('anal_name == "short_run"').itertuples()],
-		rfmix2_diploid = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}/diploid_la.hdf' for u in units.query('anal_name == "short_run"').itertuples()],
-		even_more = 'results/MOSAIC/AmericanAdmixture_4B11/AA_42/short_run/la_probabilites.3way_1-2_22-22_1204_60_0.99_100.RData'
+		rfmix2 = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix2/rfmix2.fb.tsv' for u in units.query('anal_name == "short_run"').itertuples()],
+		rfmix2_diploid = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix2/diploid_la.hdf' for u in units.query('anal_name == "short_run"').itertuples()],
+		even_more = 'results/AmericanAdmixture_4B11/AA_42/short_run/MOSAIC/la_probabilites.3way_1-2_22-22_1204_60_0.99_100.RData'
 
 
 rule long_run:
 	input:
-		rfmix2 = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}.rfmix2.fb.tsv' for u in units.query('anal_name == "long_run"').itertuples()],
-		rfmix2_diploid = [f'results/RFMix2/{u.model_name}/{u.sim_name}/{u.anal_name}/diploid_la.hdf' for u in units.query('anal_name == "long_run"').itertuples()],
-		even_more = 'results/MOSAIC/AmericanAdmixture_4B11/AA_42/long_run/la_probabilites.3way_1-200_22-22_1600_60_0.99_100.RData'
+		rfmix2 = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix2/rfmix2.fb.tsv' for u in units.query('anal_name == "long_run"').itertuples()],
+		rfmix2_diploid = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix2/diploid_la.hdf' for u in units.query('anal_name == "long_run"').itertuples()],
+		even_more = 'results/AmericanAdmixture_4B11/AA_42/long_run/MOSAIC/la_probabilites.3way_1-200_22-22_1600_60_0.99_100.RData'
 
 
 rule diagnostic_plots:
 	input:
-		pop_coal_time = [f'results/DIAGNOSTIC/{u.model_name}/{u.sim_name}/{u.anal_name}/pop_coal_time.png' for u in units.itertuples()],
-		pairwise_Fst = [f'results/DIAGNOSTIC/{u.model_name}/{u.sim_name}/{u.anal_name}/pairwise_Fst.png' for u in units.itertuples()],
-		true_local_ancestry = [f'results/DIAGNOSTIC/{u.model_name}/{u.sim_name}/{u.anal_name}/true_local_ancestry.png' for u in units.itertuples()]
-
-
-rule export_mosaic:
-	input:
-		la_results = "results/MOSAIC/{model_name}/{sim_name}/{anal_name}/MOSAIC_RESULTS/localanc_admixed_{nsource}way_1-{naming_mess}.RData",
-		model_results = "results/MOSAIC/{model_name}/{sim_name}/{anal_name}/MOSAIC_RESULTS/admixed_{nsource}way_1-{naming_mess}.RData",
-	output:
-		path = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/la_probabilites.{nsource}way_1-{naming_mess}.RData',
-	params:
-		input_dir = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/',
-	script:
-		"scripts/export_mosaic_results.R"
-
-
-rule summarize_rfmix2:
-	input:
-		inferred_la = 'results/RFMix2/{model_name}/{sim_name}/{anal_name}.rfmix2.fb.tsv'
-	output:
-		diploid = 'results/RFMix2/{model_name}/{sim_name}/{anal_name}/diploid_la.hdf',
-	params:
-		threshold = 0.9
-	script:
-		"scripts/summarize_rfmix2.py"
+		pop_coal_time = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTIC/pop_coal_time.png' for u in units.itertuples()],
+		pairwise_Fst = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTIC/pairwise_Fst.png' for u in units.itertuples()],
+		true_local_ancestry = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTIC/true_local_ancestry.png' for u in units.itertuples()]
 
 
 rule test_bmix:
 	input:
-		[f'results/bmix/{u.model_name}/{u.sim_name}/{u.anal_name}.bmix.anc.vcf.gz' for u in units.query('anal_name == "short_run"').itertuples()],
-
-rule run_bmix:
-	input:
-		target_vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.target_inds.vcf.gz',
-		reference_vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.reference_inds.vcf.gz',
-		sample_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.sample_map.txt',
-		genetic_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.plink_map.txt',
-	output:
-		prefix = 'results/bmix/{model_name}/{sim_name}/{anal_name}.bmix.anc.vcf.gz',
-	params:
-		BMIX = config['PATHS']['BMIX'],
-		prefix = 'results/bmix/{model_name}/{sim_name}/{anal_name}.bmix',
-		nthreads = 8,
-		seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed,
-	shell:
-		"java -Xmx30g -jar {params.BMIX} "
-		"ref={input.reference_vcf} "
-		"ref-panel={input.sample_map} "
-		"gt={input.target_vcf} "
-		"map={input.genetic_map} "
-		"out={params.prefix} "
-		"probs=true "
-		"nthreads={params.nthreads} "
-		"seed={params.seed} "
-
-rule run_mosaic:
-	input:
-		'programs/MOSAIC/MOSAIC/mosaic.R',
-		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixedgenofile.22'
-	output:
-		la_results = "results/MOSAIC/{model_name}/{sim_name}/{anal_name}/MOSAIC_RESULTS/localanc_admixed_{nsource}way_1-{naming_mess}.RData",
-		model_results = "results/MOSAIC/{model_name}/{sim_name}/{anal_name}/MOSAIC_RESULTS/admixed_{nsource}way_1-{naming_mess}.RData",
-	log:
-		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/mosaic.{nsource}way_1-{naming_mess}.log'
-	params:
-		mosaic = config['PATHS']['MOSAIC'],
-		input_folder = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/',
-		results_folder = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/',
-		seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed,
-		nthreads = 8,
-	shell:
-		"""
-		Rscript {params.mosaic} --seed {params.seed} --maxcores {params.nthreads} --chromosomes 22:22 --ancestries 3 admixed {params.input_folder} 2>&1 | tee {log}
-		# move the results into the results_folder
-		mkdir -p {params.results_folder}/MOSAIC_RESULTS
-		mkdir -p {params.results_folder}/MOSAIC_PLOTS
-		mkdir -p {params.results_folder}/FREQS
-		mv MOSAIC_RESULTS/* {params.results_folder}/MOSAIC_RESULTS
-		mv MOSAIC_PLOTS/* {params.results_folder}/MOSAIC_PLOTS
-		mv FREQS/* {params.results_folder}/FREQS
-		rmdir MOSAIC_RESULTS
-		rmdir MOSAIC_PLOTS
-		rmdir FREQS
-		"""
-
-
-rule make_mosaic_input:
-	input:
-		target_phased_vcf='results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.target_inds.vcf.gz',
-		reference_vcf='results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.reference_inds.vcf.gz',
-		plink_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.plink_map.txt',
-		site_ts = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.filter.tsz',
-	output:
-		'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixedgenofile.{CHR}'
-	params:
-		folder = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input',
-		chrom_id = lambda w: units.loc[(w.sim_name, w.anal_name)].chr,
-		nind_ref = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_ref,
-	script:
-		'scripts/make_mosaic_inputs.py'
-
-
-rule run_RFMix:
-	input:
-		#alleles_file = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.alleles_file.txt',
-		alleles_file = 'results/MOSAIC/{model_name}/{sim_name}/{anal_name}/input/admixedgenofile.22',
-		classes_file = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.classes_file.txt',
-		positions_file = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.positions_file.txt',
-	output:
-		viterbi = 'results/RFMix/{model_name}/{sim_name}/{anal_name}.0.Viterbi.txt'
-	params:
-		rfmix = config['PATHS']['RFMix'],
-		prefix = 'results/RFMix/{model_name}/{sim_name}/{anal_name}',
-		n_threads = 8,
-	shell:
-		"""
-		cd programs/RFmix/RFMix_v1.5.4
-		"""
-		"python2 RunRFMix.py TrioPhased "
-		"--num-threads {params.n_threads} "
-		"../../../{input.alleles_file} ../../../{input.classes_file} ../../../{input.positions_file} "
-		"-o ../../../{params.prefix} "
-
-
-rule make_rfmix_input:
-	input:
-		site_ts = 'results/simulations/{model_name}/{sim_name}/{anal_name}.sample.filter.tsz',
-		genetic_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genetic_map.txt',
-	output:
-		alleles_file = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.alleles_file.txt',
-		classes_file = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.classes_file.txt',
-		positions_file = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.positions_file.txt',
-	params:
-		nind_ref = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_ref,
-		nind_admixed = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_admixed,
-	script:
-		'scripts/make_rfmix_input.py'
-
-
-rule run_RFMix2:
-	input:
-		target_vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.target_inds.vcf.gz',
-		reference_vcf = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.phased.reference_inds.vcf.gz',
-		sample_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.sample_map.txt',
-		genetic_map = 'results/local_ancestry/{model_name}/{sim_name}/{anal_name}.genetic_map.txt',
-	output:
-		fb = 'results/RFMix2/{model_name}/{sim_name}/{anal_name}.rfmix2.fb.tsv',
-	log:
-		'results/RFMix2/{model_name}/{sim_name}/{anal_name}.rfmix2.log',
-	params:
-		rfmix2 = config['PATHS']['RFMix2'],
-		bcftools = config['PATHS']['BCFTOOLS'],
-		output = 'results/RFMix2/{model_name}/{sim_name}/{anal_name}.rfmix2',
-		nthreads = 8,
-		chr = lambda w: simulations.loc[w.sim_name].chr,
-		seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed,
-	shell:
-		"""
-		export PATH="{params.bcftools}:$PATH"
-		"""
-		"{params.rfmix2} -f {input.target_vcf} -r {input.reference_vcf} "
-		"-m {input.sample_map} -g {input.genetic_map} -o {params.output} "
-		"--reanalyze-reference -e 5 "
-		"--n-threads={params.nthreads} --chromosome={params.chr} "
-		"--random-seed={params.seed} 2>&1 | tee {log}"
+		[f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/bmix/bmix.anc.vcf.gz' for u in units.query('anal_name == "short_run"').itertuples()],
