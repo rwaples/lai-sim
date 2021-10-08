@@ -14,6 +14,7 @@
 `snakemake --dag | dot | display`
 
 # re-install MOSAIC
+## needs to be run each time a new env is made
 snakemake --cores 1 --force install_mosaic
 
 # test MOSAIC:

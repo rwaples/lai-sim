@@ -3,6 +3,7 @@ import msprime
 import stdpopsim
 import tszip
 import sys
+import numpy as np
 
 
 ts_path = str(snakemake.input[0])
@@ -12,6 +13,7 @@ chr = str(snakemake.params.chr)
 chr_len = float(snakemake.params.chr_len)
 mutation_rate = float(snakemake.params.mutation_rate)
 sim_seed = int(snakemake.params.sim_seed)
+admixture_time = int(snakemake.params.admixture_time)
 
 assert(mutation_rate <= 1e-7) # make sure mutation rate is not crazy high
 
@@ -38,6 +40,42 @@ coalesced_ts = msprime.simulate(
     population_configurations=[msprime.PopulationConfiguration() for p in ts.populations()],
     migration_matrix=None
 )
+
+# Edit the ts so that only nodes at time=0 are marked as 'samples'
+tables = coalesced_ts.tables
+newnodes = tables.nodes.copy()
+
+flags = tables.nodes.flags
+assert flags.sum() == coalesced_ts.num_samples
+
+flags[tables.nodes.time == admixture_time] = 0
+assert flags.sum() == np.intersect1d(
+                    coalesced_ts.samples(),
+                    np.where(tables.nodes.asdict()['time']==0)[0]
+                ).size
+
+newnodes.set_columns(
+    time = newnodes.time,
+    flags=flags,
+    population=newnodes.population,
+    individual=newnodes.individual,
+    metadata=newnodes.metadata,
+    metadata_offset=newnodes.metadata_offset,
+)
+
+tables.nodes.clear()
+
+for row in newnodes:
+    tables.nodes.add_row(flags=row.flags,
+                         time=row.time,
+                         population=row.population,
+                         individual=row.individual,
+                         metadata=row.metadata)
+
+coalesced_ts = tables.tree_sequence()
+del newnodes
+del tables
+del flags
 
 
 # add mutations

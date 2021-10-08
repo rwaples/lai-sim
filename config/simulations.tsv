@@ -1,3 +1,3 @@
-sim_name	model_name	sim_seed	slim_script_path	ancestral_Ne	mutation_rate	chr	chr_len
-AA_42	AmericanAdmixture_4B11	42	workflow/scripts/sim/SLiM/AmericanAdmixture_4B11.slim	7310	1.44E-08	chr22	1.0
-AA_52	AmericanAdmixture_4B11	52	workflow/scripts/sim/SLiM/AmericanAdmixture_4B11.slim	7310	1.44E-08	chr22	1.0
+sim_name	model_name	sim_seed	slim_script_path	ancestral_Ne	mutation_rate	chr	chr_len	admixture_time
+AA_42	AmericanAdmixture_4B11	42	workflow/scripts/sim/SLiM/AmericanAdmixture_4B11.slim	7310	1.44E-08	chr22	1.0	20
+AA_52	AmericanAdmixture_4B11	52	workflow/scripts/sim/SLiM/AmericanAdmixture_4B11.slim	7310	1.44E-08	chr22	1.0	20

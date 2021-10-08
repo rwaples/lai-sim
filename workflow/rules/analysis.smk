@@ -49,6 +49,7 @@ rule run_bmix:
 		"probs=true "
 		"nthreads={params.nthreads} "
 		"seed={params.seed} "
+		"min-maf=0 "
 
 
 rule run_mosaic:

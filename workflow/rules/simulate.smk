@@ -9,12 +9,12 @@ rule recap_and_mutate:
 	output:
 		'results/{model_name}/{sim_name}/full.tsz'
 	params:
-		# params are used by the script
 		ancestral_Ne = lambda w: simulations.loc[w.sim_name].ancestral_Ne,
 		chr = lambda w: simulations.loc[w.sim_name].chr,
 		chr_len = lambda w: simulations.loc[w.sim_name].chr_len,
 		mutation_rate = lambda w: simulations.loc[w.sim_name].mutation_rate,
 		sim_seed = lambda w: simulations.loc[w.sim_name].sim_seed,
+		admixture_time = lambda w: simulations.loc[w.sim_name].admixture_time,
 	script:
 		"../scripts/recap_and_mutate.py"
 

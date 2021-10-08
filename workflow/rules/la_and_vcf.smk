@@ -24,6 +24,7 @@ rule write_vcfs:
 		chrom_id = lambda w: units.loc[(w.sim_name, w.anal_name)].chr,
 		nind_ref = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_ref,
 		chr_len = lambda w: units.loc[w.sim_name, w.anal_name].chr_len,
+		target_pop = lambda w: units.loc[w.sim_name, w.anal_name].target_pop,
 	script:
 		'../scripts/write_vcfs.py'
 
@@ -68,7 +69,9 @@ rule true_local_ancestry:
 		site_matrix = 'results/{model_name}/{sim_name}/{anal_name}/true_local_ancestry.site_matrix.npz',
 		samples = 'results/{model_name}/{sim_name}/{anal_name}/true_local_ancestry.samples.txt',
 	params:
-		admixture_time = lambda w: units.loc[(w.sim_name, w.anal_name)].admixture_time
+		admixture_time = lambda w: units.loc[(w.sim_name, w.anal_name)].admixture_time,
+		target_pop = lambda w: units.loc[(w.sim_name, w.anal_name)].target_pop,
+		nind_admixed = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_admixed,
 	script:
 		'../scripts/true_local_ancestry.py'
 
@@ -82,7 +85,7 @@ rule sample_sites:
 		nind_admixed = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_admixed,
 		nind_ref = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_ref,
 		anal_seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed,
-		admixture_time = lambda w: units.loc[(w.sim_name, w.anal_name)].admixture_time
+		admixture_time = lambda w: units.loc[(w.sim_name, w.anal_name)].admixture_time,
 	script:
 		"../scripts/sample.py"
 
@@ -96,6 +99,6 @@ rule filter_inds:
 	params:
 		MAC_filter = lambda w: units.loc[(w.sim_name, w.anal_name)].MAC_filter,
 		max_snps = lambda w: units.loc[(w.sim_name, w.anal_name)].max_snps,
-		anal_seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed
+		anal_seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed,
 	script:
 		"../scripts/filter.py"

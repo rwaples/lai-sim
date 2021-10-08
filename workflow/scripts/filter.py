@@ -1,7 +1,7 @@
 import tskit
 import tszip
 import numpy as np
-from common.utils import strip_MAC, strip_adjacent, downsample_snps
+from common.utils import strip_MAC, strip_adjacent_sites, downsample_snps
 
 ts_path = str(snakemake.input[0])
 ts_out = str(snakemake.output.tsz)
@@ -17,10 +17,10 @@ simple_ts, node_mapping = ts.simplify(
 	map_nodes=True,
 	filter_populations=False,
 	filter_individuals=True,
-	filter_sites=False,
+	filter_sites=True,
 )
 simple_ts = strip_MAC(simple_ts, MAC=MAC_filter)
-simple_ts = strip_adjacent(simple_ts, dist=1.5)
+simple_ts = strip_adjacent_sites(simple_ts, dist=1.5)
 simple_ts = downsample_snps(simple_ts, nsnps=max_snps, seed=anal_seed, fail=True)
 
 tszip.compress(simple_ts, ts_out)
