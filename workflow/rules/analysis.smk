@@ -36,6 +36,7 @@ rule run_bmix:
 		'results/{model_name}/{sim_name}/{anal_name}/bmix/bmix.anc.vcf.gz',
 	params:
 		BMIX = config['PATHS']['BMIX'],
+		bcftools = config['PATHS']['BCFTOOLS'],
 		prefix = 'results/{model_name}/{sim_name}/{anal_name}/bmix/bmix',
 		nthreads = 8,
 		seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed,
@@ -50,6 +51,13 @@ rule run_bmix:
 		"nthreads={params.nthreads} "
 		"seed={params.seed} "
 		"min-maf=0 "
+
+		"""
+
+		{params.bcftools} index {params.prefix}.vcf.gz
+		"""
+
+
 
 
 rule run_mosaic:

@@ -9,7 +9,7 @@ PATHS:
     RFMix: programs/RFmix/RFMix_v1.5.4/RunRFMix.py
     RFMix2: programs/RFmix2/rfmix
     MOSAIC: programs/MOSAIC/MOSAIC/mosaic.R
-    BMIX: programs/bmix/bmix.v42.jar
+    BMIX: programs/bmix/bmix.v48.jar
     ADD_ERR: programs/add_err/add-err.jar
     ELAI: /path/to/file
 
