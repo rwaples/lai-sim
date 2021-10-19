@@ -34,6 +34,8 @@ rule run_bmix:
 		genetic_map = 'results/{model_name}/{sim_name}/{anal_name}/plink_map.txt',
 	output:
 		'results/{model_name}/{sim_name}/{anal_name}/bmix/bmix.anc.vcf.gz',
+	benchmark:
+		'results/{model_name}/{sim_name}/{anal_name}/benchmark/run_bmix.tsv',
 	params:
 		BMIX = config['PATHS']['BMIX'],
 		bcftools = config['PATHS']['BCFTOOLS'],
@@ -54,10 +56,8 @@ rule run_bmix:
 
 		"""
 
-		{params.bcftools} index {params.prefix}.vcf.gz
+		{params.bcftools} index {params.prefix}.anc.vcf.gz
 		"""
-
-
 
 
 rule run_mosaic:
@@ -69,6 +69,8 @@ rule run_mosaic:
 		model_results = "results/{model_name}/{sim_name}/{anal_name}/MOSAIC/admixed_{nsource}way_1-{naming_mess}.RData",
 	log:
 		'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/mosaic.{nsource}way_1-{naming_mess}.log'
+	benchmark:
+		'results/{model_name}/{sim_name}/{anal_name}/benchmark/run_mosaic.{nsource}way_1-{naming_mess}.tsv',
 	params:
 		mosaic = config['PATHS']['MOSAIC'],
 		input_folder = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/input/',
@@ -114,7 +116,9 @@ rule run_RFMix:
 		classes_file = 'results/{model_name}/{sim_name}/{anal_name}/classes_file.txt',
 		positions_file = 'results/{model_name}/{sim_name}/{anal_name}/positions_file.txt',
 	output:
-		viterbi = 'results/{model_name}/{sim_name}/{anal_name}/RFMix/0.Viterbi.txt'
+		viterbi = 'results/{model_name}/{sim_name}/{anal_name}/RFMix/0.Viterbi.txt',
+	benchmark:
+		'results/{model_name}/{sim_name}/{anal_name}/benchmark/run_RFMix.tsv',
 	params:
 		rfmix = config['PATHS']['RFMix'],
 		prefix = 'results/{model_name}/{sim_name}/{anal_name}/RFMix/RFMix',
@@ -154,6 +158,8 @@ rule run_RFMix2:
 		fb = 'results/{model_name}/{sim_name}/{anal_name}/RFMix2/rfmix2.fb.tsv',
 	log:
 		'results/{model_name}/{sim_name}/{anal_name}/RFMix2/rfmix2.log',
+	benchmark:
+			'results/{model_name}/{sim_name}/{anal_name}/benchmark/run_RFMix2.tsv',
 	params:
 		rfmix2 = config['PATHS']['RFMix2'],
 		bcftools = config['PATHS']['BCFTOOLS'],
