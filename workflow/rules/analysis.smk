@@ -159,7 +159,7 @@ rule run_RFMix2:
 	log:
 		'results/{model_name}/{sim_name}/{anal_name}/RFMix2/rfmix2.log',
 	benchmark:
-			'results/{model_name}/{sim_name}/{anal_name}/benchmark/run_RFMix2.tsv',
+		'results/{model_name}/{sim_name}/{anal_name}/benchmark/run_RFMix2.tsv',
 	params:
 		rfmix2 = config['PATHS']['RFMix2'],
 		bcftools = config['PATHS']['BCFTOOLS'],

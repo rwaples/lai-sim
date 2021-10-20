@@ -13,8 +13,9 @@
 # view a graph of the directed acyclic graph (DAG) of the pipeline
 `snakemake --dag | dot | display`
 
-# re-install MOSAIC
+# patch MOSAIC to allow random number seeds
 ## needs to be run each time a new env is made
+## patches the R code, allowing the passing of a random seed to the mosaic executable
 `snakemake --cores 1 --force install_mosaic`
 
 # test MOSAIC:
@@ -24,7 +25,10 @@
 # Benchmarking by snakemake benchmark:
 `see: https://stackoverflow.com/questions/46813371/meaning-of-the-benchmark-variables-in-snakemake`
 
+
+
 # TODO
-	- ELAI
+	- remove indexing step from run_bmix (due to benchmarking)
+	- generate a text table with running times for each analysis.
 	- add seed to add-err.jar
 	- update version of beagle
