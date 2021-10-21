@@ -4,6 +4,7 @@ model_results = snakemake@input[["model_results"]]
 la_results = snakemake@input[["la_results"]]
 mosaic_input_dir = snakemake@params[["input_dir"]]
 output_path = snakemake@output[["path"]]
+simple_output =  snakemake@params[["simple_output"]]
 
 load(model_results)
 load(la_results)
@@ -14,7 +15,7 @@ dims = dim(local_pos[[1]])
 # convert to array and then export
 arr = array(unlist(local_pos, use.names=FALSE), dims)
 save(arr, file = output_path)
-
+#save(arr, file = simple_output)
 
 
 

@@ -3,6 +3,22 @@ wildcard_constraints:
 	anal_name="\w+"
 
 
+rule get_R2_score:
+	input:
+		true_la = 'results/{model_name}/{sim_name}/{anal_name}/true_local_ancestry.site_matrix.npz',
+		mosaic_la = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/la_probs.RData',
+		rfmix2_la = 'results/{model_name}/{sim_name}/{anal_name}/RFMix2/rfmix2.fb.tsv',
+		bmix_la = 'results/{model_name}/{sim_name}/{anal_name}/bmix/bmix.anc.vcf.gz',
+	output:
+		R2_anc = 'results/{model_name}/{sim_name}/{anal_name}/SUMMARY/R2_score.ancestry.tsv',
+		R2_ind = 'results/{model_name}/{sim_name}/{anal_name}/SUMMARY/R2_score.individuals.tsv',
+	params:
+		bcftools = config['PATHS']['BCFTOOLS'],
+		nsource = lambda w: units.loc[(w.sim_name, w.anal_name)].nsource,
+	script:
+		"../scripts/get_R2_score.py"
+
+
 rule export_mosaic:
 	input:
 		la_results = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/localanc_admixed_{nsource}way_1-{naming_mess}.RData',
@@ -11,13 +27,35 @@ rule export_mosaic:
 		path = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/la_probabilites.{nsource}way_1-{naming_mess}.RData',
 	params:
 		input_dir = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/input/',
+		simple_output = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/la_rename.RData',
 	script:
 		"../scripts/export_mosaic_results.R"
 
 
+def generate_mosaic_name(wildcards):
+	import glob
+	#check = checkpoints.export_mosaic.get(**wildcards)
+	model_name = wildcards.model_name
+	sim_name = wildcards.sim_name
+	anal_name = wildcards.anal_name
+	#nsource = check.nsource
+	#naming_mess = check.naming_mess
+	paths = glob.glob(f'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/la_probabilites.*.RData')
+	assert len(paths)==1
+	return paths[0]
+
+rule mosiac_dummy:
+	input:
+		generate_mosaic_name
+	output:
+		'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/la_probs.RData',
+	shell:
+		"cp {input} {output}"
+
+
 rule summarize_rfmix2:
 	input:
-		inferred_la = 'results/{model_name}/{sim_name}/{anal_name}/RFMix2/rfmix2.fb.tsv'
+		inferred_la = 'results/{model_name}/{sim_name}/{anal_name}/RFMix2/rfmix2.fb.tsv',
 	output:
 		diploid = 'results/{model_name}/{sim_name}/{anal_name}/RFMix2/diploid_la.hdf',
 	params:
@@ -40,7 +78,7 @@ rule run_bmix:
 		BMIX = config['PATHS']['BMIX'],
 		bcftools = config['PATHS']['BCFTOOLS'],
 		prefix = 'results/{model_name}/{sim_name}/{anal_name}/bmix/bmix',
-		nthreads = 8,
+		nthreads = lambda w: units.loc[(w.sim_name, w.anal_name)].nthreads,
 		seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed,
 	shell:
 		"java -Xmx30g -jar {params.BMIX} "
@@ -76,14 +114,12 @@ rule run_mosaic:
 		input_folder = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/input/',
 		base_folder = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC',
 		seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed,
-		nthreads = 8,
+		nsource = lambda w: units.loc[(w.sim_name, w.anal_name)].nsource,
+		nthreads = lambda w: units.loc[(w.sim_name, w.anal_name)].nthreads,
 	shell:
 		"""
-		Rscript {params.mosaic} --seed {params.seed} --maxcores {params.nthreads} --chromosomes 22:22 --ancestries 3 admixed {params.input_folder} 2>&1 | tee {log}
-		# move the results into the results_folder
-		# mkdir -p {params.base_folder}/MOSAIC_RESULTS
-		# mkdir -p {params.base_folder}/MOSAIC_PLOTS
-		# mkdir -p {params.base_folder}/FREQS
+		Rscript {params.mosaic} --seed {params.seed} --maxcores {params.nthreads} --chromosomes 22:22 --ancestries {params.nsource} admixed {params.input_folder} 2>&1 | tee {log}
+		# move the results into the MOSAIC folder
 		mv MOSAIC_RESULTS/* {params.base_folder}
 		mv MOSAIC_PLOTS/* {params.base_folder}
 		mv FREQS/* {params.base_folder}
@@ -122,13 +158,13 @@ rule run_RFMix:
 	params:
 		rfmix = config['PATHS']['RFMix'],
 		prefix = 'results/{model_name}/{sim_name}/{anal_name}/RFMix/RFMix',
-		n_threads = 8,
+		nthreads = lambda w: units.loc[(w.sim_name, w.anal_name)].nthreads,
 	shell:
 		"""
 		cd programs/RFmix/RFMix_v1.5.4
 		"""
 		"python2 RunRFMix.py TrioPhased "
-		"--num-threads {params.n_threads} "
+		"--num-threads {params.nthreads} "
 		"../../../{input.alleles_file} ../../../{input.classes_file} ../../../{input.positions_file} "
 		"-o ../../../{params.prefix} "
 
@@ -164,7 +200,7 @@ rule run_RFMix2:
 		rfmix2 = config['PATHS']['RFMix2'],
 		bcftools = config['PATHS']['BCFTOOLS'],
 		output = 'results/{model_name}/{sim_name}/{anal_name}/RFMix2/rfmix2',
-		nthreads = 8,
+		nthreads = lambda w: units.loc[(w.sim_name, w.anal_name)].nthreads,
 		chr = lambda w: simulations.loc[w.sim_name].chr,
 		seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed,
 	shell:
@@ -173,6 +209,6 @@ rule run_RFMix2:
 		"""
 		"{params.rfmix2} -f {input.target_vcf} -r {input.reference_vcf} "
 		"-m {input.sample_map} -g {input.genetic_map} -o {params.output} "
-		"--reanalyze-reference -e 5 "
+		#"--reanalyze-reference -e 5 "
 		"--n-threads={params.nthreads} --chromosome={params.chr} "
 		"--random-seed={params.seed} 2>&1 | tee {log}"

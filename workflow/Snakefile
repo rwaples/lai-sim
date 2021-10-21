@@ -16,13 +16,27 @@ rule short_run:
 	input:
 		rfmix2 = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix2/rfmix2.fb.tsv' for u in units.query('anal_name == "short_run"').itertuples()],
 		rfmix2_diploid = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix2/diploid_la.hdf' for u in units.query('anal_name == "short_run"').itertuples()],
-		mosaic = 'results/AmericanAdmixture_4B11/AA_42/short_run/MOSAIC/la_probabilites.3way_1-2_22-22_1204_60_0.99_100.RData',
+		mosaic = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/MOSAIC/la_probs.RData' for u in units.query('anal_name == "short_run"').itertuples()],
 		bmix = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/bmix/bmix.anc.vcf.gz' for u in units.query('anal_name == "short_run"').itertuples()],
 		diag_coal = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/pop_coal_time.png' for u in units.query('anal_name == "short_run"').itertuples()],
 		diag_fst = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png' for u in units.query('anal_name == "short_run"').itertuples()],
 		diag_la = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/true_local_ancestry.png' for u in units.query('anal_name == "short_run"').itertuples()],
-
+		R2_anc = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/SUMMARY/R2_score.ancestry.tsv' for u in units.query('anal_name == "short_run"').itertuples()],
+		R2_ind = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/SUMMARY/R2_score.individuals.tsv' for u in units.query('anal_name == "short_run"').itertuples()],
 		#rfmix = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix/0.Viterbi.txt' for u in units.query('anal_name == "short_run"').itertuples()],
+
+
+rule all:
+	input:
+		rfmix2 = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix2/rfmix2.fb.tsv' for u in units.itertuples()],
+		rfmix2_diploid = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix2/diploid_la.hdf' for u in units.itertuples()],
+		mosaic = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/MOSAIC/la_probs.RData' for u in units.itertuples()],
+		bmix = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/bmix/bmix.anc.vcf.gz' for u in units.itertuples()],
+		diag_coal = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/pop_coal_time.png' for u in units.itertuples()],
+		diag_fst = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png' for u in units.itertuples()],
+		diag_la = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/true_local_ancestry.png' for u in units.itertuples()],
+		R2_anc = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/SUMMARY/R2_score.ancestry.tsv' for u in units.itertuples()],
+		R2_ind = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/SUMMARY/R2_score.individuals.tsv' for u in units.itertuples()],
 
 
 rule long_run:
@@ -41,8 +55,3 @@ rule diagnostic_plots:
 		pop_coal_time = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTIC/pop_coal_time.png' for u in units.itertuples()],
 		pairwise_Fst = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTIC/pairwise_Fst.png' for u in units.itertuples()],
 		true_local_ancestry = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTIC/true_local_ancestry.png' for u in units.itertuples()]
-
-
-rule test_bmix:
-	input:
-		[f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/bmix/bmix.anc.vcf.gz' for u in units.query('anal_name == "short_run"').itertuples()],
