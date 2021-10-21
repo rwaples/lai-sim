@@ -19,38 +19,37 @@ rule get_R2_score:
 		"../scripts/get_R2_score.py"
 
 
-rule export_mosaic:
-	input:
-		la_results = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/localanc_admixed_{nsource}way_1-{naming_mess}.RData',
-		model_results = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/admixed_{nsource}way_1-{naming_mess}.RData',
-	output:
-		path = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/la_probabilites.{nsource}way_1-{naming_mess}.RData',
-	params:
-		input_dir = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/input/',
-		simple_output = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/la_rename.RData',
-	script:
-		"../scripts/export_mosaic_results.R"
-
-
-def generate_mosaic_name(wildcards):
-	import glob
-	#check = checkpoints.export_mosaic.get(**wildcards)
+def localanc_name(wildcards):
 	model_name = wildcards.model_name
 	sim_name = wildcards.sim_name
 	anal_name = wildcards.anal_name
-	#nsource = check.nsource
-	#naming_mess = check.naming_mess
-	paths = glob.glob(f'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/la_probabilites.*.RData')
-	assert len(paths)==1
-	return paths[0]
+	nsource = units.loc[(sim_name, anal_name)].nsource
+	naming_mess = units.loc[(sim_name, anal_name)].naming_mess
+	return f'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/localanc_admixed_{nsource}way_1-{naming_mess}.RData'
 
-rule mosiac_dummy:
+def admixed_name(wildcards):
+	model_name = wildcards.model_name
+	sim_name = wildcards.sim_name
+	anal_name = wildcards.anal_name
+	nsource = units.loc[(sim_name, anal_name)].nsource
+	naming_mess = units.loc[(sim_name, anal_name)].naming_mess
+	return f'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/admixed_{nsource}way_1-{naming_mess}.RData'
+
+
+rule export_mosaic:
 	input:
-		generate_mosaic_name
+		#la_results = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/localanc_admixed_{lambda w: units.loc[(w.sim_name, w.anal_name)].nsource}way_1-{lambda w: units.loc[(w.sim_name, w.anal_name)].naming_mess}.RData',
+		#model_results = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/admixed_{lambda w: units.loc[(w.sim_name, w.anal_name)].nsource}way_1-{lambda w: units.loc[(w.sim_name, w.anal_name)].naming_mess}.RData',
+		la_results = localanc_name,
+		model_results = admixed_name
 	output:
-		'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/la_probs.RData',
-	shell:
-		"cp {input} {output}"
+		#path = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/la_probabilites.{lambda w: units.loc[(w.sim_name, w.anal_name)].nsource}way_1-{lambda w: units.loc[(w.sim_name, w.anal_name)].naming_mess}.RData',
+		path = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/la_probs.RData',
+	params:
+		input_dir = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/input/',
+		simple_output = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/la_probs.RData',
+	script:
+		"../scripts/export_mosaic_results.R"
 
 
 rule summarize_rfmix2:
@@ -119,6 +118,7 @@ rule run_mosaic:
 	shell:
 		"""
 		Rscript {params.mosaic} --seed {params.seed} --maxcores {params.nthreads} --chromosomes 22:22 --ancestries {params.nsource} admixed {params.input_folder} 2>&1 | tee {log}
+
 		# move the results into the MOSAIC folder
 		mv MOSAIC_RESULTS/* {params.base_folder}
 		mv MOSAIC_PLOTS/* {params.base_folder}

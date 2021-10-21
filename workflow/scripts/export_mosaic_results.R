@@ -15,7 +15,7 @@ dims = dim(local_pos[[1]])
 # convert to array and then export
 arr = array(unlist(local_pos, use.names=FALSE), dims)
 save(arr, file = output_path)
-#save(arr, file = simple_output)
+save(arr, file = simple_output)
 
 
 
