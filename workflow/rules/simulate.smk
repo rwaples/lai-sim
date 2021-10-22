@@ -34,8 +34,3 @@ rule simulate_admixture:
 		'results/{model_name}/{sim_name}/benchmark/simulate_admixture.tsv',
 	shell:
 		"""{params.slim_path} -seed {params.sim_seed} -d 'trees_file="{output}"' {params.slim_script} 2>&1 | tee {log}"""
-
-
-rule slim_scripts_present:
-	input:
-		[s.slim_script_path for s in simulations.itertuples()]

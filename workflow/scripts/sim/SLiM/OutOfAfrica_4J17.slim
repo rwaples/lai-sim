@@ -1,0 +1,589 @@
+/*
+ * stdpopsim undefined
+ *
+ * Demographic model: OutOfAfrica_4J17
+ * 4 population out of Africa
+ * Jouganous et al., 2017: https://doi.org/10.1534/genetics.117.200493
+ */
+
+initialize() {
+    if (!exists("dry_run"))
+        defineConstant("dry_run", F);
+    if (!exists("verbosity"))
+        defineConstant("verbosity", 2);
+
+    // Scaling factor to speed up simulation.
+    // See SLiM manual:
+    // `5.5 Rescaling population sizes to improve simulation performance`.
+    defineConstant("Q", 1.0);
+
+    defineConstant("burn_in", 10.0);
+    defineConstant("generation_time", 29);
+    defineConstant("mutation_rate", Q * 0);
+		defineConstant("chromosome_length", 51304566);
+    // defineConstant("trees_file", "from_slim.ts");
+    defineConstant("pop_names", c("YRI", "CEU", "CHB", "JPT", "ADMIX"));
+
+    _recombination_rates = c(
+        4.333506830336468e-08);
+    _recombination_ends = c(
+        chromosome_length);
+    defineConstant("recombination_rates", (1-(1-2*_recombination_rates)^Q)/2);
+    defineConstant("recombination_ends", _recombination_ends);
+
+    // Time of epoch boundaries, in years before present.
+    // The first epoch spans from INF to _T[0].
+    defineConstant("_T", c(356990, 118987, 45994, 8990, 348, 0));
+
+    // Population sizes in each epoch.
+    _N = array(c(
+        // INF:_T[0], _T[0]:_T[1], etc.
+        c(11293, 23721, 23721, 23721, 23721, 23721), // YRI
+        c(0, 0, 2831, 2512, 19349, 31170), // CEU
+        c(0, 0, 0, 1019, 28118, 61021), // CHB
+        c(0, 0, 0, 0, 4384, 204826), // JPT
+        c(0, 0, 0, 0, 0, 30000) // ADMIX
+    ), c(6, 5));
+
+    defineConstant("num_epochs", length(_T));
+    defineConstant("num_populations", ncol(_N));
+
+    // Population growth rates for each epoch.
+    defineConstant("growth_rates", array(c(
+        // INF:_T[0], _T[0]:_T[1], etc.
+        c(0.0, 0.0, 0.0, 0.0, 0.0, 0.0), // YRI
+        c(0.0, 0.0, 0.0, 0.0016, 0.0016, 0.0016), // CEU
+        c(0.0, 0.0, 0.0, 0.0026, 0.0026, 0.0026), // CHB
+        c(0.0, 0.0, 0.0, 0.0, 0.0129, 0.0129), // JPT
+        // c(0.0, 0.0, 0.0, 0.0, 0.00645, 0.00645), // JPT - testing with small growth rate - also change popsize above
+        c(0.0, 0.0, 0.0, 0.0, 0.0, 0.05) // ADMIX
+    ), c(num_epochs, num_populations)));
+
+
+
+    no_migration = rep(0, num_populations*num_populations);
+
+    // Migration rates for each epoch.
+    // Migrations involving a population with size=0 are ignored.
+    // XXX: document what the rows & cols correspond to.
+    defineConstant("migration_matrices", array(c(
+
+        // INF:_T[0]
+        no_migration,
+
+        // _T[1]:_T[2]
+        no_migration,
+
+        // _T[2]:_T[3]
+        array(c(
+            c(0, 0.000168, 0, 0, 0),
+            c(0.000168, 0, 0, 0, 0),
+            c(0, 0, 0, 0, 0),
+            c(0, 0, 0, 0, 0),
+            c(0, 0, 0, 0, 0)
+        ), c(num_populations, num_populations)),
+
+        // _T[3]:_T[4]
+        array(c(
+            c(0, 1.14e-05, 5.6e-06, 0, 0),
+            c(1.14e-05, 0, 4.75e-05, 0, 0),
+            c(5.6e-06, 4.75e-05, 0, 0, 0),
+            c(0, 0, 0, 0, 0),
+            c(0, 0, 0, 0, 0)
+        ), c(num_populations, num_populations)),
+
+        // _T[4]:_T[5]
+        array(c(
+            c(0, 1.14e-05, 5.6e-06, 0, 0),
+            c(1.14e-05, 0, 4.75e-05, 0, 0),
+            c(5.6e-06, 4.75e-05, 0, 3.3e-05, 0),
+            c(0, 0, 3.3e-05, 0, 0),
+            c(0, 0, 0, 0, 0)
+        ), c(num_populations, num_populations)),
+
+
+        // time of admixture - continue the same migration
+        array(c(
+            c(0, 1.14e-05, 5.6e-06, 0, 0),
+            c(1.14e-05, 0, 4.75e-05, 0, 0),
+            c(5.6e-06, 4.75e-05, 0, 3.3e-05, 0),
+            c(0, 0, 3.3e-05, 0, 0),
+            c(0, 0, 0, 0, 0)
+        ), c(num_populations, num_populations))
+
+
+    ), c(num_populations, num_populations, num_epochs)));
+
+
+
+
+    // Population splits, one row for each event.
+    defineConstant("subpopulation_splits", array(c(
+        // time, newpop, size, oldpop
+        c(_T[1], 1, _N[2,1], 0),
+        c(_T[2], 2, _N[3,2], 1),
+        c(_T[3], 3, _N[4,3], 2),
+        // RKW - create the admixed pop here
+        c(_T[4], 4, _N[5,4], 3)
+    ), c(4, 4)));
+
+
+
+
+    // Admixture pulses, one row for each pulse.
+    defineConstant("admixture_pulses", array(c(
+        // time, dest, source, rate
+        c(_T[4], 4, 0, 0.15),
+        c(_T[4], 4, 1, 0.15),
+        c(_T[4], 4, 2, 0.30)
+    ), c(4, 3)));
+
+
+
+
+    // Drawn mutations, one row for each mutation.
+    defineConstant("drawn_mutations", c());
+
+    // Fitness callbacks, one row for each callback.
+    defineConstant("fitness_callbacks", c());
+
+    defineConstant("op_types", c("<", "<=", ">", ">="));
+    // Allele frequency conditioning, one row for each.
+    defineConstant("condition_on_allele_frequency", c());
+
+    // One row for each sampling episode.
+    defineConstant("sampling_episodes", array(c(
+        // pop, n_inds, time
+        c(0, 5, 0),
+        c(1, 5, 0),
+        c(2, 5, 0),
+        c(3, 5, 0),
+        c(4, 5, 0)
+    ), c(3, 5)));
+
+    defineConstant("N", asInteger(_N/Q));
+
+    initializeTreeSeq();
+    initializeMutationRate(mutation_rate);
+    initializeMutationType("m1", 0.5, "f", 0);
+    initializeGenomicElementType("g1", m1, 1.0);
+    initializeGenomicElement(g1, 0, chromosome_length-1);
+    initializeRecombinationRate(recombination_rates, recombination_ends);
+    initializeGeneConversion(0.6666666, 300, 1.0);
+}
+
+function (void)err(string$ s) {
+    stop("ERROR: " + s);
+}
+
+function (void)warn(string$ s) {
+    catn("WARNING: " + s);
+}
+
+function (void)dbg(string$ s, [integer$ debug_level = 2]) {
+    if (verbosity >= debug_level) {
+        catn(sim.generation + ": " + s);
+    }
+}
+
+// Check that sizes aren't dangerously low or zero (e.g. due to scaling).
+function (void)check_size(integer$ pop, integer$ size, integer$ g) {
+    if (size == 0) {
+        err("The population size of p"+pop+" ("+pop_names[pop]+") is zero " +
+            "at generation "+g+".");
+    } else if (size < 50) {
+        warn("p"+pop+" ("+pop_names[pop]+") has only "+size+" individuals " +
+             "alive at generation "+g+".");
+    }
+}
+
+// Return the epoch index for generation g.
+function (integer)epoch(integer G, integer $g) {
+    for (i in 0:(num_epochs-1)) {
+        if (g < G[i]) {
+            return i;
+        }
+    }
+    return num_epochs - 1;
+}
+
+// Return the population size of pop at generation g.
+function (integer)pop_size_at(integer G, integer$ pop, integer$ g) {
+    e = epoch(G, g);
+    N0 = N[e,pop];
+    r = Q * growth_rates[e,pop];
+    if (r == 0) {
+        N_g = N0;
+    } else {
+        g_diff = g - G[e-1];
+        N_g = asInteger(round(N0*exp(r*g_diff)));
+    }
+    return N_g;
+}
+
+// Return the number of generations that separate t0 and t1.
+function (integer)gdiff(numeric$ t0, numeric t1) {
+    return asInteger(round((t0-t1)/generation_time/Q));
+}
+
+// Output tree sequence file and end the simulation.
+function (void)end(void) {
+    sim.treeSeqOutput(trees_file);
+    sim.simulationFinished();
+}
+
+1 {
+    // save/restore bookkeeping
+    sim.setValue("n_restores", 0);
+    sim.setValue("n_saves", 0);
+    sim.setValue("restore_function", F);
+
+    /*
+     * Create initial populations and migration rates.
+     */
+
+    // Initial populations.
+    for (i in 0:(num_populations-1)) {
+        if (N[0,i] > 0) {
+            check_size(i, N[0,i], sim.generation);
+            dbg("sim.addSubpop("+i+", "+N[0,i]+");");
+            sim.addSubpop(i, N[0,i]);
+        }
+    }
+
+    if (length(sim.subpopulations) == 0) {
+        err("No populations with non-zero size in generation 1.");
+    }
+
+    // Initial migration rates.
+    i = 0;
+    for (j in 0:(num_populations-1)) {
+        for (k in 0:(num_populations-1)) {
+            if (j==k | N[i,j] == 0 | N[i,k] == 0) {
+                next;
+            }
+
+            m = Q * migration_matrices[k,j,i];
+            p = sim.subpopulations[j];
+            dbg("p"+j+".setMigrationRates("+k+", "+m+");");
+            p.setMigrationRates(k, m);
+        }
+    }
+
+    // The end of the burn-in is the starting generation, and corresponds to
+    // time T_start. All remaining events are relative to this generation.
+    N_max = max(N[0,0:(num_populations-1)]);
+    G_start = sim.generation + asInteger(round(burn_in * N_max));
+    T_start = max(_T);
+    G = G_start + gdiff(T_start, _T);
+    G_end = max(G);
+
+    /*
+     * Register events occurring at time T_start or more recently.
+     */
+
+    // Save/restore events. These should come before all other events.
+    if (length(drawn_mutations) > 0) {
+        for (i in 0:(ncol(drawn_mutations)-1)) {
+            save = drawn_mutations[4,i] == 1;
+            if (!save) {
+                next;
+            }
+            g = G_start + gdiff(T_start, drawn_mutations[0,i]);
+            // Unconditionally save the state before the mutation is drawn.
+            sim.registerLateEvent(NULL, "{save();}", g, g);
+        }
+    }
+    if (length(condition_on_allele_frequency) > 0) {
+        for (i in 0:(ncol(condition_on_allele_frequency)-1)) {
+            g_start = G_start + gdiff(T_start, condition_on_allele_frequency[0,i]);
+            g_end = G_start + gdiff(T_start, condition_on_allele_frequency[1,i]);
+            mut_type = asInteger(condition_on_allele_frequency[2,i]);
+            pop_id = asInteger(condition_on_allele_frequency[3,i]);
+            op = op_types[asInteger(drop(condition_on_allele_frequency[4,i]))];
+            af = condition_on_allele_frequency[5,i];
+            save = condition_on_allele_frequency[6,i] == 1;
+
+            if (g_start > g_end) {
+                err("Attempt to register AF conditioning callback with g_start="+
+                    g_start+" > g_end="+g_end);
+            }
+
+            if (save) {
+                // Save the state conditional on the allele frequency.
+                // If the condition isn't met, we restore.
+                sim.registerLateEvent(NULL,
+                    "{if (af(m"+mut_type+", p"+pop_id+") "+op+" "+af+")" +
+                    " save(); else restore();}",
+                    g_start, g_start);
+                g_start = g_start + 1;
+            }
+
+            if (g_start <= g_end) {
+                sim.registerLateEvent(NULL,
+                    "{if (!(af(m"+mut_type+", p"+pop_id+") "+op+" "+af+"))" +
+                    " restore();}",
+                    g_start, g_end);
+            }
+        }
+    }
+
+    // Split events.
+    if (length(subpopulation_splits) > 0 ) {
+        for (i in 0:(ncol(subpopulation_splits)-1)) {
+            g = G_start + gdiff(T_start, subpopulation_splits[0,i]);
+            newpop = drop(subpopulation_splits[1,i]);
+            size = asInteger(subpopulation_splits[2,i] / Q);
+            oldpop = subpopulation_splits[3,i];
+            check_size(newpop, size, g);
+            sim.registerLateEvent(NULL,
+                "{dbg(self.source); " +
+                "sim.addSubpopSplit("+newpop+","+size+","+oldpop+");}",
+                g, g);
+        }
+    }
+
+    // Population size changes.
+    if (num_epochs > 1) {
+        for (i in 1:(num_epochs-1)) {
+            g = G[i-1];
+            for (j in 0:(num_populations-1)) {
+                // Change population size if this hasn't already been taken
+                // care of by sim.addSubpop() or sim.addSubpopSplit().
+                if (N[i,j] != N[i-1,j] & N[i-1,j] != 0) {
+                    check_size(j, N[i,j], g);
+                    sim.registerLateEvent(NULL,
+                        "{dbg(self.source); " +
+                        "p"+j+".setSubpopulationSize("+N[i,j]+");}",
+                        g, g);
+                }
+
+                if (growth_rates[i,j] != 0) {
+                    growth_phase_start = g+1;
+                    if (i == num_epochs-1) {
+                        growth_phase_end = G[i];
+                    } else {
+                        // We already registered a size change at generation G[i].
+                        growth_phase_end = G[i] - 1;
+                    }
+
+                    if (growth_phase_start >= growth_phase_end) {
+                        // Demographic models could have duplicate epoch times,
+                        // which should be fixed.
+                        warn("growth_phase_start="+growth_phase_start+
+                             " >= growth_phase_end="+growth_phase_end);
+                        next;
+                    }
+
+                    N_growth_phase_end = pop_size_at(G, j, growth_phase_end);
+                    check_size(j, N_growth_phase_end, growth_phase_end);
+
+                    N0 = N[i,j];
+                    r = Q * growth_rates[i,j];
+                    sim.registerLateEvent(NULL,
+                        "{" +
+                            "dbg(self.source); " +
+                            "gx=sim.generation-"+g+"; " +
+                            "size=asInteger(round("+N0+"*exp("+r+"*gx))); " +
+                            "p"+j+".setSubpopulationSize(size);" +
+                        "}",
+                        growth_phase_start, growth_phase_end);
+                }
+            }
+        }
+
+        // Migration rates.
+        for (i in 1:(num_epochs-1)) {
+            for (j in 0:(num_populations-1)) {
+                for (k in 0:(num_populations-1)) {
+                    if (j==k | N[i,j] == 0 | N[i,k] == 0) {
+                        next;
+                    }
+
+                    m_last = Q * migration_matrices[k,j,i-1];
+                    m = Q * migration_matrices[k,j,i];
+                    if (m == m_last) {
+                        // Do nothing if the migration rate hasn't changed.
+                        next;
+                    }
+                    g = G[i-1];
+                    sim.registerLateEvent(NULL,
+                        "{dbg(self.source); " +
+                        "p"+j+".setMigrationRates("+k+", "+m+");}",
+                        g, g);
+                }
+            }
+        }
+    }
+
+
+    sim.registerLateEvent("s000000", "{dbg(self.source); sim.treeSeqRememberIndividuals(sim.subpopulations.individuals);}", G_end-20, G_end-20);
+    // Admixture pulses.
+    if (length(admixture_pulses) > 0 ) {
+        for (i in 0:(ncol(admixture_pulses)-1)) {
+            g = G_start + gdiff(T_start, admixture_pulses[0,i]);
+            dest = admixture_pulses[1,i];
+            src = admixture_pulses[2,i];
+            rate = admixture_pulses[3,i];
+            sim.registerLateEvent(NULL,
+                "{dbg(self.source); " +
+                "p"+dest+".setMigrationRates("+src+", "+rate+");}",
+                g, g);
+            sim.registerLateEvent(NULL,
+                "{dbg(self.source); " +
+                "p"+dest+".setMigrationRates("+src+", 0);}",
+                g+1, g+1);
+        }
+    }
+
+    // Draw mutations.
+    if (length(drawn_mutations) > 0) {
+        for (i in 0:(ncol(drawn_mutations)-1)) {
+            g = G_start + gdiff(T_start, drawn_mutations[0,i]);
+            mut_type = drawn_mutations[1,i];
+            pop_id = drawn_mutations[2,i];
+            coordinate = drawn_mutations[3,i];
+            sim.registerLateEvent(NULL,
+                "{dbg(self.source); " +
+                "add_mut(m"+mut_type+", p"+pop_id+", "+coordinate+");}",
+                g, g);
+        }
+    }
+
+    // Setup fitness callbacks.
+    if (length(fitness_callbacks) > 0) {
+        for (i in 0:(ncol(fitness_callbacks)-1)) {
+            g_start = G_start + gdiff(T_start, fitness_callbacks[0,i]);
+            g_end = G_start + gdiff(T_start, fitness_callbacks[1,i]);
+            mut_type = asInteger(fitness_callbacks[2,i]);
+            pop_id = asInteger(fitness_callbacks[3,i]);
+            selection_coeff = Q * fitness_callbacks[4,i];
+            dominance_coeff = fitness_callbacks[5,i];
+
+            if (g_start > g_end) {
+                err("Attempt to register fitness callback with g_start="+
+                    g_start+" > g_end="+g_end);
+            }
+
+            sim.registerLateEvent(NULL,
+                "{dbg('s="+selection_coeff+", h="+dominance_coeff+
+                " for m"+mut_type+" in p"+pop_id+"');}",
+                g_start, g_start);
+            sim.registerLateEvent(NULL,
+                "{dbg('s, h defaults for m"+mut_type+" in p"+pop_id+"');}",
+                g_end, g_end);
+            /* We explicitly format() here to prevent integral-valued floats
+             * from getting converted to integers during string interpolation
+             * (this triggers a type error when the fitness callback runs). */
+            f_hom = format("%e", 1 + selection_coeff);
+            f_het = format("%e", 1 + selection_coeff * dominance_coeff);
+            sim.registerFitnessCallback(NULL,
+                "{if (homozygous) return "+f_hom+"; else return "+f_het+";}",
+                mut_type, pop_id, g_start, g_end);
+        }
+    }
+
+    // Sample individuals.
+    for (i in 0:(ncol(sampling_episodes)-1)) {
+        pop = drop(sampling_episodes[0,i]);
+        n = sampling_episodes[1,i];
+        g = G_start + gdiff(T_start, sampling_episodes[2,i]);
+
+        // Check that there will be at least n individuals for sampling.
+        N_g = pop_size_at(G, pop, g);
+        if (n > N_g) {
+            err("Request to sample "+n+" individuals from p"+pop+
+                " ("+pop_names[pop]+") at generation "+g+", but only "+
+                N_g+" individuals will be alive.");
+        }
+
+        sim.registerLateEvent(NULL,
+            "{dbg(self.source); " +
+            "inds=p"+pop+".sampleIndividuals("+n+"); " +
+            "sim.treeSeqRememberIndividuals(inds);}",
+            g, g);
+    }
+
+    sim.registerLateEvent(NULL, "{dbg(self.source); end();}", G_end, G_end);
+
+    if (G_start > sim.generation) {
+        dbg("Starting burn-in...");
+    }
+
+    if (dry_run) {
+        sim.simulationFinished();
+    }
+}
+
+// Add `mut_type` mutation at `pos`, to a single individual in `pop`.
+function (void)add_mut(object$ mut_type, object$ pop, integer$ pos) {
+   targets = sample(pop.genomes, 1);
+   targets.addNewDrawnMutation(mut_type, pos);
+}
+
+// Return the allele frequency of a drawn mutation in the specified population.
+// Assumes there's only one mutation of the given type.
+function (float$)af(object$ mut_type, object$ pop) {
+    mut = sim.mutationsOfType(mut_type);
+    if (length(mut) == 0) {
+        return 0.0;
+    }
+    return sim.mutationFrequencies(pop, mut);
+}
+
+// Save the state of the simulation.
+function (void)save(void) {
+    if (sim.getValue("restore_function")) {
+        // Don't save if we're in the restore() function.
+        return;
+    }
+    n_saves = 1 + sim.getValue("n_saves");
+    sim.setValue("n_saves", n_saves);
+    dbg("save() "+n_saves);
+    sim.treeSeqOutput(trees_file);
+}
+
+// Restore the simulation state.
+function (void)restore(void) {
+    g_restore = sim.generation;
+    n_restores = 1 + sim.getValue("n_restores");
+    sim.setValue("n_restores", n_restores);
+    n_saves = sim.getValue("n_saves");
+    if (n_saves == 0) {
+        err("restore() in generation "+g_restore+", but nothing is saved.");
+    }
+    sim.readFromPopulationFile(trees_file);
+    dbg("restore() "+n_restores+" from generation "+g_restore+", returning "+
+        "to state at save() "+n_saves);
+
+    /*
+     * The generation counter sim.generation has now been reset to the
+     * value it had when save() was called. There are two issues relating
+     * to event scheduling which must now be dealt with.
+     *
+     * 1. There may be additional late events for the generation in which
+     * restore() was called, and they are still scheduled to run.
+     * So we deactivate all script blocks to avoid unexpected problems.
+     * They will be automatically reactivated at the start of the next
+     * generation (see SLiM manual section 23.10).
+     */
+    sim.scriptBlocks.active = F;
+
+    /*
+     * 2. The late events below were run in the save() generation,
+     * but after the save() call. We execute these again here, because
+     * the next late events to run will be for sim.generation + 1.
+     * Note that the save() event is indistinguishable from the other
+     * late events in this generation, so we set a flag `restore_function`
+     * to signal the save() function not to save again.
+     */
+    g = sim.generation;
+    sim.setValue("restore_function", T);
+    for (sb in sim.scriptBlocks) {
+        if (sb.type == "late" & g >= sb.start & g <= sb.end) {
+            self = sb;
+            executeLambda(sb.source);
+        }
+    }
+    sim.setValue("restore_function", F);
+}
