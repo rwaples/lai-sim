@@ -13,6 +13,7 @@ anal_seed = int(snakemake.params.anal_seed)
 
 
 ts = tszip.decompress(ts_path)
+print('done loading')
 
 # select the samples
 # assume the last popualtions is the admixed pop
@@ -33,12 +34,16 @@ for pop in ref_pops:
 for pop in admix_pops:
 	samples = sample_inds(ts, pop, nind_admixed, seed = seeds[i])
 	to_take = np.concatenate([to_take, samples])
-to_take.sort()
+del samples
 
 # we also need to retain all the individuals present at admixture time
 ancestors = np.where(ts.tables.nodes.asdict()['time']==admixture_time)[0]
 to_take = np.concatenate([to_take, ancestors])
+del ancestors
+to_take.sort()
 
+
+print('starting to simplify')
 # simplyfy the TS
 simple_ts = ts.simplify(
 	samples=to_take,

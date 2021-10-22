@@ -8,5 +8,5 @@ anal_name	sim_name	nind_admixed	nind_ref	MAC_filter	max_snps	anal_seed	gt_err	ta
 3pop_7	AA_42	200	400	1	100000	93	0.00001	3	8
 3pop_8	AA_42	200	400	1	100000	92	0.0004	3	8
 3pop_9	AA_42	200	400	1	100000	91	0.0002	3	4
-short_run	AA_42	2	10	1	20000	90	0.0002	3	8
-#4pop_test	4pop_79	200	400	1	100000	98	0.0002	4	8
+#short_run	AA_42	2	10	1	20000	90	0.0002	3	8
+4pop_test	4pop_79	200	400	1	100000	98	0.0002	4	8

@@ -30,7 +30,8 @@ rule simulate_admixture:
 		slim_path = config["PATHS"]["SLiM"],
 		sim_seed = lambda w: simulations.loc[w.sim_name].sim_seed,
 		slim_script = lambda w: simulations.loc[w.sim_name].slim_script_path,
-	benchmark:
-		'results/{model_name}/{sim_name}/benchmark/simulate_admixture.tsv',
+	#benchmark:
+		#'results/{model_name}/{sim_name}/benchmark/simulate_admixture.tsv',
 	shell:
 		"""{params.slim_path} -seed {params.sim_seed} -d 'trees_file="{output}"' {params.slim_script} 2>&1 | tee {log}"""
+		#"""touch {output}"""
