@@ -15,16 +15,27 @@ R2_anc = str(snakemake.output.R2_anc)
 R2_ind = str(snakemake.output.R2_ind)
 
 
-def get_ancestry_dosage(arr, n_anc=nanc):
-	assert (n_anc==3)
-	a0 = arr[:, 0::3] # should be views
-	a1 = arr[:, 1::3]
-	a2 = arr[:, 2::3]
-	anc_dosage = np.zeros((arr.shape[0], int(arr.shape[1]/2)), dtype=np.half)
-	anc_dosage[:, 0::3] = a0[:, ::2] + a0[:, 1::2]
-	anc_dosage[:, 1::3] = a1[:, ::2] + a1[:, 1::2]
-	anc_dosage[:, 2::3] = a2[:, ::2] + a2[:, 1::2]
-	return anc_dosage
+def get_ancestry_dosage(arr, n_anc):
+    anc_dosage = np.zeros((arr.shape[0], int(arr.shape[1]/2)), dtype=np.half)
+    if n_anc==3:
+        assert (n_anc==3)
+        a0 = arr[:, 0::3] # should be views
+        a1 = arr[:, 1::3]
+        a2 = arr[:, 2::3]
+        anc_dosage[:, 0::3] = a0[:, ::2] + a0[:, 1::2]
+        anc_dosage[:, 1::3] = a1[:, ::2] + a1[:, 1::2]
+        anc_dosage[:, 2::3] = a2[:, ::2] + a2[:, 1::2]
+    elif n_anc==4:
+        assert (n_anc==4)
+        a0 = arr[:, 0::4] # should be views
+        a1 = arr[:, 1::4]
+        a2 = arr[:, 2::4]
+        a3 = arr[:, 3::4]
+        anc_dosage[:, 0::4] = a0[:, ::2] + a0[:, 1::2]
+        anc_dosage[:, 1::4] = a1[:, ::2] + a1[:, 1::2]
+        anc_dosage[:, 2::4] = a2[:, ::2] + a2[:, 1::2]
+        anc_dosage[:, 3::4] = a3[:, ::2] + a3[:, 1::2]
+    return anc_dosage
 
 
 def plot_ancestry_dosage(pred_dosage, start_index, reference_dosage=None):
@@ -110,7 +121,7 @@ def load_mosaic(path):
 true_anc_dosage = get_true_anc_dosage(load_true_la(true_path), n_anc=nanc)
 
 
-rfmix_anc_dosage = get_ancestry_dosage(load_rfmix_fb(rfmix2_path))
+rfmix_anc_dosage = get_ancestry_dosage(load_rfmix_fb(rfmix2_path), n_anc=nanc)
 rfmix_anc_r2, rfmix_ind_r2 = r2_ancestry_dosage(
 	true_dosage=true_anc_dosage,
 	pred_dosage=rfmix_anc_dosage,
@@ -118,7 +129,7 @@ rfmix_anc_r2, rfmix_ind_r2 = r2_ancestry_dosage(
 )
 
 
-mosaic_anc_dosage = get_ancestry_dosage(load_mosaic(mosaic_path))
+mosaic_anc_dosage = get_ancestry_dosage(load_mosaic(mosaic_path), n_anc=nanc)
 mosaic_anc_r2, mosaic_ind_r2 = r2_ancestry_dosage(
 	true_dosage=true_anc_dosage,
 	pred_dosage=mosaic_anc_dosage,
@@ -126,7 +137,7 @@ mosaic_anc_r2, mosaic_ind_r2 = r2_ancestry_dosage(
 )
 
 
-bmix_anc_dosage = get_ancestry_dosage(load_bmix(bmix_path))
+bmix_anc_dosage = get_ancestry_dosage(load_bmix(bmix_path), n_anc=nanc)
 bmix_anc_r2, bmix_ind_r2 = r2_ancestry_dosage(
 	true_dosage=true_anc_dosage,
 	pred_dosage=bmix_anc_dosage,
