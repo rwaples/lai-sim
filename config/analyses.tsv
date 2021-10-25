@@ -1,5 +1,5 @@
 anal_name	sim_name	nind_admixed	nind_ref	MAC_filter	max_snps	anal_seed	gt_err	target_pop	nthreads
-#3pop_1	AA_42	100	400	1	100000	99	0.0002	3	8
+3pop_1	AA_42	100	400	1	100000	99	0.0002	3	8
 #3pop_2	AA_42	200	400	1	100000	98	0.0002	3	8
 #3pop_3	AA_42	400	400	1	100000	97	0.0002	3	8
 #3pop_4	AA_42	200	200	1	100000	96	0.0002	3	8

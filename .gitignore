@@ -7,6 +7,8 @@ results/*
 .snakemake/
 *.log
 workflow/notebooks/Untitled.ipynb
+nohup.out
+MOSAIC*
 
 
 # Byte-compiled / optimized / DLL files
