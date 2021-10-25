@@ -40,7 +40,7 @@ rule split_vcf:
 		bcftools = config['PATHS']['BCFTOOLS']
 	shell:
 		"""
-		{params.bcftools} view --samples-file {input.samples} --output {output.vcf} --output-type z {input.vcf}
+		{params.bcftools} view --samples-file {input.samples} --output-file {output.vcf} --output-type z {input.vcf}
 		{params.bcftools} index {output.vcf}
 		"""
 
@@ -54,7 +54,7 @@ rule split_bcf:
 		bcftools = config['PATHS']['BCFTOOLS']
 	shell:
 		"""
-		{params.bcftools} view --samples-file {input.samples} --output {output.bcf} --output-type b {input.vcf}
+		{params.bcftools} view --samples-file {input.samples} --output-file {output.bcf} --output-type b {input.vcf}
 		{params.bcftools} index {output.bcf}
 		"""
 

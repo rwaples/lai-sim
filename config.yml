@@ -4,7 +4,8 @@ analyses: config/analyses.tsv
 # put full paths in here, dont use '~' for your home directory (not sure why)
 PATHS:
     SLiM: /usr/bin/slim
-    BCFTOOLS: /home/kele/programs/bcftools/bcftools-1.11/bcftools
+    #BCFTOOLS: /home/kele/programs/bcftools/bcftools-1.11/bcftools
+    BCFTOOLS: /usr/local/bin/bcftools
     BEAGLE: programs/BEAGLE/beagle.28Jun21.220.jar
     RFMix: programs/RFmix/RFMix_v1.5.4/RunRFMix.py
     RFMix2: programs/RFmix2/rfmix

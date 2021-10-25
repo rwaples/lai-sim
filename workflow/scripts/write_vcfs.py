@@ -152,7 +152,7 @@ subprocess.run([
 	snakemake.config['PATHS']['BCFTOOLS'],
 	'view',
 	'-O', 'z',
-	'--output', f'{os.path.join(base_path, "genotypes.vcf.gz")}',
+	'--output-file', f'{os.path.join(base_path, "genotypes.vcf.gz")}',
 	f'{os.path.join(base_path, "genotypes.bcf")}'
 	])
 
@@ -160,7 +160,7 @@ subprocess.run([
 	snakemake.config['PATHS']['BCFTOOLS'],
 	'view',
 	'-O', 'z',
-	'--output', f'{os.path.join(base_path, "la_true.vcf.gz")}',
+	'--output-file', f'{os.path.join(base_path, "la_true.vcf.gz")}',
 	f'{os.path.join(base_path, "la_true.bcf")}'
 	])
 

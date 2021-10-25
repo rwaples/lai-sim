@@ -14,15 +14,15 @@ wildcard_constraints:
 
 rule short_run:
 	input:
-		rfmix2 = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix2/rfmix2.fb.tsv' for u in units.query('anal_name == "short_run"').itertuples()],
-		rfmix2_diploid = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix2/diploid_la.hdf' for u in units.query('anal_name == "short_run"').itertuples()],
-		mosaic = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/MOSAIC/la_probs.RData' for u in units.query('anal_name == "short_run"').itertuples()],
-		bmix = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/bmix/bmix.anc.vcf.gz' for u in units.query('anal_name == "short_run"').itertuples()],
-		diag_coal = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/pop_coal_time.png' for u in units.query('anal_name == "short_run"').itertuples()],
-		diag_fst = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png' for u in units.query('anal_name == "short_run"').itertuples()],
-		diag_la = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/true_local_ancestry.png' for u in units.query('anal_name == "short_run"').itertuples()],
-		R2_anc = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/SUMMARY/R2_score.ancestry.tsv' for u in units.query('anal_name == "short_run"').itertuples()],
-		R2_ind = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/SUMMARY/R2_score.individuals.tsv' for u in units.query('anal_name == "short_run"').itertuples()],
+		#rfmix2 = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix2/rfmix2.fb.tsv' for u in units.querme == "short_run"').itertuples()],
+		#rfmix2_diploid = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix2/diploid_la.hdf' for u in units.query('anal_name == "short_run"').itertuples()],
+		#mosaic = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/MOSAIC/la_probs.RData' for u in units.query('anal_name == "short_run"').itertuples()],
+		#bmix = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/bmix/bmix.anc.vcf.gz' for u in units.query('anal_name == "short_run"').itertuples()],
+		#diag_coal = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/pop_coal_time.png' for u in units.query('anal_name == "short_run"').itertuples()],
+		#diag_fst = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png' for u in units.query('anal_name == "short_run"').itertuples()],
+		#diag_la = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/true_local_ancestry.png' for u in units.query('anal_name == "short_run"').itertuples()],
+		#R2_anc = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/SUMMARY/R2_score.ancestry.tsv' for u in units.query('anal_name == "short_run"').itertuples()],
+		#R2_ind = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/SUMMARY/R2_score.individuals.tsv' for u in units.query('anal_name == "short_run"').itertuples()],
 		#rfmix = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix/0.Viterbi.txt' for u in units.query('anal_name == "short_run"').itertuples()],
 
 
@@ -45,11 +45,11 @@ rule four_pop:
 		#rfmix2_diploid = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix2/diploid_la.hdf' for u in units.query('anal_name == "4pop_test"').itertuples()],
 		#mosaic = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/MOSAIC/la_probs.RData' for u in units.query('anal_name == "4pop_test"').itertuples()],
 		#bmix = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/bmix/bmix.anc.vcf.gz' for u in units.query('anal_name == "4pop_test"').itertuples()],
-		diag_coal = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/pop_coal_time.png' for u in units.query('anal_name == "4pop_test"').itertuples()],
-		diag_fst = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png' for u in units.query('anal_name == "4pop_test"').itertuples()],
-		diag_la = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/true_local_ancestry.png' for u in units.query('anal_name == "4pop_test"').itertuples()],
+		#diag_coal = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/pop_coal_time.png' for u in units.query('anal_name == "4pop_test"').itertuples()],
+		#diag_fst = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png' for u in units.query('anal_name == "4pop_test"').itertuples()],
+		#diag_la = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/true_local_ancestry.png' for u in units.query('anal_name == "4pop_test"').itertuples()],
 		#R2_anc = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/SUMMARY/R2_score.ancestry.tsv' for u in units.query('anal_name == "4pop_test"').itertuples()],
-		#R2_ind = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/SUMMARY/R2_score.individuals.tsv' for u in units.query('anal_name == "4pop_test"').itertuples()],
+		R2_ind = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/SUMMARY/R2_score.individuals.tsv' for u in units.query('anal_name == "4pop_test"').itertuples()],
 		#rfmix = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix/0.Viterbi.txt' for u in units.query('anal_name == "short_run"').itertuples()],
 
 
