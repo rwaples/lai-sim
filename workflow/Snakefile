@@ -35,8 +35,8 @@ rule all:
 		diag_coal = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/pop_coal_time.png' for u in units.itertuples()],
 		diag_fst = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png' for u in units.itertuples()],
 		diag_la = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/true_local_ancestry.png' for u in units.itertuples()],
-		#R2_anc = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/SUMMARY/R2_score.ancestry.tsv' for u in units.itertuples()],
-		#R2_ind = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/SUMMARY/R2_score.individuals.tsv' for u in units.itertuples()],
+		R2_anc = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/SUMMARY/R2_score.ancestry.tsv' for u in units.itertuples()],
+		R2_ind = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/SUMMARY/R2_score.individuals.tsv' for u in units.itertuples()],
 
 
 rule four_pop:

@@ -1,6 +1,6 @@
 mkdir ./programs
 
-## BEAGEL (v5.2 28Jun21)
+## BEAGLE (v5.2 28Jun21)
 mkdir programs/BEAGLE
 cd programs/BEAGLE
 wget https://faculty.washington.edu/browning/beagle/beagle.28Jun21.220.jar
