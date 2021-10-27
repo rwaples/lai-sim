@@ -5,7 +5,7 @@ import os
 from sklearn.metrics import r2_score
 
 BCFTOOLS = str(snakemake.params.bcftools)
-nanc = int(snakemake.params.nsource)
+n_anc = int(snakemake.params.nsource)
 true_path = str(snakemake.input.true_la)
 mosaic_path = str(snakemake.input.mosaic_la)
 rfmix2_path = str(snakemake.input.rfmix2_la)
@@ -59,28 +59,6 @@ def plot_ancestry_dosage(pred_dosage, start_index, reference_dosage=None):
 	sns.despine(bottom=True)
 
 
-def r2_ancestry_dosage(true_dosage, pred_dosage, nanc):
-    if type(pred_dosage) is pd.core.frame.DataFrame:
-        pred_dosage = pred_dosage.values
-    per_anc = []
-    for i in range(nanc):
-        per_anc.append(
-            r2_score(
-                y_true=true_dosage[:,i::3].ravel(),
-                y_pred=pred_dosage[:,i::3].ravel()
-            )
-        )
-    per_ind = []
-    for i in range(int(true_dosage.shape[1]/nanc)):
-        per_ind.append(
-            r2_score(
-                y_true=true_dosage[:, i*nanc:i*nanc+nanc].ravel(),
-                y_pred=pred_dosage[:, i*nanc:i*nanc+nanc].ravel()
-            )
-        )
-
-    return(per_anc, per_ind)
-
 
 def load_true_la(path):
 	return np.load(path)['arr']
@@ -94,6 +72,26 @@ def get_true_anc_dosage(true_la, n_anc):
 	np.put_along_axis(hap2, bb, 1, axis=1)
 	return hap1+hap2
 
+
+def r2_ancestry_dosage(true_dosage, pred_dosage, n_anc):
+    per_anc = []
+    for i in range(n_anc):
+        per_anc.append(
+            r2_score(
+                y_true=true_dosage[:,i::n_anc].ravel(),
+                y_pred=pred_dosage[:,i::n_anc].ravel()
+            )
+        )
+    per_ind = []
+    for i in range(int(true_dosage.shape[1]/n_anc)):
+        per_ind.append(
+            r2_score(
+                y_true=true_dosage[:, i*n_anc:i*n_anc+n_anc].ravel(),
+                y_pred=pred_dosage[:, i*n_anc:i*n_anc+n_anc].ravel()
+            )
+        )
+
+    return(per_anc, per_ind)
 
 ## Load in the probablistic output of each method
 
@@ -118,36 +116,36 @@ def load_mosaic(path):
 
 
 
-true_anc_dosage = get_true_anc_dosage(load_true_la(true_path), n_anc=nanc)
+true_anc_dosage = get_true_anc_dosage(load_true_la(true_path), n_anc=n_anc)
 
 
-rfmix_anc_dosage = get_ancestry_dosage(load_rfmix_fb(rfmix2_path), n_anc=nanc)
+rfmix_anc_dosage = get_ancestry_dosage(load_rfmix_fb(rfmix2_path), n_anc=n_anc)
 rfmix_anc_r2, rfmix_ind_r2 = r2_ancestry_dosage(
 	true_dosage=true_anc_dosage,
 	pred_dosage=rfmix_anc_dosage,
-	nanc=nanc
+	n_anc=n_anc
 )
 
 
-mosaic_anc_dosage = get_ancestry_dosage(load_mosaic(mosaic_path), n_anc=nanc)
+mosaic_anc_dosage = get_ancestry_dosage(load_mosaic(mosaic_path), n_anc=n_anc)
 mosaic_anc_r2, mosaic_ind_r2 = r2_ancestry_dosage(
 	true_dosage=true_anc_dosage,
 	pred_dosage=mosaic_anc_dosage,
-	nanc=nanc
+	n_anc=n_anc
 )
 
 
-bmix_anc_dosage = get_ancestry_dosage(load_bmix(bmix_path), n_anc=nanc)
+bmix_anc_dosage = get_ancestry_dosage(load_bmix(bmix_path), n_anc=n_anc)
 bmix_anc_r2, bmix_ind_r2 = r2_ancestry_dosage(
 	true_dosage=true_anc_dosage,
 	pred_dosage=bmix_anc_dosage,
-	nanc=nanc
+	n_anc=n_anc
 )
 
 
 ## Write R2 tables
 with open(R2_anc, 'w') as OUTFILE:
-	OUTFILE.write('\t'.join(['method'] + [f'anc_{x}' for x in range(nanc)]) + '\n')
+	OUTFILE.write('\t'.join(['method'] + [f'anc_{x}' for x in range(n_anc)]) + '\n')
 	OUTFILE.write('\t'.join(['rfmix2'] + [str(x) for x in rfmix_anc_r2])  + '\n')
 	OUTFILE.write('\t'.join(['mosaic'] + [str(x) for x in mosaic_anc_r2])  + '\n')
 	OUTFILE.write('\t'.join(['bmix'] + [str(x) for x in bmix_anc_r2])  + '\n')
