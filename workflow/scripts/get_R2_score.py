@@ -101,7 +101,6 @@ def load_rfmix_fb(path):
 	rfmix_res = np.repeat(rfmix_res.iloc[:, 4:].values, [5], axis = 0)
 	return rfmix_res
 
-
 def load_bmix(path):
 	csv_path = path.replace('.vcf.gz', '.csv')
 	os.system(f"{BCFTOOLS} query -f '%CHROM, %POS, [%ANP1, %ANP2,]\\n' {path} > {csv_path}")
@@ -115,16 +114,17 @@ def load_mosaic(path):
 	return mr.to_numpy().T.reshape((mr.shape[2],-1), order='C')
 
 
-
 true_anc_dosage = get_true_anc_dosage(load_true_la(true_path), n_anc=n_anc)
 
 
 rfmix_anc_dosage = get_ancestry_dosage(load_rfmix_fb(rfmix2_path), n_anc=n_anc)
+assert (len(rfmix_anc_dosage)-len(true_anc_dosage))<=5 
 rfmix_anc_r2, rfmix_ind_r2 = r2_ancestry_dosage(
 	true_dosage=true_anc_dosage,
-	pred_dosage=rfmix_anc_dosage,
+	pred_dosage=rfmix_anc_dosage[:len(true_anc_dosage)], # addressing possible uneven lengths due to RFmix only reporting ever five sites
 	n_anc=n_anc
 )
+del rfmix_anc_dosage
 
 
 mosaic_anc_dosage = get_ancestry_dosage(load_mosaic(mosaic_path), n_anc=n_anc)
@@ -133,6 +133,7 @@ mosaic_anc_r2, mosaic_ind_r2 = r2_ancestry_dosage(
 	pred_dosage=mosaic_anc_dosage,
 	n_anc=n_anc
 )
+del mosaic_anc_dosage
 
 
 bmix_anc_dosage = get_ancestry_dosage(load_bmix(bmix_path), n_anc=n_anc)
@@ -141,6 +142,7 @@ bmix_anc_r2, bmix_ind_r2 = r2_ancestry_dosage(
 	pred_dosage=bmix_anc_dosage,
 	n_anc=n_anc
 )
+del bmix_anc_dosage
 
 
 ## Write R2 tables

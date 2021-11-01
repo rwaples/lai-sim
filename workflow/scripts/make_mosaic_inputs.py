@@ -50,7 +50,7 @@ for p in range(npops-1):
 		'view',
 		'--samples-file', f'{samplelist}',
 		'--output-type', 'z',
-		'--output', f'{output}',
+		'--output-file', f'{output}',
 		f'{reference_vcf}'
 		])
 	subprocess.run([
@@ -67,7 +67,7 @@ subprocess.run([
 	'view',
 	'--samples-file', f'{samplelist}',
 	'--output-type', 'z',
-	'--output', f'{output}',
+	'--output-file', f'{output}',
 	f'{target_phased_vcf}'
 	])
 
