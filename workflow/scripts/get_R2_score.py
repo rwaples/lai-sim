@@ -59,9 +59,9 @@ def plot_ancestry_dosage(pred_dosage, start_index, reference_dosage=None):
 	sns.despine(bottom=True)
 
 
-
 def load_true_la(path):
 	return np.load(path)['arr']
+
 
 def get_true_anc_dosage(true_la, n_anc):
 	hap1 = np.zeros((true_la.shape[0], int(true_la.shape[1]/2*n_anc)), dtype = 'int8')
@@ -93,8 +93,8 @@ def r2_ancestry_dosage(true_dosage, pred_dosage, n_anc):
 
     return(per_anc, per_ind)
 
-## Load in the probablistic output of each method
 
+## Load in the probablistic output of each method
 def load_rfmix_fb(path):
 	rfmix_res = pd.read_csv(path, sep='\t', comment='#')
 	# expand out to each site
