@@ -21,7 +21,7 @@ simple_ts, node_mapping = ts.simplify(
 )
 simple_ts = strip_MAC(simple_ts, MAC=MAC_filter)
 simple_ts = strip_adjacent_sites(simple_ts, dist=1.5)
-simple_ts = downsample_snps(simple_ts, nsnps=max_snps, seed=anal_seed, fail=True)
+simple_ts = downsample_snps(simple_ts, nsnps=max_snps, seed=anal_seed, fail=False)
 
 tszip.compress(simple_ts, ts_out)
 np.save(file=mapping_out, arr=node_mapping)
