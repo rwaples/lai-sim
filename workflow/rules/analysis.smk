@@ -44,6 +44,7 @@ rule run_mosaic:
 		'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/mosaic.log',
 	benchmark:
 		'results/{model_name}/{sim_name}/{anal_name}/benchmark/run_mosaic.tsv',
+	shadow: 'full'
 	params:
 		mosaic = config['PATHS']['MOSAIC'],
 		input_folder = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/input/',
@@ -58,6 +59,8 @@ rule run_mosaic:
 		"""
 
 		"""
+		# setup_data_etc() defines MOSAIC_RESULTS
+
 
 		# move the results into the MOSAIC folder
 		mv MOSAIC_RESULTS/* {params.base_folder}
