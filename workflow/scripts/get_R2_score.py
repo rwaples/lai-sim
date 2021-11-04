@@ -3,6 +3,8 @@ import pandas as pd
 import pyreadr
 import os
 from sklearn.metrics import r2_score
+from scipy.stats import pearsonr
+
 
 BCFTOOLS = str(snakemake.params.bcftools)
 n_anc = int(snakemake.params.nsource)
@@ -77,18 +79,18 @@ def r2_ancestry_dosage(true_dosage, pred_dosage, n_anc):
     per_anc = []
     for i in range(n_anc):
         per_anc.append(
-            r2_score(
-                y_true=true_dosage[:,i::n_anc].ravel(),
-                y_pred=pred_dosage[:,i::n_anc].ravel()
-            )
+            pearsonr(
+                true_dosage[:,i::n_anc].ravel(),
+                pred_dosage[:,i::n_anc].ravel()
+            )[0]
         )
     per_ind = []
     for i in range(int(true_dosage.shape[1]/n_anc)):
         per_ind.append(
-            r2_score(
-                y_true=true_dosage[:, i*n_anc:i*n_anc+n_anc].ravel(),
-                y_pred=pred_dosage[:, i*n_anc:i*n_anc+n_anc].ravel()
-            )
+            pearsonr(
+                true_dosage[:, i*n_anc:i*n_anc+n_anc].ravel(),
+                pred_dosage[:, i*n_anc:i*n_anc+n_anc].ravel()
+            )[0]
         )
 
     return(per_anc, per_ind)
