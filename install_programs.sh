@@ -47,6 +47,8 @@ tar -xvf ./elai-latest.tar.gz
 
 ## MOSAIC (https://maths.ucd.ie/~mst/MOSAIC/)
 ## requires R (4?)
+wget https://maths.ucd.ie/~mst/MOSAIC/MOSAIC_1.3.8.tar.gz
+
 mkdir ./programs/MOSAIC
 cd ./programs/MOSAIC
 conda activate ./r-env

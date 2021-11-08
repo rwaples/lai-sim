@@ -1,0 +1,33 @@
+channels:
+  - conda-forge
+  - bioconda
+  - r
+dependencies:
+  - python
+  - snakemake
+  - numpy
+  - pandas
+  - scipy
+  - matplotlib
+  - seaborn
+  - msprime
+  - tskit
+  - stdpopsim
+  - tszip
+  - pytables
+  - jupyter
+  - notebook
+  - openjdk
+  - pip
+  - xarray
+  - scikit-allel
+  - pip:
+    - pyreadr
+  - r-base
+  - r-essentials
+  - r-Rcpp
+  - r-ff
+  - r-combinat
+  - r-LaF
+  - r-argparser
+  - r-doParallel
