@@ -23,7 +23,7 @@ dependencies:
   - scikit-allel
   - pip:
     - pyreadr
-  - r-base=3.6.3
+  - r-base
   - r-essentials
   - r-Rcpp
   - r-ff
