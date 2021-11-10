@@ -1,7 +1,7 @@
 snakemake.utils.min_version("6.3")
 configfile: "config.yml"
 include: "rules/common.smk"
-include: "rules/install.smk"
+#include: "rules/install.smk" # no longer needed with update MOSAIC v1.3.9?
 include: "rules/simulate.smk"
 include: "rules/la_and_vcf.smk"
 include: "rules/genotype_error.smk"

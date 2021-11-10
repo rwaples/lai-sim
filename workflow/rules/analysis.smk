@@ -35,7 +35,7 @@ rule export_mosaic:
 # so then I can declare these files as output as well
 rule run_mosaic:
 	input:
-		'programs/MOSAIC/MOSAIC/mosaic.R',
+		#'programs/MOSAIC/MOSAIC/mosaic.R',
 		'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/input/admixedgenofile.22',
 	output:
 		la_results = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/localanc_admixed.RData',
@@ -92,6 +92,7 @@ rule make_mosaic_input:
 		nind_ref = lambda w: units.loc[(w.sim_name, w.anal_name)].nind_ref,
 	script:
 		'../scripts/make_mosaic_inputs.py'
+
 
 rule summarize_rfmix2:
 	input:

@@ -41,12 +41,6 @@ make
 cd ../..
 
 
-## ELAI
-mkdir ./programs/elai
-cd ./programs/elai
-wget https://www.haplotype.org/download/elai-latest.tar.gz
-tar -xvf ./elai-latest.tar.gz
-
 ## MOSAIC (https://maths.ucd.ie/~mst/MOSAIC/)
 ## requires R v4
 mkdir ./programs/MOSAIC
@@ -69,3 +63,8 @@ cd ../../..
 cd ./programs/RFmix/RFMix_v1.5.4
 python2 RunRFMix.py TrioPhased ./TestData/alleles1.txt ./TestData/classes.txt ./TestData/markerLocationsChr1.txt -o outputTrioPhased
 cd ../../..
+## ELAI
+mkdir ./programs/elai
+cd ./programs/elai
+wget https://www.haplotype.org/download/elai-latest.tar.gz
+tar -xvf ./elai-latest.tar.gz
