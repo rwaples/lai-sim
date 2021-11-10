@@ -1,4 +1,4 @@
-configfile: "./config.yml"
+#configfile: "./config.yml"
 wildcard_constraints:
 	anal_name="\w+"
 

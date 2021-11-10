@@ -1,4 +1,4 @@
-configfile: "./config.yml"
+#configfile: "./config.yml"
 
 
 rule phasing:
