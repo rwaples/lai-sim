@@ -31,7 +31,7 @@ g++ -Wall -O3 -ftree-vectorize -fopenmp main.cpp getdata.cpp randomforest.cpp cr
 cd ../../../..
 
 
-## RFMIX version 2 (v2.03-r0)
+## RFMix2  (v2.03-r0)
 mkdir programs/RFmix2
 cd programs/RFmix2
 git clone https://github.com/slowkoni/rfmix.git https://github.com/slowkoni/rfmix .

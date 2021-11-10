@@ -1,11 +1,14 @@
-simulations: config/simulations.tsv
-analyses: config/analyses.tsv
+simulations: config/cluster.simulations.tsv
+analyses: config/cluster.analyses.tsv
+
+cpus: 12
+email: "ryan.waples@gmail.com"
+email_type: "FAIL"
 
 # put full paths in here, dont use '~' for your home directory (not sure why)
 PATHS:
     SLiM: /home/users/waplesr/programs/slim/build/slim
-    BCFTOOLS: /home/kele/Documents/lai/lai-sim/programs/bcftools/bcftools-1.14/bcftools
-    #BCFTOOLS: /home/users/waplesr/lai/lai-sim/programs/bcftools-1.14/bcftools
+    BCFTOOLS: /home/users/waplesr/lai/lai-sim/programs/bcftools-1.14/bcftools
     BEAGLE: programs/BEAGLE/beagle.28Jun21.220.jar
     RFMix: programs/RFmix/RFMix_v1.5.4/RunRFMix.py
     RFMix2: programs/RFmix2/rfmix/rfmix
