@@ -40,6 +40,10 @@ rule run_mosaic:
 	output:
 		la_results = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/localanc_admixed.RData',
 		model_results = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/admixed.RData',
+		emlog1 = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/admixed_1way.EMlog.out',
+		emlog3 = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/admixed_3way.EMlog.out',
+
+
 	log:
 		'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/mosaic.log',
 	benchmark:
@@ -74,6 +78,9 @@ rule run_mosaic:
 		cd {params.base_folder}
 		find localanc_admixed_*.RData -exec cp {{}} localanc_admixed.RData \;
 		find admixed_*.RData -exec cp {{}} admixed.RData \;
+
+		find admixed_1way*_EMlog.out -exec cp {{}} admixed_1way.EMlog.out \;
+		find admixed_3way*_EMlog.out -exec cp {{}} admixed_3way.EMlog.out \;
 
 		"""
 

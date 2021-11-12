@@ -26,9 +26,8 @@
 `see: https://stackoverflow.com/questions/46813371/meaning-of-the-benchmark-variables-in-snakemake`
 
 
-
 # TODO
 	- remove indexing step from run_bmix (due to benchmarking)
 	- generate a text table with running times for each analysis.
 	- add seed to add-err.jar
-	- update version of beagle
+	- fix issues with MOSAIC

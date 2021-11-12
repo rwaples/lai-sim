@@ -52,6 +52,12 @@ wget https://maths.ucd.ie/~mst/MOSAIC/MOSAIC_1.3.9.tar.gz
 git clone https://csgitlab.ucd.ie/mst/mosaic.git
 
 
+# bmix
+mkdir ./programs/bmix
+cd ./programs/bmix
+wget https://faculty.washington.edu/browning/bmix.jar
+wget ../..
+
 # MOSAIC example
 cd ./programs/MOSAIC/mosaic
 Rscript mosaic.R Moroccan example_data/ -a 2 -n 2 -c 18:22

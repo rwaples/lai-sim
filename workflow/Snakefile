@@ -31,7 +31,7 @@ rule all:
 	input:
 		#rfmix2 = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix2/rfmix2.fb.tsv' for u in units.itertuples()],
 		#rfmix2_diploid = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix2/diploid_la.hdf' for u in units.itertuples()],
-		#mosaic = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/MOSAIC/la_probs.RData' for u in units.itertuples()],
+		mosaic = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/MOSAIC/la_probs.RData' for u in units.itertuples()],
 		#bmix = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/bmix/bmix.anc.vcf.gz' for u in units.itertuples()],
 		diag_coal = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/pop_coal_time.png' for u in units.itertuples()],
 		diag_fst = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png' for u in units.itertuples()],
