@@ -45,6 +45,7 @@ def strip_MAC(ts, MAC):
 
 	ts = ts.delete_sites(sites_to_remove)
 	final_sites = ts.num_sites
+	print("MAC filter:")
 	print(f"removed {initial_sites-final_sites} sites ({(initial_sites-final_sites)/(initial_sites):.0%}), {final_sites} sites remain")
 	return ts
 
@@ -74,6 +75,7 @@ def strip_adjacent_sites(ts, dist=1.5):
 
 	ts = ts.delete_sites(sites_to_remove)
 	final_sites = ts.num_sites
+	print('Adjacent sites filter:')
 	print(f"removed {initial_sites-final_sites} sites ({(initial_sites-final_sites)/(initial_sites):.0%}), {final_sites} sites remain")
 	return ts
 
@@ -92,6 +94,18 @@ def downsample_snps(ts, nsnps, seed, fail=False):
     else:
         rng = np.random.default_rng(seed)
         keep = frozenset(np.random.choice(a=ts.num_mutations, size=nsnps, replace=False))
+
+        # RKW new way to do this
+        keep = frozenset(np.random.choice(a=ts.num_sites, size=nsnps, replace=False))
+        sites_to_remove = frozenset(np.arange(ts.num_sites)) - keep
+        ts = ts.delete_sites(sites_to_remove)
+        final_sites = ts.num_sites
+		print('Downsample filter:')
+        print(f"removed {initial_sites-final_sites} sites ({(initial_sites-final_sites)/(initial_sites):.0%}), {final_sites} sites remain")
+        return(ts)
+
+
+
         tables = ts.dump_tables()
         tables.sites.clear()
         tables.mutations.clear()
@@ -102,7 +116,7 @@ def downsample_snps(ts, nsnps, seed, fail=False):
                 if(nmut==0):
                     pass
                 else:
-                    assert nmut== 1, f"{site}"  # Only supports infinite sites muts.
+                    assert nmut == 1, f"{site}"  # Only supports infinite sites muts.
                     if mut_ix in keep:
                         mut = site.mutations[0]
                         site_id = tables.sites.add_row(
@@ -112,7 +126,7 @@ def downsample_snps(ts, nsnps, seed, fail=False):
                             site=site_id, node=mut.node, derived_state=mut.derived_state)
                     mut_ix +=1
         final_sites = len(tables.sites)
-        print('Max SNPs filter:')
+        print('Downsample filter:')
         print(f"removed {initial_sites-final_sites} sites ({(initial_sites-final_sites)/(initial_sites):.0%}), {final_sites} sites remain")
         return tables.tree_sequence()
 
