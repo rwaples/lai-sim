@@ -97,10 +97,10 @@ def downsample_snps(ts, nsnps, seed, fail=False):
 
         # RKW new way to do this
         keep = frozenset(np.random.choice(a=ts.num_sites, size=nsnps, replace=False))
-        sites_to_remove = frozenset(np.arange(ts.num_sites)) - keep
+        sites_to_remove = list(frozenset(np.arange(ts.num_sites, dtype = np.int32)) - keep)
         ts = ts.delete_sites(sites_to_remove)
         final_sites = ts.num_sites
-		print('Downsample filter:')
+        print('Downsample filter:')
         print(f"removed {initial_sites-final_sites} sites ({(initial_sites-final_sites)/(initial_sites):.0%}), {final_sites} sites remain")
         return(ts)
 
