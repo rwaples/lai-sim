@@ -56,9 +56,10 @@ rule run_mosaic:
 		seed = lambda w: units.loc[(w.sim_name, w.anal_name)].anal_seed,
 		nsource = lambda w: units.loc[(w.sim_name, w.anal_name)].nsource,
 		nthreads = lambda w: units.loc[(w.sim_name, w.anal_name)].nthreads,
+		GpcM = lambda w: int(60 * float(units.loc[(w.sim_name, w.anal_name)].max_snps) / 50000),
 	shell:
 		"""
-		Rscript {params.mosaic} --seed {params.seed} --maxcores {params.nthreads} --chromosomes 22:22 --ancestries {params.nsource} admixed {params.input_folder} 2>&1 | tee {log}
+		Rscript {params.mosaic} --seed {params.seed} --maxcores {params.nthreads} --GpcM {params.GpcM} --chromosomes 22:22 --ancestries {params.nsource} admixed {params.input_folder} 2>&1 | tee {log}
 
 		"""
 
