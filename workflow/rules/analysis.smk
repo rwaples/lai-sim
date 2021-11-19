@@ -3,6 +3,27 @@ wildcard_constraints:
 	anal_name="\w+"
 
 
+
+
+rule get_Q_score:
+	input:
+		true_la = 'results/{model_name}/{sim_name}/{anal_name}/true_local_ancestry.site_matrix.npz',
+		mosaic_la = 'results/{model_name}/{sim_name}/{anal_name}/MOSAIC/la_probs.RData',
+		rfmix2_la = 'results/{model_name}/{sim_name}/{anal_name}/RFMix2/rfmix2.fb.tsv',
+		bmix_la = 'results/{model_name}/{sim_name}/{anal_name}/bmix/bmix.anc.vcf.gz',
+	output:
+		RMSD_path ='results/{model_name}/{sim_name}/{anal_name}/SUMMARY/Q_RMSD.tsv',
+		Q_true_path = 'results/{model_name}/{sim_name}/{anal_name}/SUMMARY/Q_true.tsv',
+		Q_bmix_path = 'results/{model_name}/{sim_name}/{anal_name}/SUMMARY/Q_bmix.tsv',
+		Q_mosaic_path = 'results/{model_name}/{sim_name}/{anal_name}/SUMMARY/Q_mosaic.tsv',
+		Q_rfmix_path = 'results/{model_name}/{sim_name}/{anal_name}/SUMMARY/Q_rfmix.tsv',
+	params:
+		bcftools = config['PATHS']['BCFTOOLS'],
+		nsource = lambda w: units.loc[(w.sim_name, w.anal_name)].nsource,
+	script:
+		"../scripts/get_Q_score.py"
+
+
 rule get_R2_score:
 	input:
 		true_la = 'results/{model_name}/{sim_name}/{anal_name}/true_local_ancestry.site_matrix.npz',
