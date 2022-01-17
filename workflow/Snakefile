@@ -1,6 +1,6 @@
 snakemake.utils.min_version("6.3")
 
-#configfile: "config.yml" # should now be loaded via --profile
+#configfile: "config.yml" # should now be loaded via "--configfile" flag
 include: "rules/common.smk"
 #include: "rules/install.smk" # no longer needed with update MOSAIC v1.3.9?
 include: "rules/simulate.smk"

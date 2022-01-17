@@ -1,8 +1,5 @@
-#configfile: "./config.yml"
 wildcard_constraints:
 	anal_name="\w+"
-
-
 
 
 rule get_Q_score:

@@ -1,6 +1,6 @@
-rule sims_done:
-	input:
-		[f'results/{s.model_name}/{s.sim_name}/full.tsz' for s in simulations.itertuples()]
+#rule sims_done:
+#	input:
+#		[f'results/{s.model_name}/{s.sim_name}/full.tsz' for s in simulations.itertuples()]
 
 
 rule recap_and_mutate:
