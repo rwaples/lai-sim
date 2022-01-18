@@ -1,8 +1,3 @@
-#rule sims_done:
-#	input:
-#		[f'results/{s.model_name}/{s.sim_name}/full.tsz' for s in simulations.itertuples()]
-
-
 rule recap_and_mutate:
 	input:
 		"results/{model_name}/{sim_name}/from_slim.trees",
@@ -16,7 +11,7 @@ rule recap_and_mutate:
 		sim_seed = lambda w: simulations.loc[w.sim_name].sim_seed,
 		admixture_time = lambda w: simulations.loc[w.sim_name].admixture_time,
 	benchmark:
-		'results/{model_name}/{sim_name}/benchmark/simulate_admixture.tsv',
+		'results/{model_name}/{sim_name}/benchmark/recap_and_mutate.tsv',
 	script:
 		"../scripts/recap_and_mutate.py"
 

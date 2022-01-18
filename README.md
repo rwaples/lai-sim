@@ -7,8 +7,13 @@
 # activate conda environment (from base directory)
 `conda activate ./env`
 
+# dry run the full pipeline
+`snakemake all -c1 --configfile profiles/personal/config.yaml --dry-run`
+
+snakemake -c1 --configfile profiles/personal/config.yaml --dry-run
+
 # run the full pipeline with a single core
-`snakemake --cores 1`
+`snakemake all -c1 --configfile profiles/personal/config.yaml`
 
 # view a graph of the directed acyclic graph (DAG) of the pipeline
 `snakemake --dag | dot | display`

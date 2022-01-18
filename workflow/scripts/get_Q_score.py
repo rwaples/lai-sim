@@ -18,6 +18,7 @@ Q_bmix_path = str(snakemake.output.Q_bmix_path)
 Q_mosaic_path = str(snakemake.output.Q_mosaic_path)
 Q_rfmix_path = str(snakemake.output.Q_rfmix_path)
 
+
 def get_ancestry_dosage(arr, n_anc):
     anc_dosage = np.zeros((arr.shape[0], int(arr.shape[1]/2)), dtype=np.half)
     if n_anc==3:
@@ -80,17 +81,17 @@ def load_rfmix_fb(path):
 	rfmix_res = pd.read_csv(path, sep='\t', comment='#')
 	# expand out to each site
 	rfmix_res = np.repeat(rfmix_res.iloc[:, 4:].values, [5], axis = 0)
-	return rfmix_res
+	return(rfmix_res)
 
 def load_bmix(path):
 	csv_path = path.replace('.vcf.gz', '.csv')
+	# conver the vcf.gz to a csv
 	os.system(f"{BCFTOOLS} query -f '%CHROM, %POS, [%ANP1, %ANP2,]\\n' {path} > {csv_path}")
 	bmix = pd.read_csv(csv_path, header=None)
 	bmix = bmix.dropna(axis=1)
 	return(bmix.iloc[:,2:].values)
 
 def load_mosaic(path):
-	print(path)
 	mr = pyreadr.read_r(path)['arr'].astype(np.half)
 	return(mr.to_numpy().T.reshape((mr.shape[2],-1), order='C'))
 
@@ -147,8 +148,13 @@ rmsd_rfmix = get_RMSD_Q(Q_rfmix, Q_true)
 
 ## Write Q results tables
 with open(RMSD_path, 'w') as OUTFILE:
-    OUTFILE.write('\t'.join(['bmix', 'MOSAIC', 'RFMix2' ])  + '\n')
-    OUTFILE.write('\t'.join([f'{x:0.4f}' for x in [rmsd_bmix, rmsd_mosaic, rmsd_rfmix]])  + '\n')
+	header = '\t'.join(['bmix', 'MOSAIC', 'RFMix2'])
+	rmsd_line = '\t'.join([f'{x:0.4f}' for x in [rmsd_bmix, rmsd_mosaic, rmsd_rfmix]])
+	OUTFILE.write(header + '\n')
+	OUTFILE.write(rmsd_line  + '\n')
+print(f'RMSD in Q values')
+print(header)
+print(rmsd_line)
 
 Q_true.to_csv(Q_true_path, index = None, sep = '\t', float_format='%0.4f')
 Q_bmix.to_csv(Q_bmix_path, index = None, sep = '\t', float_format='%0.4f')

@@ -111,7 +111,6 @@ def load_bmix(path):
 	return(bmix.iloc[:,2:].values)
 
 def load_mosaic(path):
-	print(path)
 	mr = pyreadr.read_r(path)['arr'].astype(np.half)
 	return mr.to_numpy().T.reshape((mr.shape[2],-1), order='C')
 
@@ -120,7 +119,7 @@ true_anc_dosage = get_true_anc_dosage(load_true_la(true_path), n_anc=n_anc)
 
 
 rfmix_anc_dosage = get_ancestry_dosage(load_rfmix_fb(rfmix2_path), n_anc=n_anc)
-assert (len(rfmix_anc_dosage)-len(true_anc_dosage))<=5 
+assert (len(rfmix_anc_dosage)-len(true_anc_dosage))<=5
 rfmix_anc_r2, rfmix_ind_r2 = r2_ancestry_dosage(
 	true_dosage=true_anc_dosage,
 	pred_dosage=rfmix_anc_dosage[:len(true_anc_dosage)], # addressing possible uneven lengths due to RFmix only reporting ever five sites
@@ -150,9 +149,15 @@ del bmix_anc_dosage
 ## Write R2 tables
 with open(R2_anc, 'w') as OUTFILE:
 	OUTFILE.write('\t'.join(['method'] + [f'anc_{x}' for x in range(n_anc)]) + '\n')
-	OUTFILE.write('\t'.join(['rfmix2'] + [str(x) for x in rfmix_anc_r2])  + '\n')
-	OUTFILE.write('\t'.join(['mosaic'] + [str(x) for x in mosaic_anc_r2])  + '\n')
-	OUTFILE.write('\t'.join(['bmix'] + [str(x) for x in bmix_anc_r2])  + '\n')
+	OUTFILE.write('\t'.join(['rfmix2'] + [f'{x:0.4f}' for x in rfmix_anc_r2])  + '\n')
+	OUTFILE.write('\t'.join(['mosaic'] + [f'{x:0.4f}' for x in mosaic_anc_r2])  + '\n')
+	OUTFILE.write('\t'.join(['bmix'] + [f'{x:0.4f}' for x in bmix_anc_r2])  + '\n')
+
+	print(f'R^2 vs truth for LA calls:')
+	print('\t'.join(['method'] + [f'anc_{x}' for x in range(n_anc)]))
+	print('\t'.join(['rfmix2'] + [f'{x:0.4f}' for x in rfmix_anc_r2]))
+	print('\t'.join(['mosaic'] + [f'{x:0.4f}' for x in mosaic_anc_r2]))
+	print('\t'.join(['bmix'] + [f'{x:0.4f}' for x in bmix_anc_r2]))
 
 with open(R2_ind, 'w') as OUTFILE:
 	OUTFILE.write('\t'.join(['method'] + [f'ind_{x}' for x in range(len(bmix_ind_r2))]) + '\n')

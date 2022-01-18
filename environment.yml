@@ -13,7 +13,7 @@ dependencies:
   - msprime
   - tskit
   - stdpopsim
-  - tszip
+  - tszip=0.1.0
   - pytables
   - jupyter
   - notebook

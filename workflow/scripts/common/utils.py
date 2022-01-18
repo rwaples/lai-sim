@@ -45,7 +45,7 @@ def strip_MAC(ts, MAC):
 
 	ts = ts.delete_sites(sites_to_remove)
 	final_sites = ts.num_sites
-	print("MAC filter:")
+	print(f"MAC filter (>={MAC}):")
 	print(f"removed {initial_sites-final_sites} sites ({(initial_sites-final_sites)/(initial_sites):.0%}), {final_sites} sites remain")
 	return ts
 
@@ -434,6 +434,40 @@ def vcfheader(ts, target_pop):
     header = header +'\t'.join(['#CHROM','POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO', 'FORMAT'])
     header = header + '\t' + '\t'.join(ind_labels) + '\n'
     return(header)
+
+
+def get_allele_freqs(ts, pops = None):
+    """return allele frequencies for each site and population
+    returns a matrix of [site_idx, pop_idx] derived allele frequencies.
+    pops is a list of the pops, order of pops is maintained.
+    Only supports infinite site mutations with <=2 alleles.
+    """
+
+    if pops:
+        freqs = np.zeros((ts.num_sites, len(pops)))
+    else:
+        pops = [p.id for p in ts2.populations()]
+        freqs = np.zeros((ts.num_sites, len(pops)))
+    for ipop, pop in enumerate(pops):
+        samples = ts.samples(pop)
+        nsamp = len(samples)
+        isite = 0
+        for tree in ts.trees(tracked_samples=samples): # Only supports infinite sites muts.
+            for site in tree.sites():
+                assert len(site.mutations) == 1
+                mut = site.mutations[0]
+                ac = tree.num_tracked_samples(mut.node)
+                af = ac/nsamp
+                freqs[isite, ipop] = af
+                isite+=1
+    return(freqs)
+
+
+def get_mean_allele_frequencies(freqs):
+	"""return the mean allele frquency across populations.
+	Input should be the array from get_allele_freqs(). """
+	return freqs.mean(1)
+
 
 
 def get_fst_faser(ts, popA, popB):
