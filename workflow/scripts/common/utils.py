@@ -27,7 +27,7 @@ def sample_inds(ts, pop_id, nind, seed):
 
 def strip_MAC(ts, MAC):
 	"""
-	Removes sites with minor allele count >= MAC.
+	Removes sites with minor allele count <= MAC.
 	Returns a new tree-sequence with sites removed
 	"""
 
@@ -49,7 +49,7 @@ def strip_MAC(ts, MAC):
 
 	ts = ts.delete_sites(sites_to_remove)
 	final_sites = ts.num_sites
-	print(f"MAC filter (>={MAC}):")
+	print(f"MAC filter (<={MAC}):")
 	print(f"removed {initial_sites-final_sites} sites ({(initial_sites-final_sites)/(initial_sites):.0%}), {final_sites} sites remain")
 	return ts
 

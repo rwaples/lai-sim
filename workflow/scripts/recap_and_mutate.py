@@ -4,6 +4,7 @@ import stdpopsim
 import tszip
 import sys
 import numpy as np
+from common.utils import strip_MAC
 
 
 ts_path = str(snakemake.input[0])
@@ -80,5 +81,8 @@ del flags
 
 # add mutations
 mut_ts = msprime.mutate(tree_sequence=coalesced_ts, random_seed=sim_seed, rate=mutation_rate)
+# remove monomorphic sites
+# non-variable sites are present due to non-ancestors present in the ts.
+mut_ts = strip_MAC(mut_ts, MAC=0)
 # compress the ts with tszip
 tszip.compress(mut_ts, out_path)

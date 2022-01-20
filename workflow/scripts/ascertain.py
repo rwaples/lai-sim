@@ -16,9 +16,12 @@ print(f'Start ascertinment: {out_path}')
 ts = tszip.decompress(ts_path)
 
 # apply MAC filter first
+print(f'ascertainment MAC = {asc_MAC}')
+
 ts = strip_MAC(ts, MAC=asc_MAC)
 
 # apply MAF filter next
+print(f'ascertainment MAF = {asc_MAF}')
 if asc_MAF>0:
 	af = get_allele_freqs(ts, pops = list(range(target_pop)))
 	mean_af = get_mean_allele_frequencies(af)
@@ -26,8 +29,9 @@ if asc_MAF>0:
 	to_remove = np.take(np.array([s.id for s in ts.sites()]), indices=remove_index)
 	ts = ts.delete_sites(to_remove)
 
-if ts.num_sites > asc_maxsites:
-	ts = downsample_snps(ts, nsnps=asc_maxsites, seed=asc_seed, fail=True)
+if asc_maxsites>0:
+	if ts.num_sites > asc_maxsites:
+		ts = downsample_snps(ts, nsnps=asc_maxsites, seed=asc_seed, fail=True)
 
 tszip.compress(ts, out_path)
 print(f'Done with ascertainment')

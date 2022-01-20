@@ -19,7 +19,7 @@ print(f'Start sampling: {out_path} (temp)')
 ts = tszip.decompress(ts_path)
 
 # select the samples
-# assume the last popualtion is the admixed pop
+# assume the last population is the admixed pop
 pops = [p.id for p in ts.populations()]
 ref_pops = pops[:-1]
 admix_pops = pops[-1:]
