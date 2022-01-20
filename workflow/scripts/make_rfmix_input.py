@@ -32,6 +32,7 @@ with open(classes_file, 'w') as OUTFILE:
 	OUTFILE.write(' '.join(classes))
 	OUTFILE.write('\n')
 
+
 # write positions_file - 1 row per site - pos in cM
 positions = pd.read_csv(genetic_map, sep = '\t', header = None)[2].values
 with open(positions_file, 'w') as OUTFILE:

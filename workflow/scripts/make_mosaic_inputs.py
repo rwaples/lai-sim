@@ -17,7 +17,6 @@ folder = str(snakemake.params.folder)
 chrom_id = str(snakemake.params.chrom_id).strip('chr')
 nind_ref = str(snakemake.params.nind_ref)
 
-
 nind_ref = np.array([int(x) for x in nind_ref.split(',')])
 
 # write sample.names
