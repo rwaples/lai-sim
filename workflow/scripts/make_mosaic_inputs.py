@@ -3,6 +3,7 @@ import pandas as pd
 import tszip
 import os
 import subprocess
+import csv
 from common.utils import make_ind_labels
 
 
@@ -14,14 +15,16 @@ plink_map = str(snakemake.input.plink_map)
 
 folder = str(snakemake.params.folder)
 chrom_id = str(snakemake.params.chrom_id).strip('chr')
-nind_ref = int(snakemake.params.nind_ref)
+nind_ref = str(snakemake.params.nind_ref)
 
+
+nind_ref = np.array([int(x) for x in nind_ref.split(',')])
 
 # write sample.names
 ts = tszip.decompress(site_ts)
 npops = len(ts.populations())
 ind_labels = make_ind_labels(ts)
-nref_total = (npops-1) * nind_ref
+nref_total = nind_ref.sum()
 with open(os.path.join(folder, 'sample.names'), 'w') as OUTFILE:
 	for ind_string in ind_labels[:nref_total]:
 		pop = ind_string.split('-')[0]
@@ -31,11 +34,16 @@ with open(os.path.join(folder, 'sample.names'), 'w') as OUTFILE:
 		OUTFILE.write(f'{pop} {ind_string} 0 0 0 2 -9\n')
 
 # needed to subset vcf files
+start_ix = 0
+stop_ix = 0
 for p in range(npops-1):
 	pop = 'pop_' + (str(p))
+	stop_ix += nind_ref[p]
 	with open(os.path.join(folder, f'{pop}.samplelist'), 'w') as OUTFILE:
-		for ind_string in ind_labels[nind_ref*p:nind_ref*(p+1)]:
+		for ind_string in ind_labels[start_ix:stop_ix]:
 			OUTFILE.write(f'{ind_string}\n')
+	start_ix += nind_ref[p]
+
 with open(os.path.join(folder, 'admixed.samplelist'), 'w') as OUTFILE:
 	for ind_string in ind_labels[nref_total:]:
 		OUTFILE.write(f'{ind_string}\n')
@@ -101,7 +109,7 @@ subprocess.run([
 	'--haplegendsample', f'{prefix}',
 	f'{output}',
 	])
-print(f"zcat {prefix+'.hap.gz'} | tr -d ' ' > {prefix}")
+#print(f"zcat {prefix+'.hap.gz'} | tr -d ' ' > {prefix}")
 subprocess.run(
 	f"zcat {prefix+'.hap.gz'} | tr -d ' ' > {prefix}", shell=True)
 
@@ -114,7 +122,6 @@ snpfile['rsID'] = [f'        mosaic_SNP_{i}' for i in range(len(snpfile))]
 snpfile['chr'] = [f'{c[3:]}' for c in snpfile['chr']]
 snpfile['A1'] = 'A'
 snpfile['A2'] = 'T'
-import csv
 snpfile.to_csv(os.path.join(folder, f'snpfile.{chrom_id}'), sep =' ',
 	index=None, header=None, quoting=csv.QUOTE_NONE, escapechar = ' ')
 

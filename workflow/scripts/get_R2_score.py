@@ -4,6 +4,7 @@ import pyreadr
 import os
 from sklearn.metrics import r2_score
 from scipy.stats import pearsonr
+from common.utils import max_la
 
 
 BCFTOOLS = str(snakemake.params.bcftools)
@@ -12,6 +13,8 @@ true_path = str(snakemake.input.true_la)
 mosaic_path = str(snakemake.input.mosaic_la)
 rfmix2_path = str(snakemake.input.rfmix2_la)
 bmix_path = str(snakemake.input.bmix_la)
+sites_file = str(snakemake.input.sites_file)
+
 
 R2_anc = str(snakemake.output.R2_anc)
 R2_ind = str(snakemake.output.R2_ind)
@@ -103,12 +106,23 @@ def load_rfmix_fb(path):
 	rfmix_res = np.repeat(rfmix_res.iloc[:, 4:].values, [5], axis = 0)
 	return rfmix_res
 
-def load_bmix(path):
+def load_bmix(path, sites_file):
+
+	# convert the vcf.gz to a csv
 	csv_path = path.replace('.vcf.gz', '.csv')
+	bmix_sites = path.replace('.vcf.gz', '.bmix_sites')
+
 	os.system(f"{BCFTOOLS} query -f '%CHROM, %POS, [%ANP1, %ANP2,]\\n' {path} > {csv_path}")
 	bmix = pd.read_csv(csv_path, header=None)
 	bmix = bmix.dropna(axis=1)
-	return(bmix.iloc[:,2:].values)
+	res = bmix.iloc[:,2:].values
+	#
+	os.system(f"{BCFTOOLS} query -f '%POS\n' {path} > {bmix_sites}")
+	pre_sites = pd.read_csv(sites_file, header=None).values.flatten()
+	post_sites = pd.read_csv(bmix_sites, header=None).values.flatten()
+	post_indexes = np.searchsorted(post_sites, pre_sites)
+	res = res[post_indexes]
+	return(res)
 
 def load_mosaic(path):
 	mr = pyreadr.read_r(path)['arr'].astype(np.half)
@@ -122,7 +136,15 @@ rfmix_anc_dosage = get_ancestry_dosage(load_rfmix_fb(rfmix2_path), n_anc=n_anc)
 assert (len(rfmix_anc_dosage)-len(true_anc_dosage))<=5
 rfmix_anc_r2, rfmix_ind_r2 = r2_ancestry_dosage(
 	true_dosage=true_anc_dosage,
-	pred_dosage=rfmix_anc_dosage[:len(true_anc_dosage)], # addressing possible uneven lengths due to RFmix only reporting ever five sites
+	# addressing possible uneven lengths due to RFMix2 only reporting every fifth sites
+	pred_dosage=rfmix_anc_dosage[:len(true_anc_dosage)],
+	n_anc=n_anc
+)
+# get the r2 with max_like calls
+rfmixML_anc_r2, rfmixML_ind_r2 = r2_ancestry_dosage(
+	true_dosage=true_anc_dosage,
+	# addressing possible uneven lengths due to RFMix2 only reporting every fifth sites
+	pred_dosage=max_la(rfmix_anc_dosage[:len(true_anc_dosage)], n_anc=n_anc),
 	n_anc=n_anc
 )
 del rfmix_anc_dosage
@@ -134,15 +156,32 @@ mosaic_anc_r2, mosaic_ind_r2 = r2_ancestry_dosage(
 	pred_dosage=mosaic_anc_dosage,
 	n_anc=n_anc
 )
+
+
+mosaicML_anc_r2, mosaicML_ind_r2 = r2_ancestry_dosage(
+	true_dosage=true_anc_dosage,
+	pred_dosage=max_la(mosaic_anc_dosage, n_anc=n_anc),
+	n_anc=n_anc
+)
+
+
 del mosaic_anc_dosage
 
 
-bmix_anc_dosage = get_ancestry_dosage(load_bmix(bmix_path), n_anc=n_anc)
+bmix_anc_dosage = get_ancestry_dosage(load_bmix(bmix_path, sites_file=sites_file), n_anc=n_anc)
 bmix_anc_r2, bmix_ind_r2 = r2_ancestry_dosage(
 	true_dosage=true_anc_dosage,
 	pred_dosage=bmix_anc_dosage,
 	n_anc=n_anc
 )
+
+
+bmixML_anc_r2, bmixML_ind_r2 = r2_ancestry_dosage(
+	true_dosage=true_anc_dosage,
+	pred_dosage=max_la(bmix_anc_dosage, n_anc=n_anc),
+	n_anc=n_anc
+)
+
 del bmix_anc_dosage
 
 
@@ -161,6 +200,25 @@ with open(R2_anc, 'w') as OUTFILE:
 
 with open(R2_ind, 'w') as OUTFILE:
 	OUTFILE.write('\t'.join(['method'] + [f'ind_{x}' for x in range(len(bmix_ind_r2))]) + '\n')
-	OUTFILE.write('\t'.join(['rfmix2'] + [str(x) for x in rfmix_ind_r2])  + '\n')
-	OUTFILE.write('\t'.join(['mosaic'] + [str(x) for x in mosaic_ind_r2])  + '\n')
-	OUTFILE.write('\t'.join(['bmix'] + [str(x) for x in bmix_ind_r2])  + '\n')
+	OUTFILE.write('\t'.join(['rfmix2'] + [f'{x:0.4f}' for x in rfmix_ind_r2])  + '\n')
+	OUTFILE.write('\t'.join(['mosaic'] + [f'{x:0.4f}' for x in mosaic_ind_r2])  + '\n')
+	OUTFILE.write('\t'.join(['bmix'] + [f'{x:0.4f}' for x in bmix_ind_r2])  + '\n')
+
+
+with open(R2_anc+ ".ML", 'w') as OUTFILE:
+	OUTFILE.write('\t'.join(['method'] + [f'anc_{x}' for x in range(n_anc)]) + '\n')
+	OUTFILE.write('\t'.join(['rfmix2'] + [f'{x:0.4f}' for x in rfmixML_anc_r2])  + '\n')
+	OUTFILE.write('\t'.join(['mosaic'] + [f'{x:0.4f}' for x in mosaicML_anc_r2])  + '\n')
+	OUTFILE.write('\t'.join(['bmix'] + [f'{x:0.4f}' for x in bmixML_anc_r2])  + '\n')
+
+	print(f'R^2 vs truth for [ML] LA calls:')
+	print('\t'.join(['method'] + [f'anc_{x}' for x in range(n_anc)]))
+	print('\t'.join(['rfmix2'] + [f'{x:0.4f}' for x in rfmixML_anc_r2]))
+	print('\t'.join(['mosaic'] + [f'{x:0.4f}' for x in mosaicML_anc_r2]))
+	print('\t'.join(['bmix'] + [f'{x:0.4f}' for x in bmixML_anc_r2]))
+
+with open(R2_ind+ ".ML", 'w') as OUTFILE:
+	OUTFILE.write('\t'.join(['method'] + [f'ind_{x}' for x in range(len(bmix_ind_r2))]) + '\n')
+	OUTFILE.write('\t'.join(['rfmix2'] + [f'{x:0.4f}' for x in rfmixML_ind_r2])  + '\n')
+	OUTFILE.write('\t'.join(['mosaic'] + [f'{x:0.4f}'for x in mosaicML_ind_r2])  + '\n')
+	OUTFILE.write('\t'.join(['bmix'] + [f'{x:0.4f}' for x in bmixML_ind_r2])  + '\n')

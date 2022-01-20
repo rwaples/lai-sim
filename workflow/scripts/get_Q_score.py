@@ -11,6 +11,7 @@ true_path = str(snakemake.input.true_la)
 mosaic_path = str(snakemake.input.mosaic_la)
 rfmix2_path = str(snakemake.input.rfmix2_la)
 bmix_path = str(snakemake.input.bmix_la)
+sites_file = str(snakemake.input.sites_file)
 # output
 RMSD_path = str(snakemake.output.RMSD_path)
 Q_true_path = str(snakemake.output.Q_true_path)
@@ -83,13 +84,23 @@ def load_rfmix_fb(path):
 	rfmix_res = np.repeat(rfmix_res.iloc[:, 4:].values, [5], axis = 0)
 	return(rfmix_res)
 
-def load_bmix(path):
+def load_bmix(path, sites_file):
+
+	# convert the vcf.gz to a csv
 	csv_path = path.replace('.vcf.gz', '.csv')
-	# conver the vcf.gz to a csv
+	bmix_sites = path.replace('.vcf.gz', '.bmix_sites')
+
 	os.system(f"{BCFTOOLS} query -f '%CHROM, %POS, [%ANP1, %ANP2,]\\n' {path} > {csv_path}")
 	bmix = pd.read_csv(csv_path, header=None)
 	bmix = bmix.dropna(axis=1)
-	return(bmix.iloc[:,2:].values)
+	res = bmix.iloc[:,2:].values
+	#
+	os.system(f"{BCFTOOLS} query -f '%POS\n' {path} > {bmix_sites}")
+	pre_sites = pd.read_csv(sites_file, header=None).values.flatten()
+	post_sites = pd.read_csv(bmix_sites, header=None).values.flatten()
+	post_indexes = np.searchsorted(post_sites, pre_sites)
+	res = res[post_indexes]
+	return(res)
 
 def load_mosaic(path):
 	mr = pyreadr.read_r(path)['arr'].astype(np.half)
@@ -133,7 +144,7 @@ def get_RMSD_Q(Q1, Q2):
 
 
 true_anc_dosage = get_true_anc_dosage(load_true_la(true_path), n_anc=n_anc)
-bmix_anc_dosage = get_ancestry_dosage(load_bmix(bmix_path), n_anc=n_anc)
+bmix_anc_dosage = get_ancestry_dosage(load_bmix(bmix_path, sites_file=sites_file), n_anc=n_anc)
 mosaic_anc_dosage = get_ancestry_dosage(load_mosaic(mosaic_path), n_anc=n_anc)
 rfmix_anc_dosage = get_ancestry_dosage(load_rfmix_fb(rfmix2_path), n_anc=n_anc)
 

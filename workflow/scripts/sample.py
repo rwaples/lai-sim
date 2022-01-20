@@ -7,9 +7,11 @@ from common.utils import sample_inds
 ts_path = str(snakemake.input[0])
 out_path = str(snakemake.output[0])
 nind_admixed = int(snakemake.params.nind_admixed)
-nind_ref = int(snakemake.params.nind_ref)
+nind_ref = str(snakemake.params.nind_ref)
 admixture_time = int(snakemake.params.admixture_time)
 anal_seed = int(snakemake.params.anal_seed)
+
+nind_ref = np.array([int(x) for x in nind_ref.split(',')])
 
 
 print(f'Start sampling: {out_path} (temp)')
@@ -29,7 +31,7 @@ seeds = rng.bit_generator._seed_seq.spawn(len(pops))
 
 i = 0
 for pop in ref_pops:
-	samples = sample_inds(ts, pop, nind_ref, seed = seeds[i])
+	samples = sample_inds(ts, pop, nind_ref[i], seed = seeds[i])
 	to_take = np.concatenate([to_take, samples])
 	i+=1
 for pop in admix_pops:

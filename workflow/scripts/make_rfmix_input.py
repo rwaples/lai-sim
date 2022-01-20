@@ -10,9 +10,10 @@ alleles_file = str(snakemake.output.alleles_file)
 classes_file = str(snakemake.output.classes_file)
 positions_file = str(snakemake.output.positions_file)
 
-nind_ref = int(snakemake.params.nind_ref)
 nind_admixed = int(snakemake.params.nind_admixed)
+nind_ref = str(snakemake.params.nind_ref)
 
+nind_ref = np.array([int(x) for x in nind_ref.split(',')])
 
 # write alleles file - ne row per site, one column per haplotype
 ts = tszip.decompress(site_ts)

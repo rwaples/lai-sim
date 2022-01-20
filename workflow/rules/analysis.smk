@@ -4,6 +4,7 @@ rule get_Q_score:
 		mosaic_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/la_probs.RData',
 		rfmix2_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.fb.tsv',
 		bmix_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/bmix/bmix.anc.vcf.gz',
+		sites_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
 	output:
 		RMSD_path ='results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/Q_RMSD.tsv',
 		Q_true_path = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/Q_true.tsv',
@@ -23,6 +24,7 @@ rule get_R2_score:
 		mosaic_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/la_probs.RData',
 		rfmix2_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.fb.tsv',
 		bmix_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/bmix/bmix.anc.vcf.gz',
+		sites_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
 	output:
 		R2_anc = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/R2_score.ancestry.tsv',
 		R2_ind = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/R2_score.individuals.tsv',
@@ -31,6 +33,7 @@ rule get_R2_score:
 		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
 	script:
 		"../scripts/get_R2_score.py"
+
 
 rule export_mosaic:
 	input:
@@ -44,22 +47,18 @@ rule export_mosaic:
 		"../scripts/export_mosaic_results.R"
 
 
-# change the output of this file to be one of the file with a non-changing name
-# at the same time, rename the relevant files with changing names to have a simpler naming scheme
-# so then I can declare these files as output as well
+# changed the output of this file to be a file with non-changing name
+# also rename the relevant files with variable names
 rule run_mosaic:
 	input:
-		#'programs/MOSAIC/MOSAIC/mosaic.R',
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/admixedgenofile.22',
 	output:
 		la_results = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/localanc_admixed.RData',
 		model_results = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/admixed.RData',
 		emlog1 = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/admixed_1way.EMlog.out',
 		emlog3 = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/admixed_3way.EMlog.out',
-
-
 	log:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/mosaic.log',
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/run_mosaic.log',
 	benchmark:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_mosaic.tsv',
 	shadow: 'full'
@@ -78,8 +77,6 @@ rule run_mosaic:
 		"""
 
 		"""
-		# setup_data_etc() defines MOSAIC_RESULTS
-
 
 		# move the results into the MOSAIC folder
 		mv MOSAIC_RESULTS/* {params.base_folder}
@@ -108,6 +105,8 @@ rule make_mosaic_input:
 		site_ts = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/sample.filter.tsz',
 	output:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/admixedgenofile.{CHR}'
+	log:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/make_input.{CHR}.log'
 	params:
 		folder = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input',
 		chrom_id = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].chr,
@@ -135,6 +134,8 @@ rule run_bmix:
 		genetic_map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/plink_map.txt',
 	output:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/bmix/bmix.anc.vcf.gz',
+	log:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/bmix/run_bmix.log',
 	benchmark:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_bmix.tsv',
 	params:
@@ -153,7 +154,7 @@ rule run_bmix:
 		"probs=true "
 		"nthreads={params.nthreads} "
 		"seed={params.seed} "
-		"min-maf=0 "
+		#"min-maf=0 "
 
 		"""
 
@@ -224,6 +225,7 @@ rule run_RFMix2:
 		"""
 		"{params.rfmix2} -f {input.target_vcf} -r {input.reference_vcf} "
 		"-m {input.sample_map} -g {input.genetic_map} -o {params.output} "
-		#"--reanalyze-reference -e 5 "
+		#"--reanalyze-reference "
+		"-e 5 "
 		"--n-threads={params.nthreads} --chromosome={params.chr} "
 		"--random-seed={params.seed} 2>&1 | tee {log}"

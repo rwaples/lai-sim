@@ -10,6 +10,7 @@ rule write_vcfs:
 		sample_map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/sample_map.txt',
 		reference_inds = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/reference_inds.txt',
 		target_inds = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/target_inds.txt',
+		sites = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
 	params:
 		base_path = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}',
 		chrom_id = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].chr,
@@ -26,7 +27,8 @@ rule split_vcf:
 		vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.gz',
 		samples = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/{sample_group}.txt',
 	output:
-		vcf = temp('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.{sample_group}.vcf.gz'),
+		#vcf = temp('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.{sample_group}.vcf.gz'),
+		vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.{sample_group}.vcf.gz',
 	params:
 		bcftools = config['PATHS']['BCFTOOLS']
 	shell:
@@ -34,6 +36,7 @@ rule split_vcf:
 		{params.bcftools} view --samples-file {input.samples} --output-file {output.vcf} --output-type z {input.vcf}
 		{params.bcftools} index {output.vcf}
 		"""
+
 
 rule split_bcf:
 	input:
@@ -72,12 +75,16 @@ rule ascertain:
 		'results/{model_name}/{sim_name}/full.tsz'
 	output:
 		'results/{model_name}/{sim_name}/{asc_name}/ascertained.tsz'
+	output:
+		'results/{model_name}/{sim_name}/{asc_name}/ascertained.log'
+	conda:
+		'../../environment.yml'
 	params:
-		asc_MAC = lambda w: units.loc[(w.sim_name, w.asc_name)].asc_MAC,
-		asc_MAF = lambda w: units.loc[(w.sim_name, w.asc_name)].asc_MAF,
-		asc_maxsites = lambda w: units.loc[(w.sim_name, w.asc_name)].asc_maxsites,
-		asc_seed = lambda w: units.loc[(w.sim_name, w.asc_name)].asc_seed,
-		target_pop = lambda w: units.loc[(w.sim_name, w.asc_name)].target_pop,
+		asc_MAC = lambda w: units.loc[(w.sim_name, w.asc_name)].asc_MAC[0],
+		asc_MAF = lambda w: units.loc[(w.sim_name, w.asc_name)].asc_MAF[0],
+		asc_maxsites = lambda w: units.loc[(w.sim_name, w.asc_name)].asc_maxsites[0],
+		asc_seed = lambda w: units.loc[(w.sim_name, w.asc_name)].asc_seed[0],
+		target_pop = lambda w: units.loc[(w.sim_name, w.asc_name)].target_pop[0],
 	script:
 		"../scripts/ascertain.py"
 

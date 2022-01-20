@@ -3,6 +3,8 @@ rule recap_and_mutate:
 		"results/{model_name}/{sim_name}/from_slim.trees",
 	output:
 		'results/{model_name}/{sim_name}/full.tsz'
+	log:
+		'results/{model_name}/{sim_name}/recap_and_mutate.log'
 	params:
 		ancestral_Ne = lambda w: simulations.loc[w.sim_name].ancestral_Ne,
 		chr = lambda w: simulations.loc[w.sim_name].chr,

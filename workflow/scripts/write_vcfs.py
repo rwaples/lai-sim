@@ -14,10 +14,11 @@ site_matrix = str(snakemake.input.site_matrix)
 
 base_path = str(snakemake.params.base_path)
 chrom_id = str(snakemake.params.chrom_id)
-nind_ref = int(snakemake.params.nind_ref)
+nind_ref = str(snakemake.params.nind_ref)
 chr_len = float(snakemake.params.chr_len)
 target_pop = int(snakemake.params.target_pop)
 
+nind_ref = np.array([int(x) for x in nind_ref.split(',')])
 
 # remove the existing 'individuals', make a ts for exporting with inds removed
 ts = tszip.decompress(site_ts)
@@ -48,7 +49,7 @@ read_fd, write_fd = os.pipe()
 write_pipe = os.fdopen(write_fd, "w")
 with open(os.path.join(base_path, 'genotypes.bcf'), "w") as bcf_file:
 	proc = subprocess.Popen(
-	[f"{snakemake.config['PATHS']['BCFTOOLS']}", "view", "-O", "b"], stdin=read_fd, stdout=bcf_file
+		[f"{snakemake.config['PATHS']['BCFTOOLS']}", "view", "-O", "b"], stdin=read_fd, stdout=bcf_file
 	)
 	export_ts.write_vcf(
 		write_pipe,
@@ -67,7 +68,7 @@ with open(os.path.join(base_path, 'genotypes.bcf'), "w") as bcf_file:
 # write file mapping inds to populations
 # only for the reference individuals
 npops = len(export_ts.populations())
-nref_total = (npops-1) * nind_ref
+nref_total = nind_ref.sum()
 with open(os.path.join(base_path, 'sample_map.txt'), 'w') as OUTFILE:
 	for ind_string in ind_labels[:nref_total]:
 		pop = ind_string.split('-')[0]
