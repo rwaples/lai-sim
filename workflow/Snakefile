@@ -10,6 +10,7 @@ include: "rules/genotype_error.smk"
 include: "rules/phasing.smk"
 include: "rules/analysis.smk"
 include: "rules/diagnostic_plots.smk"
+include: "rules/reports.smk"
 
 
 wildcard_constraints:

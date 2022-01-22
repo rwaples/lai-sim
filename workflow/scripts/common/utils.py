@@ -589,6 +589,7 @@ def load_bmix(path, sites_file, BCFTOOLS):
 	bmix = pd.read_csv(csv_path, header=None)
 	bmix = bmix.dropna(axis=1)
 	res = bmix.iloc[:,2:].values
+	res = np.concatenate([res[:1], res])
 	#
 	os.system(f"{BCFTOOLS} query -f '%POS\n' {path} > {bmix_sites}")
 	pre_sites = pd.read_csv(sites_file, header=None).values.flatten()
