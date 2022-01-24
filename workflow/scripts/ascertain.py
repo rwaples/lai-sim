@@ -29,6 +29,8 @@ if asc_MAF>0:
 	to_remove = np.take(np.array([s.id for s in ts.sites()]), indices=remove_index)
 	ts = ts.delete_sites(to_remove)
 
+
+print(f'ascertainment max sites = {asc_maxsites}')
 if asc_maxsites>0:
 	if ts.num_sites > asc_maxsites:
 		ts = downsample_snps(ts, nsnps=asc_maxsites, seed=asc_seed, fail=True)
