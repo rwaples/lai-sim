@@ -12,7 +12,7 @@ dependencies:
   - seaborn
   - msprime
   - tskit
-  - stdpopsim
+  - stdpopsim>=0.1.2
   - tszip=0.1.0
   - pytables
   - jupyter

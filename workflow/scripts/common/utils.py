@@ -516,26 +516,26 @@ def get_fst_faser(ts, popA, popB):
 
 
 def get_ancestry_dosage(arr, n_anc):
-    anc_dosage = np.zeros((arr.shape[0], int(arr.shape[1]/2)), dtype=np.half)
-    if n_anc==3:
-        assert (n_anc==3)
-        a0 = arr[:, 0::3] # should be views
-        a1 = arr[:, 1::3]
-        a2 = arr[:, 2::3]
-        anc_dosage[:, 0::3] = a0[:, ::2] + a0[:, 1::2]
-        anc_dosage[:, 1::3] = a1[:, ::2] + a1[:, 1::2]
-        anc_dosage[:, 2::3] = a2[:, ::2] + a2[:, 1::2]
-    elif n_anc==4:
-        assert (n_anc==4)
-        a0 = arr[:, 0::4] # should be views
-        a1 = arr[:, 1::4]
-        a2 = arr[:, 2::4]
-        a3 = arr[:, 3::4]
-        anc_dosage[:, 0::4] = a0[:, ::2] + a0[:, 1::2]
-        anc_dosage[:, 1::4] = a1[:, ::2] + a1[:, 1::2]
-        anc_dosage[:, 2::4] = a2[:, ::2] + a2[:, 1::2]
-        anc_dosage[:, 3::4] = a3[:, ::2] + a3[:, 1::2]
-    return anc_dosage
+	anc_dosage = np.zeros((arr.shape[0], int(arr.shape[1]/2)), dtype=np.half)
+	if n_anc==3:
+		assert (n_anc==3)
+		a0 = arr[:, 0::3] # should be views
+		a1 = arr[:, 1::3]
+		a2 = arr[:, 2::3]
+		anc_dosage[:, 0::3] = a0[:, ::2] + a0[:, 1::2]
+		anc_dosage[:, 1::3] = a1[:, ::2] + a1[:, 1::2]
+		anc_dosage[:, 2::3] = a2[:, ::2] + a2[:, 1::2]
+	elif n_anc==4:
+		assert (n_anc==4)
+		a0 = arr[:, 0::4] # should be views
+		a1 = arr[:, 1::4]
+		a2 = arr[:, 2::4]
+		a3 = arr[:, 3::4]
+		anc_dosage[:, 0::4] = a0[:, ::2] + a0[:, 1::2]
+		anc_dosage[:, 1::4] = a1[:, ::2] + a1[:, 1::2]
+		anc_dosage[:, 2::4] = a2[:, ::2] + a2[:, 1::2]
+		anc_dosage[:, 3::4] = a3[:, ::2] + a3[:, 1::2]
+	return anc_dosage
 
 def load_true_la(path):
 	return np.load(path)['arr']
@@ -552,46 +552,48 @@ def get_true_anc_dosage(true_la, n_anc):
 
 
 def r2_ancestry_dosage(true_dosage, pred_dosage, n_anc):
-    per_anc = []
-    for i in range(n_anc):
-        per_anc.append(
-            pearsonr(
-                true_dosage[:,i::n_anc].ravel(),
-                pred_dosage[:,i::n_anc].ravel()
-            )[0]
-        )
-    per_ind = []
-    for i in range(int(true_dosage.shape[1]/n_anc)):
-        per_ind.append(
-            pearsonr(
-                true_dosage[:, i*n_anc:i*n_anc+n_anc].ravel(),
-                pred_dosage[:, i*n_anc:i*n_anc+n_anc].ravel()
-            )[0]
-        )
+	per_anc = []
+	for i in range(n_anc):
+		per_anc.append(
+			pearsonr(
+				true_dosage[:,i::n_anc].ravel(),
+				pred_dosage[:,i::n_anc].ravel()
+			)[0]
+		)
+	per_ind = []
+	for i in range(int(true_dosage.shape[1]/n_anc)):
+		per_ind.append(
+			pearsonr(
+				true_dosage[:, i*n_anc:i*n_anc+n_anc].ravel(),
+				pred_dosage[:, i*n_anc:i*n_anc+n_anc].ravel()
+			)[0]
+		)
 
-    return(per_anc, per_ind)
+	return(per_anc, per_ind)
 
 
 ## Load in the probablistic output of each method
 def load_rfmix_fb(path):
+	"""Load and return an array of the posterior local ancestry probabilities from RFMixv2."""
 	rfmix_res = pd.read_csv(path, sep='\t', comment='#')
 	# expand out to each site
 	rfmix_res = np.repeat(rfmix_res.iloc[:, 4:].values, [5], axis = 0)
 	return(rfmix_res)
 
 def load_bmix(path, sites_file, BCFTOOLS):
+	"""Load and return an array of the posterior local ancestry probabilities from bmix."""
 
 	# convert the vcf.gz to a csv
 	csv_path = path.replace('.vcf.gz', '.csv')
 	bmix_sites = path.replace('.vcf.gz', '.bmix_sites')
-
 	os.system(f"{BCFTOOLS} query -f '%CHROM, %POS, [%ANP1, %ANP2,]\\n' {path} > {csv_path}")
+	os.system(f"{BCFTOOLS} query -f '%POS\n' {path} > {bmix_sites}")
+
 	bmix = pd.read_csv(csv_path, header=None)
 	bmix = bmix.dropna(axis=1)
 	res = bmix.iloc[:,2:].values
 	res = np.concatenate([res[:1], res])
-	#
-	os.system(f"{BCFTOOLS} query -f '%POS\n' {path} > {bmix_sites}")
+
 	pre_sites = pd.read_csv(sites_file, header=None).values.flatten()
 	post_sites = pd.read_csv(bmix_sites, header=None).values.flatten()
 	post_indexes = np.searchsorted(post_sites, pre_sites)
@@ -599,44 +601,50 @@ def load_bmix(path, sites_file, BCFTOOLS):
 	return(res)
 
 def load_mosaic(path):
+	"""Load and return an array of the posterior local ancestry probabilities from MOSAIC."""
 	mr = pyreadr.read_r(path)['arr'].astype(np.half)
 	return(mr.to_numpy().T.reshape((mr.shape[2],-1), order='C'))
 
 
 def get_Q(arr, n_anc):
-    nsites = arr.shape[0]
-    # avoid overflow and sum over sites
-    arr = arr.astype(float).sum(0)
-    if n_anc == 3:
-        a0 = arr[0::3] # should be views
-        a1 = arr[1::3]
-        a2 = arr[2::3]
-        q0 = (a0[0::2] + a0[1::2])/(nsites*4)
-        q1 = (a1[0::2] + a1[1::2])/(nsites*4)
-        q2 = (a2[0::2] + a2[1::2])/(nsites*4)
-        Q = pd.DataFrame([q0, q1, q2]).T
-        Q.columns = ['pop_0', 'pop_1', 'pop_2']
-    elif n_anc == 4:
-        a0 = arr[0::4] # should be views
-        a1 = arr[1::4]
-        a2 = arr[2::4]
-        a3 = arr[3::4]
-        q0 = (a0[0::2] + a0[1::2])/(nsites*4)
-        q1 = (a1[0::2] + a1[1::2])/(nsites*4)
-        q2 = (a2[0::2] + a2[1::2])/(nsites*4)
-        q3 = (a3[0::2] + a3[1::2])/(nsites*4)
-        Q = pd.DataFrame([q0, q1, q2, q3]).T
-        Q.columns = ['pop_0', 'pop_1', 'pop_2', 'pop_3']
+	"""Return a data frame of ancestry fractions (Q)
+	calculated from probabalistic local ancestry proportions .
+	"""
 
-    return(Q)
+	nsites = arr.shape[0]
+	# avoid overflow and sum over sites
+	arr = arr.astype(float).sum(0)
+	if n_anc == 3:
+		a0 = arr[0::3] # should be views
+		a1 = arr[1::3]
+		a2 = arr[2::3]
+		q0 = (a0[0::2] + a0[1::2])/(nsites*4)
+		q1 = (a1[0::2] + a1[1::2])/(nsites*4)
+		q2 = (a2[0::2] + a2[1::2])/(nsites*4)
+		Q = pd.DataFrame([q0, q1, q2]).T
+		Q.columns = ['pop_0', 'pop_1', 'pop_2']
+	elif n_anc == 4:
+		a0 = arr[0::4] # should be views
+		a1 = arr[1::4]
+		a2 = arr[2::4]
+		a3 = arr[3::4]
+		q0 = (a0[0::2] + a0[1::2])/(nsites*4)
+		q1 = (a1[0::2] + a1[1::2])/(nsites*4)
+		q2 = (a2[0::2] + a2[1::2])/(nsites*4)
+		q3 = (a3[0::2] + a3[1::2])/(nsites*4)
+		Q = pd.DataFrame([q0, q1, q2, q3]).T
+		Q.columns = ['pop_0', 'pop_1', 'pop_2', 'pop_3']
+
+	return(Q)
 
 def get_RMSD_Q(Q1, Q2):
-    assert(Q1.shape == Q2.shape)
-    D = Q1-Q2
-    SD = D*D
-    MSD = SD.mean().mean()
-    RMSD = np.sqrt(MSD)
-    return(RMSD)
+	"""Return the RMSD between two sets of ancestry proportions."""
+	assert(Q1.shape == Q2.shape)
+	D = Q1-Q2
+	SD = D*D
+	MSD = SD.mean().mean()
+	RMSD = np.sqrt(MSD)
+	return(RMSD)
 
 
 def max_la(vals, n_anc):
