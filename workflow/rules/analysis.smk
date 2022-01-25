@@ -2,7 +2,7 @@ rule get_Q_score:
 	input:
 		true_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/true_local_ancestry.site_matrix.npz',
 		mosaic_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/la_probs.RData',
-		rfmix2_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.fb.tsv',
+		rfmix2_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.fb.tsv.gz',
 		bmix_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/bmix/bmix.anc.vcf.gz',
 		sites_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
 	output:
@@ -22,7 +22,7 @@ rule get_R2_score:
 	input:
 		true_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/true_local_ancestry.site_matrix.npz',
 		mosaic_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/la_probs.RData',
-		rfmix2_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.fb.tsv',
+		rfmix2_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.fb.tsv.gz',
 		bmix_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/bmix/bmix.anc.vcf.gz',
 		sites_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
 	output:
@@ -104,26 +104,28 @@ rule make_mosaic_input:
 		plink_map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/plink_map.txt',
 		site_ts = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/sample.filter.tsz',
 	output:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/admixedgenofile.{CHR}'
+		temp('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/admixedgenofile.22'),
+		temp('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/pop_0genofile.22'),
+		temp('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/pop_1genofile.22'),
 	log:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/make_input.{CHR}.log'
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/make_input.22.log'
 	params:
 		folder = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input',
-		chrom_id = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].chr,
+		#chrom_id = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].chr,
 		nind_ref = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nind_ref,
 	script:
 		'../scripts/make_mosaic_inputs.py'
 
 
-rule summarize_rfmix2:
-	input:
-		inferred_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.fb.tsv',
-	output:
-		diploid = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/diploid_la.hdf',
-	params:
-		threshold = 0.9
-	script:
-		"../scripts/summarize_rfmix2.py"
+#rule summarize_rfmix2:
+#	input:
+#		inferred_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.fb.tsv',
+#	output:
+#		diploid = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/diploid_la.hdf',
+#	params:
+#		threshold = 0.9
+#	script:
+#		"../scripts/summarize_rfmix2.py"
 
 
 rule run_bmix:
@@ -207,7 +209,10 @@ rule run_RFMix2:
 		sample_map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/sample_map.txt',
 		genetic_map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/genetic_map.txt',
 	output:
-		fb = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.fb.tsv',
+		fb = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.fb.tsv.gz',
+		Q = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.rfmix.Q.gz',
+		msp = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.msp.tsv.gz',
+		sis = temp('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.sis.tsv'),
 	log:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.log',
 	benchmark:
@@ -219,6 +224,11 @@ rule run_RFMix2:
 		nthreads = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nthreads,
 		chr = lambda w: simulations.loc[w.sim_name].chr,
 		seed = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].anal_seed,
+		# output files that will be zipped
+		fb = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.fb.tsv',
+		Q = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.rfmix.Q',
+		msp = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.msp.tsv',
+
 	shell:
 		"""
 		export PATH="{params.bcftools}:$PATH"
@@ -228,4 +238,10 @@ rule run_RFMix2:
 		#"--reanalyze-reference "
 		"-e 5 "
 		"--n-threads={params.nthreads} --chromosome={params.chr} "
-		"--random-seed={params.seed} 2>&1 | tee {log}"
+		"--random-seed={params.seed} 2>&1 | tee {log} "
+
+		"""
+		gzip {params.fb}
+		gzip {params.Q}
+		gzip {params.msp}
+		"""

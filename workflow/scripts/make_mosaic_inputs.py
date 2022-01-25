@@ -14,7 +14,8 @@ site_ts = str(snakemake.input.site_ts)
 plink_map = str(snakemake.input.plink_map)
 
 folder = str(snakemake.params.folder)
-chrom_id = str(snakemake.params.chrom_id).strip('chr')
+#chrom_id = str(snakemake.params.chrom_id).strip('chr')
+chrom_id = str(22)
 nind_ref = str(snakemake.params.nind_ref)
 
 nind_ref = np.array([int(x) for x in nind_ref.split(',')])
