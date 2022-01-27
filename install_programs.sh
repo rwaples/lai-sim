@@ -47,7 +47,7 @@ mkdir ./programs/MOSAIC
 cd ./programs/MOSAIC
 wget https://maths.ucd.ie/~mst/MOSAIC/MOSAIC_1.3.9.tar.gz
 # within R
-# install.packages("programs/MOSAIC/MOSAIC_1.3.9.tar.gz")
+install.packages("programs/MOSAIC/MOSAIC_1.3.9.tar.gz")
 # back in shell
 git clone https://csgitlab.ucd.ie/mst/mosaic.git
 

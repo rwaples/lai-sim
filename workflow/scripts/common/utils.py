@@ -517,6 +517,12 @@ def get_fst_faser(ts, popA, popB):
 
 def get_ancestry_dosage(arr, n_anc):
 	anc_dosage = np.zeros((arr.shape[0], int(arr.shape[1]/2)), dtype=np.half)
+	if n_anc==2:
+		a0 = arr[:, 0::2] # should be views
+		a1 = arr[:, 1::2]
+		anc_dosage[:, 0::2] = a0[:, ::2] + a0[:, 1::2]
+		anc_dosage[:, 1::2] = a1[:, ::2] + a1[:, 1::2]
+
 	if n_anc==3:
 		assert (n_anc==3)
 		a0 = arr[:, 0::3] # should be views
@@ -580,6 +586,7 @@ def load_rfmix_fb(path):
 	rfmix_res = np.repeat(rfmix_res.iloc[:, 4:].values, [5], axis = 0)
 	return(rfmix_res)
 
+
 def load_bmix(path, sites_file, BCFTOOLS):
 	"""Load and return an array of the posterior local ancestry probabilities from bmix."""
 
@@ -614,6 +621,13 @@ def get_Q(arr, n_anc):
 	nsites = arr.shape[0]
 	# avoid overflow and sum over sites
 	arr = arr.astype(float).sum(0)
+	if n_anc == 2:
+		a0 = arr[0::2] # should be views
+		a1 = arr[1::2]
+		q0 = (a0[0::2] + a0[1::2])/(nsites*4)
+		q1 = (a1[0::2] + a1[1::2])/(nsites*4)
+		Q = pd.DataFrame([q0, q1]).T
+		Q.columns = ['pop_0', 'pop_1']
 	if n_anc == 3:
 		a0 = arr[0::3] # should be views
 		a1 = arr[1::3]

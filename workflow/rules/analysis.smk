@@ -56,12 +56,12 @@ rule run_mosaic:
 		la_results = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/localanc_admixed.RData',
 		model_results = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/admixed.RData',
 		emlog1 = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/admixed_1way.EMlog.out',
-		emlog3 = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/admixed_3way.EMlog.out',
+		emlog3 = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/admixed_ALLway.EMlog.out',
 	log:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/run_mosaic.log',
 	benchmark:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_mosaic.tsv',
-	shadow: 'full'
+	#shadow: 'full'
 	params:
 		mosaic = config['PATHS']['MOSAIC'],
 		input_folder = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/',
@@ -90,9 +90,9 @@ rule run_mosaic:
 		cd {params.base_folder}
 		find localanc_admixed_*.RData -exec cp {{}} localanc_admixed.RData \;
 		find admixed_*.RData -exec cp {{}} admixed.RData \;
-
+		# copy log files
 		find admixed_1way*_EMlog.out -exec cp {{}} admixed_1way.EMlog.out \;
-		find admixed_3way*_EMlog.out -exec cp {{}} admixed_3way.EMlog.out \;
+		find admixed_{params.nsource}way*_EMlog.out -exec cp {{}} admixed_ALLway.EMlog.out \;
 
 		"""
 
@@ -104,9 +104,9 @@ rule make_mosaic_input:
 		plink_map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/plink_map.txt',
 		site_ts = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/sample.filter.tsz',
 	output:
-		temp('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/admixedgenofile.22'),
-		temp('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/pop_0genofile.22'),
-		temp('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/pop_1genofile.22'),
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/admixedgenofile.22',
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/pop_0genofile.22',
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/pop_1genofile.22',
 	log:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/make_input.22.log'
 	params:
@@ -236,7 +236,7 @@ rule run_RFMix2:
 		"{params.rfmix2} -f {input.target_vcf} -r {input.reference_vcf} "
 		"-m {input.sample_map} -g {input.genetic_map} -o {params.output} "
 		#"--reanalyze-reference "
-		"-e 5 "
+		#"-e 5 "
 		"--n-threads={params.nthreads} --chromosome={params.chr} "
 		"--random-seed={params.seed} 2>&1 | tee {log} "
 
