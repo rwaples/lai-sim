@@ -469,8 +469,7 @@ def get_allele_freqs(ts, pops = None):
 def get_mean_allele_frequencies(freqs):
 	"""return the mean allele frquency across populations.
 	Input should be the array from get_allele_freqs(). """
-	return freqs.mean(1)
-
+	return(freqs.mean(1))
 
 
 def get_fst_faser(ts, popA, popB):
@@ -511,8 +510,7 @@ def get_fst_faser(ts, popA, popB):
 
 	num, denom = allel.hudson_fst(acA, acB)
 	fst = np.sum(num) / np.sum(denom)
-	return fst
-
+	return(fst)
 
 
 def get_ancestry_dosage(arr, n_anc):
@@ -522,7 +520,6 @@ def get_ancestry_dosage(arr, n_anc):
 		a1 = arr[:, 1::2]
 		anc_dosage[:, 0::2] = a0[:, ::2] + a0[:, 1::2]
 		anc_dosage[:, 1::2] = a1[:, ::2] + a1[:, 1::2]
-
 	if n_anc==3:
 		assert (n_anc==3)
 		a0 = arr[:, 0::3] # should be views
@@ -541,7 +538,8 @@ def get_ancestry_dosage(arr, n_anc):
 		anc_dosage[:, 1::4] = a1[:, ::2] + a1[:, 1::2]
 		anc_dosage[:, 2::4] = a2[:, ::2] + a2[:, 1::2]
 		anc_dosage[:, 3::4] = a3[:, ::2] + a3[:, 1::2]
-	return anc_dosage
+	return(anc_dosage)
+
 
 def load_true_la(path):
 	return np.load(path)['arr']
@@ -607,6 +605,7 @@ def load_bmix(path, sites_file, BCFTOOLS):
 	res = res[post_indexes]
 	return(res)
 
+
 def load_mosaic(path):
 	"""Load and return an array of the posterior local ancestry probabilities from MOSAIC."""
 	mr = pyreadr.read_r(path)['arr'].astype(np.half)
@@ -650,6 +649,7 @@ def get_Q(arr, n_anc):
 		Q.columns = ['pop_0', 'pop_1', 'pop_2', 'pop_3']
 
 	return(Q)
+
 
 def get_RMSD_Q(Q1, Q2):
 	"""Return the RMSD between two sets of ancestry proportions."""

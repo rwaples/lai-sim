@@ -21,7 +21,6 @@ Q_mosaic_path = str(snakemake.output.Q_mosaic_path)
 Q_rfmix_path = str(snakemake.output.Q_rfmix_path)
 
 
-
 true_anc_dosage = get_true_anc_dosage(load_true_la(true_path), n_anc=n_anc)
 bmix_anc_dosage = get_ancestry_dosage(load_bmix(bmix_path, sites_file=sites_file, BCFTOOLS=BCFTOOLS), n_anc=n_anc)
 mosaic_anc_dosage = get_ancestry_dosage(load_mosaic(mosaic_path), n_anc=n_anc)

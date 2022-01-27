@@ -25,14 +25,14 @@ rfmix_anc_dosage = get_ancestry_dosage(load_rfmix_fb(rfmix2_path), n_anc=n_anc)
 assert (len(rfmix_anc_dosage)-len(true_anc_dosage))<=5
 rfmix_anc_r2, rfmix_ind_r2 = r2_ancestry_dosage(
 	true_dosage=true_anc_dosage,
-	# addressing possible uneven lengths due to RFMix2 only reporting every fifth sites
+	# addressing possible uneven lengths due to RFMix2 only reporting every fifth site
 	pred_dosage=rfmix_anc_dosage[:len(true_anc_dosage)],
 	n_anc=n_anc
 )
 # get the r2 with max_like calls
 rfmixML_anc_r2, rfmixML_ind_r2 = r2_ancestry_dosage(
 	true_dosage=true_anc_dosage,
-	# addressing possible uneven lengths due to RFMix2 only reporting every fifth sites
+	# addressing possible uneven lengths due to RFMix2 only reporting every fifth site
 	pred_dosage=max_la(rfmix_anc_dosage[:len(true_anc_dosage)], n_anc=n_anc),
 	n_anc=n_anc
 )
