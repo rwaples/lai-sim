@@ -5,6 +5,8 @@ import itertools
 import allel
 import pyreadr
 import os
+import matplotlib.pyplot as plt
+import seaborn as sns
 from scipy.stats import pearsonr
 from sklearn.metrics import r2_score
 
@@ -674,3 +676,27 @@ def max_la(vals, n_anc):
 		np.put_along_axis(c, a, 1, axis = 1)
 		vals[:, idxs[i-1]:idxs[i]] = c
 	return(vals)
+
+
+def plot_ancestry_dosage(pred_dosage, start_index, n_anc, title, path=None, format='pdf', reference_dosage=None):
+	"""    """
+	colors = ['blue', 'orange', 'green', 'purple']
+
+	fig, ax = plt.subplots(figsize = (12, n_anc*1.5), nrows=n_anc, sharex=True, sharey=True)
+	f = []
+	for i in range(n_anc):
+		l, = ax[i].plot(pred_dosage[:, start_index+i], c=colors[i])
+		f.append(l)
+		if reference_dosage is not None:
+			l, = ax[i].plot(reference_dosage[:, start_index+i], c=colors[i], alpha=.3, ls='--')
+
+	plt.legend(f, [f'pop{p}' for p in range(n_anc)])
+
+
+
+	fig.tight_layout()
+	sns.despine(bottom=True)
+	ax[0].set_title(title)
+	ax[-1].set_xlabel('Site number ')
+	if path:
+		plt.savefig(path, dpi=300, format=format, bbox_inches='tight')
