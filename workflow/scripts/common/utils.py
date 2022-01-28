@@ -393,7 +393,7 @@ def get_local_ancestry_pop_multi(ts, pop, admixture_time, max_samples=100, per_r
 	# sampling population
 	local_ancestry_df['samplepop'] = [pop_of_node[x] for x in local_ancestry_df['child']]
 	local_ancestry_df = local_ancestry_df.sort_values(['samplepop', 'child', 'left']).reset_index(drop=True)
-	return local_ancestry_df
+	return(local_ancestry_df)
 
 
 def make_ind_labels(ts):
@@ -408,7 +408,7 @@ def make_ind_labels(ts):
 	for p in nind_in_pop:
 		for i in range(1, nind_in_pop[p]+1):
 			ind_labels.append(f'pop_{p}-ind_{i:04}')
-	return ind_labels
+	return(ind_labels)
 
 
 def vcfheader(ts, target_pop):
@@ -445,7 +445,6 @@ def get_allele_freqs(ts, pops = None):
 	pops is a list of the pops, order of pops is maintained.
 	Only supports infinite site mutations with <=2 alleles.
 	"""
-
 	if pops:
 		freqs = np.zeros((ts.num_sites, len(pops)))
 	else:
@@ -478,7 +477,6 @@ def get_fst_faser(ts, popA, popB):
 	Uses the allel.hudson_fst() function from scikit-allel.
 	popA and popB are the samples from each pop
 	"""
-
 	popA_samples = ts.samples(popA)
 	popB_samples = ts.samples(popB)
 	# count the number of derived alleles within each pop
@@ -542,7 +540,7 @@ def get_ancestry_dosage(arr, n_anc):
 
 
 def load_true_la(path):
-	return np.load(path)['arr']
+	return(np.load(path)['arr'])
 
 
 def get_true_anc_dosage(true_la, n_anc):
@@ -552,7 +550,7 @@ def get_true_anc_dosage(true_la, n_anc):
 	bb = np.arange(true_la[:, 1::2].shape[1])*n_anc+true_la[:, 1::2]
 	np.put_along_axis(hap1, aa, 1, axis=1)
 	np.put_along_axis(hap2, bb, 1, axis=1)
-	return hap1+hap2
+	return(hap1+hap2)
 
 
 def r2_ancestry_dosage(true_dosage, pred_dosage, n_anc):
@@ -613,27 +611,27 @@ def load_mosaic(path):
 
 
 def get_Q(arr, n_anc):
-	"""Return a data frame of ancestry fractions (Q)
-	calculated from probabalistic local ancestry proportions .
 	"""
-
+	Return a data frame of ancestry fractions (Q)
+	calculated from probabalistic local ancestry proportions.
+	"""
 	nsites = arr.shape[0]
 	# avoid overflow and sum over sites
 	arr = arr.astype(float).sum(0)
 	if n_anc == 2:
 		a0 = arr[0::2] # should be views
 		a1 = arr[1::2]
-		q0 = (a0[0::2] + a0[1::2])/(nsites*4)
-		q1 = (a1[0::2] + a1[1::2])/(nsites*4)
+		q0 = a0/(nsites*2)
+		q1 = a1/(nsites*2)
 		Q = pd.DataFrame([q0, q1]).T
 		Q.columns = ['pop_0', 'pop_1']
-	if n_anc == 3:
+	elif n_anc == 3:
 		a0 = arr[0::3] # should be views
 		a1 = arr[1::3]
 		a2 = arr[2::3]
-		q0 = (a0[0::2] + a0[1::2])/(nsites*4)
-		q1 = (a1[0::2] + a1[1::2])/(nsites*4)
-		q2 = (a2[0::2] + a2[1::2])/(nsites*4)
+		q0 = a0/(nsites*2)
+		q1 = a1/(nsites*2)
+		q2 = a2/(nsites*2)
 		Q = pd.DataFrame([q0, q1, q2]).T
 		Q.columns = ['pop_0', 'pop_1', 'pop_2']
 	elif n_anc == 4:
@@ -641,10 +639,10 @@ def get_Q(arr, n_anc):
 		a1 = arr[1::4]
 		a2 = arr[2::4]
 		a3 = arr[3::4]
-		q0 = (a0[0::2] + a0[1::2])/(nsites*4)
-		q1 = (a1[0::2] + a1[1::2])/(nsites*4)
-		q2 = (a2[0::2] + a2[1::2])/(nsites*4)
-		q3 = (a3[0::2] + a3[1::2])/(nsites*4)
+		q0 = a0/(nsites*2)
+		q1 = a1/(nsites*2)
+		q2 = a2/(nsites*2)
+		q3 = a3/(nsites*2)
 		Q = pd.DataFrame([q0, q1, q2, q3]).T
 		Q.columns = ['pop_0', 'pop_1', 'pop_2', 'pop_3']
 

@@ -1,6 +1,6 @@
 anal_name	asc_name	nind_admixed	nind_ref	MAC_filter	max_snps	anal_seed	gt_err	target_pop	nthreads
-p2_array_10a100_100	p2_arraylike	10	100,100	1	100000	4432	0.0002	2	8
-p2_seq_10a100_100	p2_seqlike	10	100,100	1	300000	4432	0.0002	2	8
+p2_array_10a100_100	p2_arraylike	40	100,100	1	100000	4432	0.0002	2	8
+p2_seq_10a100_100	p2_seqlike	40	100,100	1	300000	4432	0.0002	2	8
 
 #AFT99	A33	10	20,20,20	1	10000	99	0.0002	3	8
 #AFT92	A33	10	50,20,50	1	10000	92	0.0002	3	8
