@@ -4,6 +4,16 @@ rule reports:
 		Q="results/reports/Q_report.txt"
 
 
+rule ancestry_dosage_plots:
+	input:
+		bmix = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/ancestry_dosage.0.bmix.pdf"
+			for u in units.itertuples()],
+		rfmix2 = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/ancestry_dosage.0.rfmix2.pdf"
+			for u in units.itertuples()],
+		mosaic = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/ancestry_dosage.0.mosaic.pdf"
+			for u in units.itertuples()]
+
+
 rule R2_report:
 	input:
 		[f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.ancestry.tsv"
@@ -32,16 +42,6 @@ rule Q_report:
 		nind_ref = [units.loc[(u.sim_name, u.asc_name, u.anal_name)].nind_ref for u in units.itertuples()],
 	script:
 		'../scripts/make_Q_report.py'
-
-
-rule ancestry_dosage_plots:
-	input:
-		bmix = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/ancestry_dosage.0.bmix.pdf"
-			for u in units.itertuples()],
-		rfmix2 = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/ancestry_dosage.0.rfmix2.pdf"
-			for u in units.itertuples()],
-		mosaic = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/ancestry_dosage.0.mosaic.pdf"
-			for u in units.itertuples()]
 
 
 rule plot_ancestry_dosage:
