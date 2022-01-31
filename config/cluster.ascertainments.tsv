@@ -1,0 +1,11 @@
+asc_name	sim_name	asc_MAC	asc_MAF	asc_maxsites	asc_seed
+p3_seqlike	threepop_42	1	0	5000000	80
+p3_arraylike	threepop_42	1	0.05	5000000	88
+p3_seqlike2	threepop_42	1	0	5000000	81
+p3_arraylike2	threepop_42	1	0.05	5000000	89
+
+p4_seqlike	fourpop_79	1	0	5000000	80
+p4_arraylike	fourpop_79	1	0.05	5000000	88
+
+p2_seqlike	twopop_17	1	0	5000000	80
+p2_arraylike	twopop_17	1	0.05	5000000	88

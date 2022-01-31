@@ -1,4 +1,5 @@
 simulations: config/cluster.simulations.tsv
+ascertainments: config/cluster.ascertainments.tsv
 analyses: config/cluster.analyses.tsv
 
 cpus: 12
