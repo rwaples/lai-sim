@@ -61,7 +61,7 @@ rule run_mosaic:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/run_mosaic.log',
 	benchmark:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_mosaic.tsv',
-	#shadow: 'full'
+	shadow: 'full'
 	params:
 		mosaic = config['PATHS']['MOSAIC'],
 		input_folder = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/',
