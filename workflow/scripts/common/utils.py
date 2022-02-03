@@ -614,6 +614,7 @@ def load_mosaic(path):
 	res = arr.T.reshape((arr.shape[2],-1), order='C')
 	return(res)
 
+
 def get_Q(arr, n_anc):
 	"""
 	Return a data frame of ancestry fractions (Q)
