@@ -1,9 +1,14 @@
 
 library('MOSAIC')
+library('reticulate')
+np <- import("numpy")
+
+
 model_results = snakemake@input[["model_results"]]
 la_results = snakemake@input[["la_results"]]
 mosaic_input_dir = snakemake@params[["input_dir"]]
 output_path = snakemake@output[["path"]]
+np_path = snakemake@output[["np_path"]]
 #simple_output =  snakemake@params[["simple_output"]]
 
 load(model_results)
@@ -15,9 +20,7 @@ dims = dim(local_pos[[1]])
 # convert to array and then export
 arr = array(unlist(local_pos, use.names=FALSE), dims)
 save(arr, file = output_path)
-#save(arr, file = simple_output)
-
-
+np$savez_compressed(np_path, arr=arr)
 
 # for each position and haplotype, find the ancestry with the largest probability
 # threshold = 0.9

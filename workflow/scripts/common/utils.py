@@ -608,9 +608,11 @@ def load_bmix(path, sites_file, BCFTOOLS):
 
 def load_mosaic(path):
 	"""Load and return an array of the posterior local ancestry probabilities from MOSAIC."""
-	mr = pyreadr.read_r(path)['arr'].astype(np.half)
-	return(mr.to_numpy().T.reshape((mr.shape[2],-1), order='C'))
-
+	#mr = pyreadr.read_r(path)['arr'].astype(np.half)
+	#res = mr.to_numpy().T.reshape((mr.shape[2],-1), order='C')
+	arr = np.load(path)['arr']
+	res = arr.T.reshape((arr.shape[2],-1), order='C')
+	return(res)
 
 def get_Q(arr, n_anc):
 	"""
