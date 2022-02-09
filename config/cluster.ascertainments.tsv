@@ -9,3 +9,6 @@ p4_arraylike	fourpop_79	1	0.05	5000000	88
 
 p2_seqlike	twopop_17	1	0	5000000	80
 p2_arraylike	twopop_17	1	0.05	5000000	88
+
+p3_LARGE_array	threepop_LARGE	1	0.05	5000000	89123
+p3_LARGE_seq	threepop_LARGE	1	0	5000000	891321
