@@ -17,7 +17,6 @@ folder = str(snakemake.params.folder)
 #chrom_id = str(snakemake.params.chrom_id).strip('chr')
 chrom_id = str(22)
 nind_ref = str(snakemake.params.nind_ref)
-
 nind_ref = np.array([int(x) for x in nind_ref.split(',')])
 
 # write sample.names
@@ -32,6 +31,7 @@ with open(os.path.join(folder, 'sample.names'), 'w') as OUTFILE:
 	for ind_string in ind_labels[nref_total:]:
 		pop = 'admixed'
 		OUTFILE.write(f'{pop} {ind_string} 0 0 0 2 -9\n')
+
 
 # needed to subset vcf files
 start_ix = 0

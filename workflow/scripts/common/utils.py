@@ -410,6 +410,7 @@ def make_ind_labels(ts):
 	for p in nind_in_pop:
 		for i in range(1, nind_in_pop[p]+1):
 			ind_labels.append(f'pop_{p}-ind_{i:04}')
+	ind_labels = sorted(ind_labels)
 	return(ind_labels)
 
 
