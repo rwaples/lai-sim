@@ -127,17 +127,6 @@ rule make_mosaic_input:
 		'../scripts/make_mosaic_inputs.py'
 
 
-#rule summarize_rfmix2:
-#	input:
-#		inferred_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.fb.tsv',
-#	output:
-#		diploid = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/diploid_la.hdf',
-#	params:
-#		threshold = 0.9
-#	script:
-#		"../scripts/summarize_rfmix2.py"
-
-
 rule run_bmix:
 	input:
 		target_vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.target_inds.vcf.gz',
