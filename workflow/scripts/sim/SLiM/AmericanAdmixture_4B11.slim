@@ -327,8 +327,10 @@ function (void)end(void) {
     if (length(admixture_pulses) > 0 ) {
         for (i in 0:(ncol(admixture_pulses)-1)) {
             g = G_start + gdiff(T_start, admixture_pulses[0,i]);
-            dest = admixture_pulses[1,i];
-            src = admixture_pulses[2,i];
+            // dest = admixture_pulses[1,i];
+            // src = admixture_pulses[2,i];
+            dest = asInteger(drop(admixture_pulses[1,i]));
+            src = asInteger(drop(admixture_pulses[2,i]));
             rate = admixture_pulses[3,i];
             sim.registerLateEvent(NULL,
                 "{dbg(self.source); " +

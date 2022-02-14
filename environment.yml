@@ -31,3 +31,4 @@ dependencies:
   - r-LaF
   - r-argparser
   - r-doParallel
+  - r-reticulate
