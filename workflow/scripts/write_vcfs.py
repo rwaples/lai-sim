@@ -72,7 +72,7 @@ with open(os.path.join(base_path, 'sample_map.txt'), 'w') as OUTFILE:
 	for ind_string in ind_labels:
 		pop = int(ind_string.split('-')[0].split('_')[1])
 		if pop != target_pop:
-			OUTFILE.write(f'{ind_string}\t{pop}\n')
+			OUTFILE.write(f'{ind_string}\tpop_{pop}\n')
 
 ## write files with inds from the reference and admixed populations
 with open(os.path.join(base_path, 'reference_inds.txt'), 'w') as OUTFILE:
