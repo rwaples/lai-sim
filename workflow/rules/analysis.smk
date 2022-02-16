@@ -14,6 +14,10 @@ rule get_Q_score:
 	params:
 		bcftools = config['PATHS']['BCFTOOLS'],
 		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
+	log:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/get_Q_score.log',
+	conda:
+		'./env'
 	script:
 		"../scripts/get_Q_score.py"
 
@@ -31,6 +35,8 @@ rule get_R2_score:
 	params:
 		bcftools = config['PATHS']['BCFTOOLS'],
 		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
+	log:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/get_R2_score.log',
 	script:
 		"../scripts/get_R2_score.py"
 
@@ -44,6 +50,8 @@ rule export_mosaic:
 		np_path = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/la_probs.npz',
 	params:
 		input_dir = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/',
+	log:
+		input_dir = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/export_mosaic.log',
 	script:
 		"../scripts/export_mosaic_results.R"
 
@@ -56,11 +64,6 @@ rule run_mosaic:
 		model_results = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/admixed.RData',
 		emlog1 = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/admixed_1way.EMlog.out',
 		emlog3 = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/admixed_ALLway.EMlog.out',
-	log:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/run_mosaic.log',
-	benchmark:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_mosaic.tsv',
-	shadow: 'full'
 	params:
 		mosaic = config['PATHS']['MOSAIC'],
 		input_folder = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/',
@@ -70,6 +73,12 @@ rule run_mosaic:
 		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
 		nthreads = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nthreads,
 		#GpcM = lambda w: int(60 * float(units.loc[(w.sim_name, w.asc_name, w.anal_name)].max_snps) / 50000),
+	log:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/run_mosaic.log',
+	benchmark:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_mosaic.tsv',
+	shadow:
+		'full'
 	shell:
 		"""
 		# recalculate gpcm based on the actual number of sites in the analysis
@@ -112,13 +121,13 @@ rule make_mosaic_input:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/admixedgenofile.22',
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/pop_0genofile.22',
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/pop_1genofile.22',
-	log:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/make_input.22.log'
 	params:
 		folder = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input',
 		#chrom_id = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].chr,
 		nind_ref = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nind_ref,
 		target_pop = lambda w: units.loc[(w.sim_name, w.asc_name)].target_pop[0],
+	log:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/make_input.22.log'
 	script:
 		'../scripts/make_mosaic_inputs.py'
 
@@ -131,16 +140,16 @@ rule run_bmix:
 		genetic_map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/plink_map.txt',
 	output:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/bmix/bmix.anc.vcf.gz',
-	log:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/bmix/run_bmix.log',
-	benchmark:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_bmix.tsv',
 	params:
 		BMIX = config['PATHS']['BMIX'],
 		bcftools = config['PATHS']['BCFTOOLS'],
 		prefix = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/bmix/bmix',
 		nthreads = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nthreads,
 		seed = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].anal_seed,
+	log:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/bmix/run_bmix.log',
+	benchmark:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_bmix.tsv',
 	shell:
 		"java -Xmx30g -jar {params.BMIX} "
 		"ref={input.reference_vcf} "
@@ -166,12 +175,14 @@ rule run_RFMix:
 		positions_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/positions_file.txt',
 	output:
 		viterbi = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix/0.Viterbi.txt',
-	benchmark:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_RFMix.tsv',
 	params:
 		rfmix = config['PATHS']['RFMix'],
 		prefix = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix/RFMix',
 		nthreads = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nthreads,
+	benchmark:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_RFMix.tsv',
+	log:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix/run_RFMix.log',
 	shell:
 		"""
 		cd programs/RFmix/RFMix_v1.5.4
@@ -193,6 +204,8 @@ rule make_rfmix_input:
 	params:
 		nind_ref = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nind_ref,
 		nind_admixed = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nind_admixed,
+	log:
+		positions_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/logs/make_rfmix_input.log',
 	script:
 		'../scripts/make_rfmix_input.py'
 
@@ -208,10 +221,6 @@ rule run_RFMix2:
 		Q = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.rfmix.Q.gz',
 		msp = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.msp.tsv.gz',
 		sis = temp('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.sis.tsv'),
-	log:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.log',
-	benchmark:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_RFMix2.tsv',
 	params:
 		rfmix2 = config['PATHS']['RFMix2'],
 		bcftools = config['PATHS']['BCFTOOLS'],
@@ -223,7 +232,10 @@ rule run_RFMix2:
 		fb = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.fb.tsv',
 		Q = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.rfmix.Q',
 		msp = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.msp.tsv',
-
+	log:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/logs/run_RFMix2.log',
+	benchmark:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_RFMix2.tsv',
 	shell:
 		"""
 		export PATH="{params.bcftools}:$PATH"
