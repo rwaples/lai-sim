@@ -407,10 +407,16 @@ def make_ind_labels(ts):
 	for p in nind_in_pop:
 		nind_in_pop[p] = int(nind_in_pop[p]/2)
 	ind_labels = []
-	for p in nind_in_pop:
-		for i in range(1, nind_in_pop[p]+1):
-			ind_labels.append(f'pop_{p}-ind_{i:04}')
-	ind_labels = sorted(ind_labels)
+	#for p in nind_in_pop:
+	#	for i in range(1, nind_in_pop[p]+1):
+	#		ind_labels.append(f'pop_{p}-ind_{i:04}')
+	#ind_labels = sorted(ind_labels)
+	countpop = collections.defaultdict(int)
+
+	for indpop in pops[::2]:
+	    countpop[indpop]+=1
+	    label = f'pop_{indpop}-ind_{countpop[indpop]:04}'
+	    ind_labels.append(label)
 	return(ind_labels)
 
 
@@ -422,19 +428,7 @@ def vcfheader(ts, target_pop):
 	contig = f'##contig=<ID=chr22,length={int(np.ceil(ts.get_sequence_length()))}>\n'
 	FORMAT = '##FORMAT=<ID=LA,Number=1,Type=String,Description="Local ancestry">\n'
 
-	pop_of_sample = dict(zip(range(len(ts.tables.nodes)), ts.tables.nodes.population))
-
-	nind_in_pop = collections.defaultdict(int)
-	pops = [pop_of_sample[i] for i in ts.samples(target_pop)]
-	for p in pops:
-		nind_in_pop[p] += 1
-	for p in nind_in_pop:
-		nind_in_pop[p] = int(nind_in_pop[p]/2)
-
-	ind_labels = []
-	for p in nind_in_pop:
-		for i in range(1, nind_in_pop[p]+1):
-			ind_labels.append(f'pop_{p}-ind_{i:05}')
+	ind_labels = make_ind_labels(ts.simplify(ts.samples(target_pop)))
 
 	header = fileformat+fileDate+FILTER+contig+FORMAT
 	header = header +'\t'.join(['#CHROM','POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO', 'FORMAT'])

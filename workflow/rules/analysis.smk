@@ -123,6 +123,7 @@ rule make_mosaic_input:
 		folder = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input',
 		#chrom_id = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].chr,
 		nind_ref = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nind_ref,
+		target_pop = lambda w: units.loc[(w.sim_name, w.asc_name)].target_pop[0],
 	script:
 		'../scripts/make_mosaic_inputs.py'
 

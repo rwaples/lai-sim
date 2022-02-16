@@ -93,7 +93,7 @@ rule sample_sites:
 	input:
 		'results/{model_name}/{sim_name}/{asc_name}/ascertained.tsz'
 	output:
-		temp('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/sample.tsz')
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/sample.tsz'
 	params:
 		nind_admixed = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nind_admixed,
 		nind_ref = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nind_ref,

@@ -65,24 +65,27 @@ with open(os.path.join(base_path, 'genotypes.bcf'), "w") as bcf_file:
 		raise RuntimeError("bcftools failed with status:", proc.returncode)
 
 
-# write file mapping inds to populations
-# only for the reference individuals
+# write files mapping inds to populations
 npops = len(export_ts.populations())
 nref_total = nind_ref.sum()
 with open(os.path.join(base_path, 'sample_map.txt'), 'w') as OUTFILE:
-	for ind_string in ind_labels[:nref_total]:
-		pop = ind_string.split('-')[0]
-		OUTFILE.write(f'{ind_string}\t{pop}\n')
+	for ind_string in ind_labels:
+		pop = int(ind_string.split('-')[0].split('_')[1])
+		if pop != target_pop:
+			OUTFILE.write(f'{ind_string}\t{pop}\n')
 
 ## write files with inds from the reference and admixed populations
 with open(os.path.join(base_path, 'reference_inds.txt'), 'w') as OUTFILE:
-	for ind_string in ind_labels[:nref_total]:
-		OUTFILE.write(f'{ind_string}\n')
+	for ind_string in ind_labels:
+		pop = int(ind_string.split('-')[0].split('_')[1])
+		if pop != target_pop:
+			OUTFILE.write(f'{ind_string}\n')
 
 with open(os.path.join(base_path, 'target_inds.txt'), 'w') as OUTFILE:
-	for ind_string in ind_labels[nref_total:]:
-		OUTFILE.write(f'{ind_string}\n')
-
+	for ind_string in ind_labels:
+		pop = int(ind_string.split('-')[0].split('_')[1])
+		if pop == target_pop:
+			OUTFILE.write(f'{ind_string}\n')
 
 # write two formats of genetic maps files
 os.system(f"{snakemake.config['PATHS']['BCFTOOLS']} query -f '%POS\\n' {os.path.join(base_path, 'genotypes.bcf')} > {os.path.join(base_path, 'site.positions')}")

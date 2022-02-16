@@ -18,6 +18,8 @@ folder = str(snakemake.params.folder)
 chrom_id = str(22)
 nind_ref = str(snakemake.params.nind_ref)
 nind_ref = np.array([int(x) for x in nind_ref.split(',')])
+target_pop = int(snakemake.params.target_pop)
+
 
 # write sample.names
 ts = tszip.decompress(site_ts)
@@ -25,28 +27,27 @@ npops = len(ts.populations())
 ind_labels = make_ind_labels(ts)
 nref_total = nind_ref.sum()
 with open(os.path.join(folder, 'sample.names'), 'w') as OUTFILE:
-	for ind_string in ind_labels[:nref_total]:
-		pop = ind_string.split('-')[0]
-		OUTFILE.write(f'{pop} {ind_string} 0 0 0 2 -9\n')
-	for ind_string in ind_labels[nref_total:]:
-		pop = 'admixed'
-		OUTFILE.write(f'{pop} {ind_string} 0 0 0 2 -9\n')
-
+	for ind_string in ind_labels:
+		pop = int(ind_string.split('-')[0].split('_')[1])
+		if pop != target_pop:
+			OUTFILE.write(f'pop_{pop} {ind_string} 0 0 0 2 -9\n')
+		if pop == target_pop:
+			OUTFILE.write(f'admixed {ind_string} 0 0 0 2 -9\n')
 
 # needed to subset vcf files
-start_ix = 0
-stop_ix = 0
 for p in range(npops-1):
 	pop = 'pop_' + (str(p))
-	stop_ix += nind_ref[p]
 	with open(os.path.join(folder, f'{pop}.samplelist'), 'w') as OUTFILE:
-		for ind_string in ind_labels[start_ix:stop_ix]:
-			OUTFILE.write(f'{ind_string}\n')
-	start_ix += nind_ref[p]
+		for ind_string in ind_labels:
+			indpop = ind_string.split('-')[0]
+			if indpop == pop:
+				OUTFILE.write(f'{ind_string}\n')
 
 with open(os.path.join(folder, 'admixed.samplelist'), 'w') as OUTFILE:
-	for ind_string in ind_labels[nref_total:]:
-		OUTFILE.write(f'{ind_string}\n')
+	for ind_string in ind_labels:
+		ipop = int(ind_string.split('-')[0].split('_')[1])
+		if ipop == target_pop:
+			OUTFILE.write(f'{ind_string}\n')
 
 for p in range(npops-1):
 	pop = 'pop_' + (str(p))
