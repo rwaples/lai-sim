@@ -23,3 +23,15 @@ rule plot_local_ancestry:
 		plot = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/true_local_ancestry.png'
 	script:
 		'../scripts/plot_true_local_ancestry.py'
+
+
+rule plot_qq_report:
+	input:
+		true_path = 'path',
+		bmix_path = 'path',
+		rfmix_path = 'path',
+		mosaic_path = 'path',
+	output:
+		plot = 'path',
+	script:
+		'../scripts/plot_qq_report.py'

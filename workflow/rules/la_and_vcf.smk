@@ -75,10 +75,8 @@ rule ascertain:
 		'results/{model_name}/{sim_name}/full.tsz'
 	output:
 		'results/{model_name}/{sim_name}/{asc_name}/ascertained.tsz'
-	output:
+	log:
 		'results/{model_name}/{sim_name}/{asc_name}/ascertained.log'
-	conda:
-		'../../environment.yml'
 	params:
 		asc_MAC = lambda w: units.loc[(w.sim_name, w.asc_name)].asc_MAC[0],
 		asc_MAF = lambda w: units.loc[(w.sim_name, w.asc_name)].asc_MAF[0],
