@@ -14,7 +14,7 @@
 `snakemake all -c1 --configfile profiles/personal/config.yaml`
 
 # view a graph of the directed acyclic graph (DAG) that is used for each analysis
-`snakemake all -c1 --configfile profiles/personal/config.yaml --rulegraph dot | display`
+`snakemake all -c1 --configfile profiles/personal/config.yaml --rulegraph | dot | display`
 
 <!--- # patch MOSAIC to allow random number seeds
 ## needs to be run each time a new env is made

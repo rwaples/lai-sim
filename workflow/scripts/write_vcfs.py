@@ -179,7 +179,3 @@ subprocess.run([
 	'index',
 	f'{os.path.join(base_path, "la_true.vcf.gz")}'
 	])
-
-## delete the raw vcf files
-#os.remove(f'{os.path.join(base_path, "genotypes.vcf")}')
-#os.remove(f'{os.path.join(base_path, "la_true.vcf")}')

@@ -48,8 +48,6 @@ rule export_mosaic:
 		"../scripts/export_mosaic_results.R"
 
 
-# changed the output of this file to be a file with non-changing name
-# also rename the relevant files with variable names
 rule run_mosaic:
 	input:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/admixedgenofile.22',
@@ -71,16 +69,13 @@ rule run_mosaic:
 		seed = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].anal_seed,
 		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
 		nthreads = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nthreads,
-		GpcM = lambda w: int(60 * float(units.loc[(w.sim_name, w.asc_name, w.anal_name)].max_snps) / 50000),
+		#GpcM = lambda w: int(60 * float(units.loc[(w.sim_name, w.asc_name, w.anal_name)].max_snps) / 50000),
 	shell:
 		"""
 		# recalculate gpcm based on the actual number of sites in the analysis
 		nsite=$(sed -n '$=' {params.sites_file})
 		numer=0.0012
 		gpcm=$(python -c "a=$nsite*$numer;print(int(a))")
-
-		echo $gpcm
-		echo boots!
 
 		Rscript {params.mosaic} --seed {params.seed} --maxcores {params.nthreads} --GpcM $gpcm --chromosomes 22:22 --ancestries {params.nsource} admixed {params.input_folder} 2>&1 | tee {log}
 
@@ -163,7 +158,7 @@ rule run_bmix:
 		{params.bcftools} index {params.prefix}.anc.vcf.gz
 		"""
 
-
+# notice this is RFMix v1, not currently used
 rule run_RFMix:
 	input:
 		alleles_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/admixedgenofile.22',

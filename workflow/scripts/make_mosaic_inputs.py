@@ -28,10 +28,10 @@ ind_labels = make_ind_labels(ts)
 nref_total = nind_ref.sum()
 with open(os.path.join(folder, 'sample.names'), 'w') as OUTFILE:
 	for ind_string in ind_labels:
-		pop = int(ind_string.split('-')[0].split('_')[1])
-		if pop != target_pop:
-			OUTFILE.write(f'pop_{pop} {ind_string} 0 0 0 2 -9\n')
-		if pop == target_pop:
+		ipop = int(ind_string.split('-')[0].split('_')[1])
+		if ipop != target_pop:
+			OUTFILE.write(f'pop_{ipop} {ind_string} 0 0 0 2 -9\n')
+		if ipop == target_pop:
 			OUTFILE.write(f'admixed {ind_string} 0 0 0 2 -9\n')
 
 # needed to subset vcf files
@@ -49,6 +49,7 @@ with open(os.path.join(folder, 'admixed.samplelist'), 'w') as OUTFILE:
 		if ipop == target_pop:
 			OUTFILE.write(f'{ind_string}\n')
 
+# vcf for each reference population
 for p in range(npops-1):
 	pop = 'pop_' + (str(p))
 	samplelist = os.path.join(folder, f'{pop}.samplelist')
@@ -96,7 +97,6 @@ for p in range(npops-1):
 		'--haplegendsample', f'{prefix}',
 		f'{output}',
 		])
-	print(f"zcat {prefix+'.hap.gz'} | tr -d ' ' > {prefix}")
 	subprocess.run(
 		f"zcat {prefix+'.hap.gz'} | tr -d ' ' > {prefix}", shell=True)
 
@@ -110,7 +110,6 @@ subprocess.run([
 	'--haplegendsample', f'{prefix}',
 	f'{output}',
 	])
-#print(f"zcat {prefix+'.hap.gz'} | tr -d ' ' > {prefix}")
 subprocess.run(
 	f"zcat {prefix+'.hap.gz'} | tr -d ' ' > {prefix}", shell=True)
 
@@ -127,7 +126,7 @@ snpfile.to_csv(os.path.join(folder, f'snpfile.{chrom_id}'), sep =' ',
 	index=None, header=None, quoting=csv.QUOTE_NONE, escapechar = ' ')
 
 
-# write rates
+# write rates file
 with open(os.path.join(folder, f'rates.{chrom_id}'), 'w') as OUTFILE:
 	OUTFILE.write(f':sites:{len(snpfile)}\n')
 	bp = ' '.join([str(x) for x in snpfile['bp'].values])

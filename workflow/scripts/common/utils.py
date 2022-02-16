@@ -24,7 +24,7 @@ def sample_inds(ts, pop_id, nind, seed):
 	samples = np.empty(nind*2, dtype=int)
 	samples[0::2] = take
 	samples[1::2] = take+1
-	return samples
+	return(samples)
 
 
 def strip_MAC(ts, MAC):
@@ -83,7 +83,7 @@ def strip_adjacent_sites(ts, dist=1.5):
 	final_sites = ts.num_sites
 	print('Adjacent sites filter:')
 	print(f"removed {initial_sites-final_sites} sites ({(initial_sites-final_sites)/(initial_sites):.0%}), {final_sites} sites remain")
-	return ts
+	return(ts)
 
 
 def downsample_snps(ts, nsnps, seed, fail=False):
@@ -99,9 +99,6 @@ def downsample_snps(ts, nsnps, seed, fail=False):
 			return(ts)
 	else:
 		rng = np.random.default_rng(seed)
-		keep = frozenset(np.random.choice(a=ts.num_mutations, size=nsnps, replace=False))
-
-		# RKW new way to do this
 		keep = frozenset(np.random.choice(a=ts.num_sites, size=nsnps, replace=False))
 		sites_to_remove = list(frozenset(np.arange(ts.num_sites, dtype = np.int32)) - keep)
 		ts = ts.delete_sites(sites_to_remove)
@@ -109,31 +106,6 @@ def downsample_snps(ts, nsnps, seed, fail=False):
 		print('Downsample filter:')
 		print(f"removed {initial_sites-final_sites} sites ({(initial_sites-final_sites)/(initial_sites):.0%}), {final_sites} sites remain")
 		return(ts)
-
-
-		tables = ts.dump_tables()
-		tables.sites.clear()
-		tables.mutations.clear()
-		mut_ix = 0
-		for tree in ts.trees():
-			for site in tree.sites():
-				nmut = len(site.mutations)
-				if(nmut==0):
-					pass
-				else:
-					assert nmut == 1, f"{site}"  # Only supports infinite sites muts.
-					if mut_ix in keep:
-						mut = site.mutations[0]
-						site_id = tables.sites.add_row(
-							position=site.position,
-							ancestral_state=site.ancestral_state)
-						tables.mutations.add_row(
-							site=site_id, node=mut.node, derived_state=mut.derived_state)
-					mut_ix +=1
-		final_sites = len(tables.sites)
-		print('Downsample filter:')
-		print(f"removed {initial_sites-final_sites} sites ({(initial_sites-final_sites)/(initial_sites):.0%}), {final_sites} sites remain")
-		return tables.tree_sequence()
 
 
 def get_local_ancestry(ts, admixture_time, per_batch):
@@ -271,7 +243,7 @@ def get_la_mat(ts, df, mapping=None):
 		poporder = sample_order
 	la_mat = la_mat[:, poporder]
 
-	return la_mat, sample_order
+	return(la_mat, sample_order)
 
 
 def get_la_mat_large(ts, df, mapping):
@@ -325,8 +297,8 @@ def get_la_mat_large(ts, df, mapping):
 	# finally sort the output by samplepop so the samples from each pop are contiguous
 	poporder = np.array([new_of_old[x] for x in sample_order])
 	la_mat = la_mat[:, poporder]
+	return(la_mat, sample_order)
 
-	return la_mat, sample_order
 
 def find_la(params):
 	"""
@@ -347,7 +319,7 @@ def find_la(params):
 		'parent': local.parent,
 		'child': local.child
 	})
-	return local_df
+	return(local_df)
 
 
 def get_local_ancestry_pop_multi(ts, pop, admixture_time, max_samples=100, per_rep=12, n_cores=8):
@@ -400,17 +372,14 @@ def get_local_ancestry_pop_multi(ts, pop, admixture_time, max_samples=100, per_r
 
 def make_ind_labels(ts):
 	pop_of_sample = dict(zip(range(len(ts.tables.nodes)), ts.tables.nodes.population))
-	nind_in_pop = collections.defaultdict(int)
+	#nind_in_pop = collections.defaultdict(int)
 	pops = [pop_of_sample[i] for i in ts.samples()]
-	for p in pops:
-		nind_in_pop[p] +=1
-	for p in nind_in_pop:
-		nind_in_pop[p] = int(nind_in_pop[p]/2)
-	ind_labels = []
+	#for p in pops:
+	#	nind_in_pop[p] +=1
 	#for p in nind_in_pop:
-	#	for i in range(1, nind_in_pop[p]+1):
-	#		ind_labels.append(f'pop_{p}-ind_{i:04}')
-	#ind_labels = sorted(ind_labels)
+	#	nind_in_pop[p] = int(nind_in_pop[p]/2)
+
+	ind_labels = []
 	countpop = collections.defaultdict(int)
 
 	for indpop in pops[::2]:
@@ -436,7 +405,7 @@ def vcfheader(ts, target_pop):
 	return(header)
 
 
-def get_allele_freqs(ts, pops = None):
+def get_allele_freqs(ts, pops=None):
 	"""return allele frequencies for each site and population
 	returns a matrix of [site_idx, pop_idx] derived allele frequencies.
 	pops is a list of the pops, order of pops is maintained.
@@ -567,7 +536,6 @@ def r2_ancestry_dosage(true_dosage, pred_dosage, n_anc):
 				pred_dosage[:, i*n_anc:i*n_anc+n_anc].ravel()
 			)[0]
 		)
-
 	return(per_anc, per_ind)
 
 
@@ -650,7 +618,7 @@ def get_Q(arr, n_anc):
 
 
 def get_RMSD_Q(Q1, Q2):
-	"""Return the RMSD between two sets of ancestry proportions."""
+	"""Return the RMSD between two sets of ancestry proportions (Q)."""
 	assert(Q1.shape == Q2.shape)
 	D = Q1-Q2
 	SD = D*D
@@ -661,15 +629,15 @@ def get_RMSD_Q(Q1, Q2):
 
 def max_la(vals, n_anc):
 	"""
-	Modifies the res array in place.
-	Replaces each probabalistic la call with a categorical call
+	*Modifies the passed array in place*
+	Replaces each probabalistic local ancestry call with a categorical call
 	for the ancestry with the highest posterior probability.
-	Breaks ties by going to the lower numbered population
+	Breaks ties by going to the lower-numbered population
 	"""
 	idxs = np.arange(0, vals.shape[1]+n_anc, n_anc)
 	for i in range(1, len(idxs)):
 		b = vals[:, idxs[i-1]:idxs[i]]
-		a = b.argmax(1, keepdims=True) # breaks ties by assigning the lower pop
+		a = b.argmax(1, keepdims=True) # notice this breaks ties by assigning the lower pop
 		c = np.zeros_like(b)
 		np.put_along_axis(c, a, 1, axis = 1)
 		vals[:, idxs[i-1]:idxs[i]] = c
@@ -689,8 +657,6 @@ def plot_ancestry_dosage(pred_dosage, start_index, n_anc, title, path=None, form
 			l, = ax[i].plot(reference_dosage[:, start_index+i], c=colors[i], alpha=.3, ls='--')
 
 	plt.legend(f, [f'pop{p}' for p in range(n_anc)])
-
-
 
 	fig.tight_layout()
 	sns.despine(bottom=True)

@@ -6,7 +6,7 @@ programs/*
 results/*
 .snakemake/
 *.log
-workflow/notebooks/Untitled.ipynb
+workflow/notebooks/*
 nohup.out
 MOSAIC*
 logs/
