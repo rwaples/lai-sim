@@ -1,5 +1,5 @@
 # lai-sim
-A Snakemake workflow / pipeline for simulating admixture and evaluating local ancestry inference programs.
+A Snakemake workflow for simulating admixture and evaluating local ancestry inference programs.
 
 ## Required external programs
 	- SLiM [(link)](https://messerlab.org/slim/)
