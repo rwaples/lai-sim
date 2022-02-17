@@ -12,7 +12,6 @@ PATHS:
     MOSAIC: programs/MOSAIC/mosaic/mosaic.R
     BMIX: programs/bmix/bmix.jar
     ADD_ERR: programs/add_err/add-err.jar
-    ELAI: /path/to/file
 
 diagnostic_plots: True
 
