@@ -664,3 +664,73 @@ def plot_ancestry_dosage(pred_dosage, start_index, n_anc, title, path=None, form
 	ax[-1].set_xlabel('Site number ')
 	if path:
 		plt.savefig(path, dpi=300, format=format, bbox_inches='tight')
+
+
+def make_qq_report(inferred_dosage, true_dosage, nbins=100):
+    qq = pd.DataFrame({
+        'true':true_dosage.flatten(),
+        'inferred':inferred_dosage.flatten()
+    })
+    qq['bin'] = pd.cut(
+        qq['inferred'],
+        bins = np.linspace(0, 2, nbins+1),
+        include_lowest=True,
+        labels=False
+    )
+    report = qq.groupby(['bin'])['true'].agg([np.mean, len]).reset_index()
+    report.columns = ['bin', 'mean', 'n']
+    return(report)
+
+
+def add_reports(report_a, report_b):
+    new_report = report_a.copy() # keep bins
+
+    merged = report_a.merge(report_b, on='bin', how='outer')
+    merged = merged.replace(np.nan, 0)
+    # n is a sum of a and b
+    new_report['n'] = np.nansum([merged['n_x'], merged['n_y']], axis=0, dtype=int)
+    # mean is a weighted average of a and b
+    new_report['mean'] = np.average(
+        [merged['mean_x'], merged['mean_y']],
+        axis=0,
+        weights = [merged['n_x'], merged['n_y']]
+    )
+    return(new_report)
+
+
+def plot_qq_report(report, title=None, reflines=True):
+    if reflines:
+        point1 = [-.1, 0]
+        point2 = [.1, 0]
+        x_values = [point1[0], point2[0]]
+        y_values = [point1[1], point2[1]]
+        plt.plot(x_values, y_values, c= 'k', ls='--')
+        point1 = [.9, 1]
+        point2 = [1.1, 1]
+        x_values = [point1[0], point2[0]]
+        y_values = [point1[1], point2[1]]
+        plt.plot(x_values, y_values, c= 'k', ls='--')
+        point1 = [1.9, 2]
+        point2 = [2.1, 2]
+        x_values = [point1[0], point2[0]]
+        y_values = [point1[1], point2[1]]
+        plt.plot(x_values, y_values, c= 'k', ls='--')
+    plt.scatter(
+        report['bin']/len(report)*2,
+        report['mean'],
+        c = ['r'] + ['b']*int(np.floor((len(report)-3)/2)) + ['r'] + ['b']*int(np.ceil((len(report)-3)/2)) + ['r']
+    )
+    plt.title(title)
+    plt.xlabel('inferred ancestry dosage bin')
+    plt.ylabel('mean of true ancestry dosage')
+    plt.show()
+    plt.scatter(
+        report['bin']/len(report)*2,
+        report['n'],
+        c = ['r'] + ['b']*int(np.floor((len(report)-3)/2)) + ['r'] + ['b']*int(np.ceil((len(report)-3)/2)) + ['r']
+    )
+
+    plt.xlabel('inferred ancestry dosage bin')
+    plt.ylabel('count')
+    plt.semilogy()
+    plt.show()

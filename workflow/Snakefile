@@ -29,6 +29,11 @@ rule all:
 			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png"
 			for u in units.itertuples()
 		],
+		diag_qq=[
+			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/qq.png"
+			for u in units.itertuples()
+		],
+
 		R2_anc=[
 			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.ancestry.tsv"
 			for u in units.itertuples()
@@ -43,18 +48,17 @@ rule all:
 		],
 
 
-rule sims:
+rule just_sim:
 	input:
 		sim=[
 			f"results/{u.model_name}/{u.sim_name}/full.tsz" for u in units.itertuples()
 		],
 
 
-rule ascertain_all:
+rule just_ascertain:
 	input:
 		asc=[
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/ascertained.tsz"
-			for u in units.itertuples()
+			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/ascertained.tsz"	for u in units.itertuples()
 		],
 
 
