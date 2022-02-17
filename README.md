@@ -1,4 +1,6 @@
 # lai-sim
+A Snakemake workflow / pipeline for simulating admixture and evaluating local ancestry inference programs.
+
 
 # create the conda environment
 ## requires mamba, as suggested by Snakemake
