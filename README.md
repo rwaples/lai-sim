@@ -2,13 +2,13 @@
 A Snakemake workflow for simulating admixture and evaluating local ancestry inference programs.
 
 ## Required external programs
-	- SLiM [(link)](https://messerlab.org/slim/)
-	- RFMix version 2 [(link)](https://github.com/slowkoni/rfmix)
-	- bmix [(link)](https://github.com/browning-lab/bmix)
-		BCFTOOLS [(link)](http://samtools.github.io/bcftools/howtos/index.html)
-		BEAGLE [(link)](http://faculty.washington.edu/browning/beagle/beagle.html)
-		add_err 
-	- Snakemake and conda (see below)
+* SLiM [link](https://messerlab.org/slim/)
+* RFMix version 2 [(link)](https://github.com/slowkoni/rfmix)
+* bmix [(link)](https://github.com/browning-lab/bmix)
+* BCFTOOLS [(link)](http://samtools.github.io/bcftools/howtos/index.html)
+* BEAGLE [(link)](http://faculty.washington.edu/browning/beagle/beagle.html)
+* add_err (link pending)
+* Snakemake and conda (see below)
 
 # create the conda environment
 ## requires mamba, as suggested by Snakemake
