@@ -67,7 +67,7 @@ rule run_mosaic:
 	params:
 		mosaic = config['PATHS']['MOSAIC'],
 		#input_folder = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/',
-		input_folder = lambda w, input: os.path.dirname(input)+'/',
+		input_folder = lambda w, input: os.path.dirname(input[0])+'/',
 		base_folder = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC',
 		sites_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
 		seed = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].anal_seed,
