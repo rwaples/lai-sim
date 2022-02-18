@@ -18,8 +18,8 @@ mosaic_qq = pd.read_csv(mosaic_report, sep='\t')
 
 
 def plot_qq_reports(bmix, rfmix, mosaic, plot_path, reflines=True):
-    with sns.plotting_context('notebook', font_scale=1.5):
-        fig, ax = plt.subplots(nrows=2, ncols=3, figsize=(16,8), sharex=True, sharey='row')
+    with sns.plotting_context('notebook', font_scale=1.3):
+        fig, ax = plt.subplots(nrows=2, ncols=3, figsize=(12,6), sharex=True, sharey='row')
         names = ['bmix', 'rfmix', 'mosaic']
         for i, report in enumerate([bmix,rfmix,mosaic]):
             name = names[i]

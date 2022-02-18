@@ -10,6 +10,9 @@ workflow/notebooks/*
 nohup.out
 MOSAIC*
 logs/
+report.html
+report.zip
+
 
 
 # Byte-compiled / optimized / DLL files

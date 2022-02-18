@@ -18,6 +18,7 @@ wildcard_constraints:
 	asc_name="\w+",
 	sim_name="\w+",
 
+report: "report/workflow.rst"
 
 rule all:
 	input:
