@@ -68,33 +68,21 @@ rule just_bmix:
 		[f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/bmix/bmix.anc.vcf.gz' for u in units.itertuples()],
 
 
-rule four_pop:
-	input:
-		R2_ind=[
-			f"results/{u.model_name}/{u.sim_name}/{u.anal_name}/SUMMARY/R2_score.individuals.tsv"
-			for u in units.query('anal_name == "4pop_test"').itertuples()
-		], #rfmix2 = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix2/rfmix2.fb.tsv' for u in units.query('anal_name == "4pop_test"').itertuples()],
-		 #rfmix2_diploid = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix2/diploid_la.hdf' for u in units.query('anal_name == "4pop_test"').itertuples()],
-		 #mosaic = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/MOSAIC/la_probs.RData' for u in units.query('anal_name == "4pop_test"').itertuples()],
-		 #bmix = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/bmix/bmix.anc.vcf.gz' for u in units.query('anal_name == "4pop_test"').itertuples()],
-		 #diag_coal = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/pop_coal_time.png' for u in units.query('anal_name == "4pop_test"').itertuples()],
-		 #diag_fst = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png' for u in units.query('anal_name == "4pop_test"').itertuples()],
-		 #diag_la = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTICS/true_local_ancestry.png' for u in units.query('anal_name == "4pop_test"').itertuples()],
-		 #R2_anc = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/SUMMARY/R2_score.ancestry.tsv' for u in units.query('anal_name == "4pop_test"').itertuples()],
-		 #rfmix = [f'results/{u.model_name}/{u.sim_name}/{u.anal_name}/RFMix/0.Viterbi.txt' for u in units.query('anal_name == "short_run"').itertuples()],
-
-
 rule diagnostic_plots:
 	input:
 		pop_coal_time=[
-			f"results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTIC/pop_coal_time.png"
+			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/pop_coal_time.png"
 			for u in units.itertuples()
 		],
 		pairwise_Fst=[
-			f"results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTIC/pairwise_Fst.png"
+			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png"
 			for u in units.itertuples()
 		],
 		true_local_ancestry=[
-			f"results/{u.model_name}/{u.sim_name}/{u.anal_name}/DIAGNOSTIC/true_local_ancestry.png"
+			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/true_local_ancestry.png"
 			for u in units.itertuples()
 		],
+		ancestry_dosage=[
+			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.0.bmix.pdf"
+			for u in units.itertuples()
+		]

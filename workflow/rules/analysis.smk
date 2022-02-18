@@ -66,13 +66,13 @@ rule run_mosaic:
 		emlog3 = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/admixed_ALLway.EMlog.out',
 	params:
 		mosaic = config['PATHS']['MOSAIC'],
-		input_folder = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/',
+		#input_folder = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/',
+		input_folder = lambda w, input: os.path.dirname(input)+'/',
 		base_folder = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC',
 		sites_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
 		seed = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].anal_seed,
 		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
 		nthreads = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nthreads,
-		#GpcM = lambda w: int(60 * float(units.loc[(w.sim_name, w.asc_name, w.anal_name)].max_snps) / 50000),
 	log:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/run_mosaic.log',
 	benchmark:
@@ -91,6 +91,10 @@ rule run_mosaic:
 		"""
 
 		"""
+
+		# MOSAIC provides no ability to specify output folders or file names
+		# file names depend on the input data and parameters
+		# below I try to enforce a consistent naming scheme.
 
 		# move the results into the MOSAIC folder
 		mv MOSAIC_RESULTS/* {params.base_folder}
