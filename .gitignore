@@ -12,7 +12,7 @@ MOSAIC*
 logs/
 report.html
 report.zip
-
+.Rhistory
 
 
 # Byte-compiled / optimized / DLL files
