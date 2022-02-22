@@ -47,6 +47,12 @@ rule all:
 			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/Q_RMSD.tsv"
 			for u in units.itertuples()
 		],
+		
+		R2="results/reports/R2_report.txt",
+		Q="results/reports/Q_report.txt",
+		QQ_bmix="results/reports/QQ.bmix.txt",
+		QQ_rfmix="results/reports/QQ.rfmix.txt",
+		QQ_mosaic="results/reports/QQ.mosaic.txt",
 
 
 rule just_sim:
