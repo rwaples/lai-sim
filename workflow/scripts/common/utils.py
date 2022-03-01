@@ -3,12 +3,10 @@ import pandas as pd
 import collections
 import itertools
 import allel
-import pyreadr
 import os
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import pearsonr
-from sklearn.metrics import r2_score
 
 
 def sample_inds(ts, pop_id, nind, seed):
@@ -570,47 +568,46 @@ def load_bmix(path, sites_file, BCFTOOLS):
 
 
 def load_mosaic(path):
-	"""Load and return an array of the posterior local ancestry probabilities from MOSAIC."""
-	#mr = pyreadr.read_r(path)['arr'].astype(np.half)
-	#res = mr.to_numpy().T.reshape((mr.shape[2],-1), order='C')
+	"""Return an array of the posterior LA probabilities from MOSAIC."""
 	arr = np.load(path)['arr']
-	res = arr.T.reshape((arr.shape[2],-1), order='C')
+	res = arr.T.reshape((arr.shape[2], -1), order='C')
 	return(res)
 
 
 def get_Q(arr, n_anc):
 	"""
-	Return a data frame of ancestry fractions (Q)
-	calculated from probabalistic local ancestry proportions.
+	Return a data frame of ancestry fractions (Q).
+
+	Calculated from probabalistic local ancestry proportions.
 	"""
 	nsites = arr.shape[0]
 	# avoid overflow and sum over sites
 	arr = arr.astype(float).sum(0)
 	if n_anc == 2:
-		a0 = arr[0::2] # should be views
+		a0 = arr[0::2]  # should be views
 		a1 = arr[1::2]
-		q0 = a0/(nsites*2)
-		q1 = a1/(nsites*2)
+		q0 = a0 / (nsites * 2)
+		q1 = a1 / (nsites * 2)
 		Q = pd.DataFrame([q0, q1]).T
 		Q.columns = ['pop_0', 'pop_1']
 	elif n_anc == 3:
-		a0 = arr[0::3] # should be views
+		a0 = arr[0::3]
 		a1 = arr[1::3]
 		a2 = arr[2::3]
-		q0 = a0/(nsites*2)
-		q1 = a1/(nsites*2)
-		q2 = a2/(nsites*2)
+		q0 = a0 / (nsites * 2)
+		q1 = a1 / (nsites * 2)
+		q2 = a2 / (nsites * 2)
 		Q = pd.DataFrame([q0, q1, q2]).T
 		Q.columns = ['pop_0', 'pop_1', 'pop_2']
 	elif n_anc == 4:
-		a0 = arr[0::4] # should be views
+		a0 = arr[0::4]
 		a1 = arr[1::4]
 		a2 = arr[2::4]
 		a3 = arr[3::4]
-		q0 = a0/(nsites*2)
-		q1 = a1/(nsites*2)
-		q2 = a2/(nsites*2)
-		q3 = a3/(nsites*2)
+		q0 = a0 / (nsites * 2)
+		q1 = a1 / (nsites * 2)
+		q2 = a2 / (nsites * 2)
+		q3 = a3 / (nsites * 2)
 		Q = pd.DataFrame([q0, q1, q2, q3]).T
 		Q.columns = ['pop_0', 'pop_1', 'pop_2', 'pop_3']
 
@@ -620,8 +617,8 @@ def get_Q(arr, n_anc):
 def get_RMSD_Q(Q1, Q2):
 	"""Return the RMSD between two sets of ancestry proportions (Q)."""
 	assert(Q1.shape == Q2.shape)
-	D = Q1-Q2
-	SD = D*D
+	D = Q1 - Q2
+	SD = D * D
 	MSD = SD.mean().mean()
 	RMSD = np.sqrt(MSD)
 	return(RMSD)
@@ -629,18 +626,19 @@ def get_RMSD_Q(Q1, Q2):
 
 def max_la(vals, n_anc):
 	"""
-	*Modifies the passed array in place*
-	Replaces each probabalistic local ancestry call with a categorical call
-	for the ancestry with the highest posterior probability.
+	Replace each probabalistic local ancestry call with a categorical call.
+
+	Calls the ancestry with the highest posterior probability.
 	Breaks ties by going to the lower-numbered population
+	NOTICE - Modifies the passed array in place.
 	"""
-	idxs = np.arange(0, vals.shape[1]+n_anc, n_anc)
+	idxs = np.arange(0, vals.shape[1] + n_anc, n_anc)
 	for i in range(1, len(idxs)):
-		b = vals[:, idxs[i-1]:idxs[i]]
-		a = b.argmax(1, keepdims=True) # notice this breaks ties by assigning the lower pop
+		b = vals[:, idxs[i - 1]:idxs[i]]
+		a = b.argmax(1, keepdims=True)  # breaks ties by assigning the lower pop
 		c = np.zeros_like(b)
-		np.put_along_axis(c, a, 1, axis = 1)
-		vals[:, idxs[i-1]:idxs[i]] = c
+		np.put_along_axis(c, a, 1, axis=1)
+		vals[:, idxs[i - 1]:idxs[i]] = c
 	return(vals)
 
 
