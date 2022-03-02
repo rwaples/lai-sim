@@ -15,7 +15,7 @@ chr_len = float(snakemake.params.chr_len)
 mutation_rate = float(snakemake.params.mutation_rate)
 sim_seed = int(snakemake.params.sim_seed)
 admixture_time = int(snakemake.params.admixture_time)
-assert(mutation_rate <= 1e-7) # make sure mutation rate is not crazy high
+assert(mutation_rate <= 1e-7)  # make sure mutation rate is not crazy high
 
 ts = tskit.load(ts_path)
 species = stdpopsim.get_species("HomSap")
@@ -50,12 +50,12 @@ assert flags.sum() == coalesced_ts.num_samples
 
 flags[tables.nodes.time == admixture_time] = 0
 assert flags.sum() == np.intersect1d(
-				coalesced_ts.samples(),
-				np.where(tables.nodes.asdict()['time']==0)[0]
-			).size
+	coalesced_ts.samples(),
+	np.where(tables.nodes.asdict()['time'] == 0)[0]
+).size
 
 newnodes.set_columns(
-	time = newnodes.time,
+	time=newnodes.time,
 	flags=flags,
 	population=newnodes.population,
 	individual=newnodes.individual,

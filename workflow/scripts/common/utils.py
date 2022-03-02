@@ -5,6 +5,7 @@ import collections
 import itertools
 import allel
 import os
+import multiprocessing
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import pearsonr
@@ -27,11 +28,10 @@ def sample_inds(ts, pop_id, nind, seed):
 
 
 def strip_MAC(ts, MAC):
-	"""
-	Removes sites with minor allele count <= MAC.
+	"""Remove sites with minor allele count <= MAC.
+
 	Returns a new tree-sequence with sites removed
 	"""
-
 	initial_sites = ts.num_sites
 	present_samples = np.intersect1d(
 		ts.samples(),
@@ -124,12 +124,12 @@ def get_local_ancestry(ts, admixture_time, per_batch):
 	target_ancestors = np.where(ts.tables.nodes.asdict()['time'] == admixture_time)[0]
 
 	nsample = len(target_samples)
-	l = [x for x in range(0, nsample, per_batch)]
-	r = [x for x in range(per_batch, nsample + per_batch, per_batch)]
+	L = [x for x in range(0, nsample, per_batch)]
+	R = [x for x in range(per_batch, nsample + per_batch, per_batch)]
 	dfs = []
-	for i in range(len(l)):
+	for i in range(len(L)):
 		local = ts.tables.link_ancestors(
-			samples=target_samples[l[i]:r[i]],
+			samples=target_samples[L[i]:R[i]],
 			ancestors=target_ancestors
 		)
 
@@ -153,11 +153,11 @@ def get_local_ancestry(ts, admixture_time, per_batch):
 
 
 def get_local_ancestry_pop(ts, pop, admixture_time, max_samples=100, per_rep=12):
-	"""returns df describing local ancestry
-	local ancestry is defined by the location of ancestors at admixture_time
-	and does this by considering per_rep samples at once
-	"""
+	"""Return df describing local ancestry.
 
+	Local ancestry is defined by the location of ancestors at admixture_time
+	and does this by considering per_rep samples at once.
+	"""
 	ancestors = np.where(ts.tables.nodes.asdict()['time'] == admixture_time)[0]
 	pop_samples = ts.samples(population=pop)
 	if max_samples:
@@ -166,14 +166,14 @@ def get_local_ancestry_pop(ts, pop, admixture_time, max_samples=100, per_rep=12)
 		nsample = pop_samples.size
 	target_samples = pop_samples[:nsample]  # could allow random sampling of inds
 
-	l = [x for x in range(0, nsample, per_rep)]
-	r = [x for x in range(per_rep, nsample, per_rep)] + [nsample]
-	assert(len(l) == len(r))
+	L = [x for x in range(0, nsample, per_rep)]
+	R = [x for x in range(per_rep, nsample, per_rep)] + [nsample]
+	assert(len(L) == len(R))
 	dfs = []
 
-	for i in range(len(l)):
+	for i in range(len(L)):
 		local = ts.tables.link_ancestors(
-			samples=target_samples[l[i]:r[i]],
+			samples=target_samples[L[i]:R[i]],
 			ancestors=ancestors
 		)
 		local_df = pd.DataFrame({
@@ -184,7 +184,7 @@ def get_local_ancestry_pop(ts, pop, admixture_time, max_samples=100, per_rep=12)
 		})
 		dfs.append(local_df)
 		if i % 100 == 0:
-			print(f'Done with local ancestry batch {i} out of {len(l)}!')
+			print(f'Done with local ancestry batch {i} out of {len(L)}!')
 
 	local_ancestry_df = pd.concat(dfs)
 	pop_of_node = dict(zip(range(len(ts.tables.nodes)), ts.tables.nodes.population))
@@ -198,6 +198,7 @@ def get_local_ancestry_pop(ts, pop, admixture_time, max_samples=100, per_rep=12)
 
 
 def get_la_mat(ts, df, mapping=None):
+	"""Get a array of local ancestry at each site."""
 	# the df gives the local ancestry
 	# the ts should be simplified with with only the desired (target) samples retained.
 	# The node re-mapping produced by simplify(map_nodes=True) should be supplied here if
@@ -205,7 +206,7 @@ def get_la_mat(ts, df, mapping=None):
 
 	# make sure the local ancestry df is sorted by samplepop
 	df = df.sort_values(['samplepop', 'child', 'left']).reset_index(drop=True)
-	sample_order = df['child'].unique() # preserves order of occurance
+	sample_order = df['child'].unique()  # preserves order of occurance
 	# this will be the output order of the columns in the la_mat
 
 	# create an empty output matrix
@@ -215,24 +216,24 @@ def get_la_mat(ts, df, mapping=None):
 
 	# bed_mask records which sites fall within
 	# the intervals on each row of df
-	site_pos = np.array([site.position for site in ts.sites()])[:,None]
+	site_pos = np.array([site.position for site in ts.sites()])[:, None]
 	bed_mask = (df['left'].values <= site_pos) & (df['right'].values > site_pos)
 
-	sites_idx = np.where(bed_mask)[0] # gives the site index
-	rows_idx = np.where(bed_mask)[1] # gives the LA row index
+	sites_idx = np.where(bed_mask)[0]  # gives the site index
+	rows_idx = np.where(bed_mask)[1]  # gives the LA row index
 	old_of_index = df['child'].to_dict()
 
 	if mapping is not None:
 		# use the mapping to get "old" node ids
-		new_node, old_node = np.where(mapping == ts.samples()[:,None])
+		new_node, old_node = np.where(mapping == ts.samples()[:, None])
 		new_of_old = dict(zip(old_node, new_node))
-		old_of_new = dict(zip(new_node, old_node))
-		haps_idx = np.array([new_of_old[old_of_index[x]] for x in rows_idx]) # gives the hap
+		# old_of_new = dict(zip(new_node, old_node))
+		haps_idx = np.array([new_of_old[old_of_index[x]] for x in rows_idx])  # hap
 
 	else:
-		haps_idx = np.array([old_of_index[x] for x in rows_idx]) # gives the hap
+		haps_idx = np.array([old_of_index[x] for x in rows_idx])  # hap
 
-	pops = np.array(df['localpop'])[rows_idx] # pop at each location
+	pops = np.array(df['localpop'])[rows_idx]  # pop at each location
 
 	la_mat[sites_idx, haps_idx] = pops
 	# finally sort the output by samplepop so the samples from each pop are contiguous
@@ -246,8 +247,8 @@ def get_la_mat(ts, df, mapping=None):
 
 
 def get_la_mat_large(ts, df, mapping):
-	"""
-	Returns a matrix with the local ancestry of each individual at each site.
+	"""Return a matrix with the local ancestry of each individual at each site.
+
 	the df gives the local ancestry
 	the ts should be simplified with with only the target samples retained.
 	The node re-mapping produced by simplify(map_nodes=True) should be supplied here.
@@ -300,11 +301,10 @@ def get_la_mat_large(ts, df, mapping):
 
 
 def find_la(params):
-	"""
-	runs link_ancestors() on each set of samples.
-	called from get_local_ancestry_pop_multi()
-	"""
+	"""Run link_ancestors() on each set of samples.
 
+	This function to be called from get_local_ancestry_pop_multi()
+	"""
 	# unpack params
 	tables, samples, ancestors = params
 
@@ -322,10 +322,11 @@ def find_la(params):
 
 
 def get_local_ancestry_pop_multi(ts, pop, admixture_time, max_samples=100, per_rep=12, n_cores=8):
-	"""returns df describing local ancestry
-	local ancestry is defined by the location of ancestors at admixture_time
+	"""Returns a df describing local ancestry.
+
+	Local ancestry is defined by the location of ancestors at admixture_time
 	reports local ancestry for nsample chromosomes per population
-	and does this by considering per_rep samples at once
+	and does this by considering per_rep samples at once.
 	"""
 
 	ancestors = np.where(ts.tables.nodes.asdict()['time'] == admixture_time)[0]
@@ -337,21 +338,21 @@ def get_local_ancestry_pop_multi(ts, pop, admixture_time, max_samples=100, per_r
 	print(f'getting local ancestry tracts for {nsample} samples from population {pop}.')
 	target_samples = pop_samples[:nsample]  # could allow random sampling of inds
 
-	l = [x for x in range(0, nsample, per_rep)]
-	r = [x for x in range(per_rep, nsample, per_rep)] + [nsample]
-	assert(len(l) == len(r))
+	L = [x for x in range(0, nsample, per_rep)]
+	R = [x for x in range(per_rep, nsample, per_rep)] + [nsample]
+	assert(len(L) == len(R))
 
 	# multiprocessing starts here
 	dfs = []
 	pool = multiprocessing.Pool(n_cores)
-	table_iter = itertools.repeat(ts.tables.copy(), len(l))
-	ancestors_iter = itertools.repeat(ancestors, len(l))
+	table_iter = itertools.repeat(ts.tables.copy(), len(L))
+	ancestors_iter = itertools.repeat(ancestors, len(L))
 
 	inputs = zip(
 		table_iter,
-		[target_samples[l[i]:r[i]] for i in range(len(l))],
+		[target_samples[L[i]:R[i]] for i in range(len(L))],
 		ancestors_iter
-		)
+	)
 
 	for res in pool.imap(find_la, inputs):
 		dfs.append(res)
@@ -370,25 +371,20 @@ def get_local_ancestry_pop_multi(ts, pop, admixture_time, max_samples=100, per_r
 
 
 def make_ind_labels(ts):
+	"""Make labels for diploid samples present in the ts."""
 	pop_of_sample = dict(zip(range(len(ts.tables.nodes)), ts.tables.nodes.population))
-	#nind_in_pop = collections.defaultdict(int)
 	pops = [pop_of_sample[i] for i in ts.samples()]
-	#for p in pops:
-	#	nind_in_pop[p] +=1
-	#for p in nind_in_pop:
-	#	nind_in_pop[p] = int(nind_in_pop[p]/2)
-
 	ind_labels = []
 	countpop = collections.defaultdict(int)
-
 	for indpop in pops[::2]:
-	    countpop[indpop]+=1
-	    label = f'pop_{indpop}-ind_{countpop[indpop]:04}'
-	    ind_labels.append(label)
+		countpop[indpop] += 1
+		label = f'pop_{indpop}-ind_{countpop[indpop]:04}'
+		ind_labels.append(label)
 	return(ind_labels)
 
 
 def vcfheader(ts, target_pop):
+	"""Construct an appropriate vcf header."""
 	from datetime import date
 	fileformat = '##fileformat=VCFv4.2\n'
 	fileDate = f'##filedate={date.today().ctime()}\n'
@@ -398,14 +394,15 @@ def vcfheader(ts, target_pop):
 
 	ind_labels = make_ind_labels(ts.simplify(ts.samples(target_pop)))
 
-	header = fileformat+fileDate+FILTER+contig+FORMAT
-	header = header +'\t'.join(['#CHROM','POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO', 'FORMAT'])
+	header = fileformat + fileDate + FILTER + contig + FORMAT
+	header = header + '\t'.join(['#CHROM', 'POS', 'ID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO', 'FORMAT'])
 	header = header + '\t' + '\t'.join(ind_labels) + '\n'
 	return(header)
 
 
 def get_allele_freqs(ts, pops=None):
-	"""return allele frequencies for each site and population
+	"""Return allele frequencies for each site and population.
+
 	returns a matrix of [site_idx, pop_idx] derived allele frequencies.
 	pops is a list of the pops, order of pops is maintained.
 	Only supports infinite site mutations with <=2 alleles.
@@ -413,32 +410,34 @@ def get_allele_freqs(ts, pops=None):
 	if pops:
 		freqs = np.zeros((ts.num_sites, len(pops)))
 	else:
-		pops = [p.id for p in ts2.populations()]
+		pops = [p.id for p in ts.populations()]
 		freqs = np.zeros((ts.num_sites, len(pops)))
 	for ipop, pop in enumerate(pops):
 		samples = ts.samples(pop)
 		nsamp = len(samples)
 		isite = 0
-		for tree in ts.trees(tracked_samples=samples): # Only supports infinite sites muts.
+		for tree in ts.trees(tracked_samples=samples):
 			for site in tree.sites():
-				assert len(site.mutations) == 1
+				assert len(site.mutations) == 1  # Only supports infinite sites
 				mut = site.mutations[0]
 				ac = tree.num_tracked_samples(mut.node)
-				af = ac/nsamp
+				af = ac / nsamp
 				freqs[isite, ipop] = af
-				isite+=1
+				isite += 1
 	return(freqs)
 
 
 def get_mean_allele_frequencies(freqs):
-	"""return the mean allele frquency across populations.
-	Input should be the array from get_allele_freqs(). """
+	"""Return the mean allele frquency across populations.
+
+	Input should be the array from get_allele_freqs().
+	"""
 	return(freqs.mean(1))
 
 
 def get_fst_faser(ts, popA, popB):
-	"""
-	Hudson Fst for popA and popB.
+	"""	Hudson Fst for popA and popB.
+
 	Uses the allel.hudson_fst() function from scikit-allel.
 	popA and popB are the samples from each pop
 	"""
@@ -477,23 +476,22 @@ def get_fst_faser(ts, popA, popB):
 
 
 def get_ancestry_dosage(arr, n_anc):
-	anc_dosage = np.zeros((arr.shape[0], int(arr.shape[1]/2)), dtype=np.half)
-	if n_anc==2:
-		a0 = arr[:, 0::2] # should be views
+	"""Compute ancestry dosage from probablistic haploid ancestry calls."""
+	anc_dosage = np.zeros((arr.shape[0], int(arr.shape[1] / 2)), dtype=np.half)
+	if n_anc == 2:
+		a0 = arr[:, 0::2]  # should be views
 		a1 = arr[:, 1::2]
 		anc_dosage[:, 0::2] = a0[:, ::2] + a0[:, 1::2]
 		anc_dosage[:, 1::2] = a1[:, ::2] + a1[:, 1::2]
-	if n_anc==3:
-		assert (n_anc==3)
-		a0 = arr[:, 0::3] # should be views
+	if n_anc == 3:
+		a0 = arr[:, 0::3]
 		a1 = arr[:, 1::3]
 		a2 = arr[:, 2::3]
 		anc_dosage[:, 0::3] = a0[:, ::2] + a0[:, 1::2]
 		anc_dosage[:, 1::3] = a1[:, ::2] + a1[:, 1::2]
 		anc_dosage[:, 2::3] = a2[:, ::2] + a2[:, 1::2]
-	elif n_anc==4:
-		assert (n_anc==4)
-		a0 = arr[:, 0::4] # should be views
+	elif n_anc == 4:
+		a0 = arr[:, 0::4]
 		a1 = arr[:, 1::4]
 		a2 = arr[:, 2::4]
 		a3 = arr[:, 3::4]
@@ -505,17 +503,18 @@ def get_ancestry_dosage(arr, n_anc):
 
 
 def load_true_la(path):
+	"""Load true local ancestry."""
 	return(np.load(path)['arr'])
 
 
 def get_true_anc_dosage(true_la, n_anc):
-	hap1 = np.zeros((true_la.shape[0], int(true_la.shape[1]/2*n_anc)), dtype = 'int8')
-	hap2 = np.zeros((true_la.shape[0], int(true_la.shape[1]/2*n_anc)), dtype = 'int8')
-	aa = np.arange(true_la[:, ::2].shape[1])*n_anc+true_la[:, ::2]
-	bb = np.arange(true_la[:, 1::2].shape[1])*n_anc+true_la[:, 1::2]
+	hap1 = np.zeros((true_la.shape[0], int(true_la.shape[1] / 2 * n_anc)), dtype='int8')
+	hap2 = np.zeros((true_la.shape[0], int(true_la.shape[1] / 2 * n_anc)), dtype='int8')
+	aa = np.arange(true_la[:, ::2].shape[1]) * n_anc + true_la[:, ::2]
+	bb = np.arange(true_la[:, 1::2].shape[1]) * n_anc + true_la[:, 1::2]
 	np.put_along_axis(hap1, aa, 1, axis=1)
 	np.put_along_axis(hap2, bb, 1, axis=1)
-	return(hap1+hap2)
+	return(hap1 + hap2)
 
 
 def r2_ancestry_dosage(true_dosage, pred_dosage, n_anc):
@@ -523,33 +522,31 @@ def r2_ancestry_dosage(true_dosage, pred_dosage, n_anc):
 	for i in range(n_anc):
 		per_anc.append(
 			pearsonr(
-				true_dosage[:,i::n_anc].ravel(),
-				pred_dosage[:,i::n_anc].ravel()
+				true_dosage[:, i::n_anc].ravel(),
+				pred_dosage[:, i::n_anc].ravel()
 			)[0]
 		)
 	per_ind = []
-	for i in range(int(true_dosage.shape[1]/n_anc)):
+	for i in range(int(true_dosage.shape[1] / n_anc)):
 		per_ind.append(
 			pearsonr(
-				true_dosage[:, i*n_anc:i*n_anc+n_anc].ravel(),
-				pred_dosage[:, i*n_anc:i*n_anc+n_anc].ravel()
+				true_dosage[:, i * n_anc:i * n_anc + n_anc].ravel(),
+				pred_dosage[:, i * n_anc:i * n_anc + n_anc].ravel()
 			)[0]
 		)
 	return(per_anc, per_ind)
 
 
-## Load in the probablistic output of each method
 def load_rfmix_fb(path):
-	"""Load and return an array of the posterior local ancestry probabilities from RFMixv2."""
+	"""Load an array of the posterior local ancestry probabilities from RFMixv2."""
 	rfmix_res = pd.read_csv(path, sep='\t', comment='#')
 	# expand out to each site
-	rfmix_res = np.repeat(rfmix_res.iloc[:, 4:].values, [5], axis = 0)
+	rfmix_res = np.repeat(rfmix_res.iloc[:, 4:].values, [5], axis=0)
 	return(rfmix_res)
 
 
 def load_bmix(path, sites_file, BCFTOOLS):
 	"""Load and return an array of the posterior local ancestry probabilities from bmix."""
-
 	# convert the vcf.gz to a csv
 	csv_path = path.replace('.vcf.gz', '.csv')
 	bmix_sites = path.replace('.vcf.gz', '.bmix_sites')
@@ -558,7 +555,7 @@ def load_bmix(path, sites_file, BCFTOOLS):
 
 	bmix = pd.read_csv(csv_path, header=None)
 	bmix = bmix.dropna(axis=1)
-	res = bmix.iloc[:,2:].values
+	res = bmix.iloc[:, 2:].values
 	res = np.concatenate([res[:1], res])
 
 	pre_sites = pd.read_csv(sites_file, header=None).values.flatten()
@@ -652,7 +649,6 @@ def plot_ancestry_dosage(
 	reference_dosage=None
 ):
 	"""Plot ancestry dosage."""
-
 	colors = ['blue', 'orange', 'green', 'purple']
 
 	fig, ax = plt.subplots(
@@ -698,54 +694,58 @@ def make_qq_report(inferred_dosage, true_dosage, nbins=100):
 
 
 def add_reports(report_a, report_b):
-    new_report = report_a.copy() # keep bins
+	"""Add two QQ reports.
 
-    merged = report_a.merge(report_b, on='bin', how='outer')
-    merged = merged.replace(np.nan, 0)
-    # n is a sum of a and b
-    new_report['n'] = np.nansum([merged['n_x'], merged['n_y']], axis=0, dtype=int)
-    # mean is a weighted average of a and b
-    new_report['mean'] = np.average(
-        [merged['mean_x'], merged['mean_y']],
-        axis=0,
-        weights = [merged['n_x'], merged['n_y']]
-    )
-    return(new_report)
+	New report is a weighted average.
+	"""
+	new_report = report_a.copy()  # keep bins
+
+	merged = report_a.merge(report_b, on='bin', how='outer')
+	merged = merged.replace(np.nan, 0)
+	# n is a sum of a and b
+	new_report['n'] = np.nansum([merged['n_x'], merged['n_y']], axis=0, dtype=int)
+	# mean is a weighted average of a and b
+	new_report['mean'] = np.average(
+		[merged['mean_x'], merged['mean_y']],
+		axis=0,
+		weights=[merged['n_x'], merged['n_y']]
+	)
+	return(new_report)
 
 
 def plot_qq_report(report, title=None, reflines=True):
-    if reflines:
-        point1 = [-.1, 0]
-        point2 = [.1, 0]
-        x_values = [point1[0], point2[0]]
-        y_values = [point1[1], point2[1]]
-        plt.plot(x_values, y_values, c= 'k', ls='--')
-        point1 = [.9, 1]
-        point2 = [1.1, 1]
-        x_values = [point1[0], point2[0]]
-        y_values = [point1[1], point2[1]]
-        plt.plot(x_values, y_values, c= 'k', ls='--')
-        point1 = [1.9, 2]
-        point2 = [2.1, 2]
-        x_values = [point1[0], point2[0]]
-        y_values = [point1[1], point2[1]]
-        plt.plot(x_values, y_values, c= 'k', ls='--')
-    plt.scatter(
-        report['bin']/len(report)*2,
-        report['mean'],
-        c = ['r'] + ['b']*int(np.floor((len(report)-3)/2)) + ['r'] + ['b']*int(np.ceil((len(report)-3)/2)) + ['r']
-    )
-    plt.title(title)
-    plt.xlabel('inferred ancestry dosage bin')
-    plt.ylabel('mean of true ancestry dosage')
-    plt.show()
-    plt.scatter(
-        report['bin']/len(report)*2,
-        report['n'],
-        c = ['r'] + ['b']*int(np.floor((len(report)-3)/2)) + ['r'] + ['b']*int(np.ceil((len(report)-3)/2)) + ['r']
-    )
+	if reflines:
+		point1 = [-.1, 0]
+		point2 = [.1, 0]
+		x_values = [point1[0], point2[0]]
+		y_values = [point1[1], point2[1]]
+		plt.plot(x_values, y_values, c='k', ls='--')
+		point1 = [.9, 1]
+		point2 = [1.1, 1]
+		x_values = [point1[0], point2[0]]
+		y_values = [point1[1], point2[1]]
+		plt.plot(x_values, y_values, c='k', ls='--')
+		point1 = [1.9, 2]
+		point2 = [2.1, 2]
+		x_values = [point1[0], point2[0]]
+		y_values = [point1[1], point2[1]]
+		plt.plot(x_values, y_values, c='k', ls='--')
+	plt.scatter(
+		report['bin'] / len(report) * 2,
+		report['mean'],
+		c=['r'] + ['b'] * int(np.floor((len(report) - 3) / 2)) + ['r'] + ['b'] * int(np.ceil((len(report) - 3) / 2)) + ['r']
+	)
+	plt.title(title)
+	plt.xlabel('inferred ancestry dosage bin')
+	plt.ylabel('mean of true ancestry dosage')
+	plt.show()
+	plt.scatter(
+		report['bin'] / len(report) * 2,
+		report['n'],
+		c=['r'] + ['b'] * int(np.floor((len(report) - 3) / 2)) + ['r'] + ['b'] * int(np.ceil((len(report) - 3) / 2)) + ['r']
+	)
 
-    plt.xlabel('inferred ancestry dosage bin')
-    plt.ylabel('count')
-    plt.semilogy()
-    plt.show()
+	plt.xlabel('inferred ancestry dosage bin')
+	plt.ylabel('count')
+	plt.semilogy()
+	plt.show()

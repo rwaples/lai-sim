@@ -10,9 +10,9 @@ ts = tszip.decompress(site_ts)
 
 
 for x in range(len(ts.populations())):
-    y = ts.tables.nodes.time[np.where(ts.tables.nodes.population==x)[0]]
-    plt.plot(np.log10(np.sort(y)+1), label=x)
-plt.legend(title = 'population')
+	y = ts.tables.nodes.time[np.where(ts.tables.nodes.population == x)[0]]
+	plt.plot(np.log10(np.sort(y) + 1), label=x)
+plt.legend(title='population')
 plt.ylabel('log10(node age+1)')
 plt.xlabel('nodes within each population')
 plt.savefig(plot_path)
