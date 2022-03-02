@@ -3,15 +3,17 @@ A Snakemake workflow for simulating admixture and evaluating local ancestry infe
 
 ## Required external programs
 * SLiM [link](https://messerlab.org/slim/)
+	msprime [(link)](https://tskit.dev/msprime/docs/stable/intro.html)
 * RFMix version 2 [(link)](https://github.com/slowkoni/rfmix)
 * bmix [(link)](https://github.com/browning-lab/bmix)
-* BCFTOOLS [(link)](http://samtools.github.io/bcftools/howtos/index.html)
+* MOSAIC [(link)](https://maths.ucd.ie/~mst/MOSAIC/)
+	BCFTOOLS [(link)](http://samtools.github.io/bcftools/howtos/index.html)
 * BEAGLE [(link)](http://faculty.washington.edu/browning/beagle/beagle.html)
 * add_err (link pending)
 * Snakemake and conda (see below)
 
 # create the conda environment
-## requires mamba, as suggested by Snakemake
+## uses mamba, rather than conda, as suggested by Snakemake
 `mamba env create -f environment.yml --prefix ./env`
 
 # activate conda environment (from base directory)
@@ -20,10 +22,10 @@ A Snakemake workflow for simulating admixture and evaluating local ancestry infe
 # dry run the full pipeline
 `snakemake all -c1 --configfile profiles/personal/config.yaml --dry-run`
 
-# run the full pipeline with a single core
+# run the full pipeline
 `snakemake all -c1 --configfile profiles/personal/config.yaml`
 
-# view a graph of the directed acyclic graph (DAG) that is used for each analysis
+# view the directed acyclic graph (DAG) that is used for each analysis
 `snakemake all -c1 --configfile profiles/personal/config.yaml --rulegraph | dot | display`
 
 <!--- # patch MOSAIC to allow random number seeds
