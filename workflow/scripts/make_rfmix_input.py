@@ -1,3 +1,4 @@
+"""Make input files for RFMix v2."""
 import tskit
 import tszip
 import numpy as np

@@ -11,11 +11,12 @@ rule plot_pairwise_Fst:
 	input:
 		site_ts = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/sample.filter.tsz',
 	output:
-		plot = report('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/pairwise_Fst.png',
-					caption="../report/pairwise_Fst.rst",
-					category="Diagnostics",
-					subcategory="{model_name}  {sim_name}  {asc_name}  {anal_name}"
-				),
+		plot = report(
+			'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/pairwise_Fst.png',
+			caption="../report/pairwise_Fst.rst",
+			category="Diagnostics",
+			subcategory="{model_name}  {sim_name}  {asc_name}  {anal_name}"
+		),
 	script:
 		'../scripts/plot_pairwise_Fst.py'
 
@@ -53,10 +54,11 @@ rule plot_qq_reports:
 		mosaic_report = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/qq_mosaic.txt',
 		rfmix_report = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/qq_rfmix.txt',
 	output:
-		plot_path = report('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/qq.png',
-						caption="../report/qq_plot.rst",
-						category="Diagnostics",
-						subcategory="{model_name}  {sim_name}  {asc_name}  {anal_name}"
-					),
+		plot_path = report(
+			'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/qq.png',
+			caption="../report/qq_plot.rst",
+			category="Diagnostics",
+			subcategory="{model_name}  {sim_name}  {asc_name}  {anal_name}"
+		),
 	script:
 		'../scripts/plot_qq.py'

@@ -27,7 +27,6 @@ rule split_vcf:
 		vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.gz',
 		samples = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/{sample_group}.txt',
 	output:
-		#vcf = temp('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.{sample_group}.vcf.gz'),
 		vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.{sample_group}.vcf.gz',
 	params:
 		bcftools = config['PATHS']['BCFTOOLS']
@@ -40,7 +39,7 @@ rule split_vcf:
 
 rule split_bcf:
 	input:
-		vcf =  'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.gz',
+		vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.gz',
 		samples = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/{sample_group}.txt'
 	output:
 		bcf = temp('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.{sample_group}.bcf'),

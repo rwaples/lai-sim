@@ -1,9 +1,8 @@
-
 library('MOSAIC')
 library('reticulate')
+
+
 np <- import("numpy")
-
-
 model_results = snakemake@input[["model_results"]]
 la_results = snakemake@input[["la_results"]]
 mosaic_input_dir = snakemake@params[["input_dir"]]

@@ -1,3 +1,4 @@
+"""Plot a heatmap of pairwise Fst (Hudson)."""
 import tskit
 import tszip
 import matplotlib.pyplot as plt

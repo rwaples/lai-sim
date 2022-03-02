@@ -6,7 +6,7 @@ rule get_Q_score:
 		bmix_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/bmix/bmix.anc.vcf.gz',
 		sites_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
 	output:
-		RMSD_path ='results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/Q_RMSD.tsv',
+		RMSD_path = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/Q_RMSD.tsv',
 		Q_true_path = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/Q_true.tsv',
 		Q_bmix_path = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/Q_bmix.tsv',
 		Q_mosaic_path = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/Q_mosaic.tsv',
@@ -66,8 +66,8 @@ rule run_mosaic:
 		emlog3 = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/admixed_ALLway.EMlog.out',
 	params:
 		mosaic = config['PATHS']['MOSAIC'],
-		#input_folder = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/',
-		input_folder = lambda w, input: os.path.dirname(input[0])+'/',
+		# input_folder = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/',
+		input_folder = lambda w, input: os.path.dirname(input[0]) + '/',
 		base_folder = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC',
 		sites_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
 		seed = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].anal_seed,
@@ -117,8 +117,8 @@ rule run_mosaic:
 
 rule make_mosaic_input:
 	input:
-		target_phased_vcf ='results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.target_inds.vcf.gz',
-		reference_vcf ='results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.reference_inds.vcf.gz',
+		target_phased_vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.target_inds.vcf.gz',
+		reference_vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.reference_inds.vcf.gz',
 		plink_map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/plink_map.txt',
 		site_ts = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/sample.filter.tsz',
 	output:
@@ -127,7 +127,7 @@ rule make_mosaic_input:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/pop_1genofile.22',
 	params:
 		folder = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input',
-		#chrom_id = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].chr,
+		# chrom_id = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].chr,
 		nind_ref = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nind_ref,
 		target_pop = lambda w: units.loc[(w.sim_name, w.asc_name)].target_pop[0],
 	log:
@@ -246,8 +246,8 @@ rule run_RFMix2:
 		"""
 		"{params.rfmix2} -f {input.target_vcf} -r {input.reference_vcf} "
 		"-m {input.sample_map} -g {input.genetic_map} -o {params.output} "
-		#"--reanalyze-reference "
-		#"-e 5 "
+		# "--reanalyze-reference "
+		# "-e 5 "
 		"--n-threads={params.nthreads} --chromosome={params.chr} "
 		"--random-seed={params.seed} 2>&1 | tee {log} "
 

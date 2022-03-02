@@ -22,16 +22,16 @@ ts = strip_MAC(ts, MAC=asc_MAC)
 
 # apply MAF filter next
 print(f'ascertainment MAF = {asc_MAF}')
-if asc_MAF>0:
+if asc_MAF > 0:
 	af = get_allele_freqs(ts, pops=list(range(target_pop)))
 	mean_af = get_mean_allele_frequencies(af)
-	remove_index = np.where(mean_af<=asc_MAF)[0] # sites that failed maf filter
+	remove_index = np.where(mean_af <= asc_MAF)[0]  # sites that failed maf filter
 	to_remove = np.take(np.array([s.id for s in ts.sites()]), indices=remove_index)
 	ts = ts.delete_sites(to_remove)
 
 
 print(f'ascertainment max sites = {asc_maxsites}')
-if asc_maxsites>0:
+if asc_maxsites > 0:
 	if ts.num_sites > asc_maxsites:
 		ts = downsample_snps(ts, nsnps=asc_maxsites, seed=asc_seed, fail=True)
 

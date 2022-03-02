@@ -1,4 +1,3 @@
-import tskit
 import tszip
 import numpy as np
 from common.utils import strip_MAC, strip_adjacent_sites, downsample_snps
@@ -17,7 +16,7 @@ print(f'Start filter sites: {tsz_out}')
 ts = tszip.decompress(ts_path)
 
 simple_ts, node_mapping = ts.simplify(
-	samples=np.where(ts.tables.nodes.asdict()['time']==0)[0],
+	samples=np.where(ts.tables.nodes.asdict()['time'] == 0)[0],
 	map_nodes=True,
 	filter_populations=False,
 	filter_individuals=True,
@@ -30,4 +29,4 @@ simple_ts = downsample_snps(simple_ts, nsnps=max_snps, seed=anal_seed, fail=Fals
 tszip.compress(simple_ts, tsz_out)
 np.save(file=mapping_out, arr=node_mapping)
 
-print(f'Done filter sites')
+print('Done filter sites')

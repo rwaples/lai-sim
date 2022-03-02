@@ -22,11 +22,10 @@ units = units.merge(analyses, on='asc_name')
 
 # used for getting the names of the MOSAIC output files
 units['nsource'] = units['target_pop']
-#units['naming_mess'] = units['nind_admixed'].map(str) + "_22-22_" + (2*(units['nind_admixed']+units['nsource']*units['nind_ref'])).map(str) + "_60_0.99_100"
 
 simulations = simulations.set_index("sim_name", drop=False)
 ascertainments = ascertainments.set_index("asc_name", drop=False)
 analyses = analyses.set_index("anal_name", drop=False)
 # merge them all - this is the dataframe used in most cases
 
-units = units.set_index(['sim_name', 'asc_name', 'anal_name'], drop = False)
+units = units.set_index(['sim_name', 'asc_name', 'anal_name'], drop=False)

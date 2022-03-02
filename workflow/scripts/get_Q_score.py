@@ -35,17 +35,17 @@ rmsd_bmix = get_RMSD_Q(Q_bmix, Q_true)
 rmsd_mosaic = get_RMSD_Q(Q_mosaic, Q_true)
 rmsd_rfmix = get_RMSD_Q(Q_rfmix, Q_true)
 
-## Write Q results tables
+# Write Q results tables
 with open(RMSD_path, 'w') as OUTFILE:
 	header = '\t'.join(['bmix', 'MOSAIC', 'RFMix2'])
 	rmsd_line = '\t'.join([f'{x:0.4f}' for x in [rmsd_bmix, rmsd_mosaic, rmsd_rfmix]])
 	OUTFILE.write(header + '\n')
-	OUTFILE.write(rmsd_line  + '\n')
-print(f'RMSD in Q values')
+	OUTFILE.write(rmsd_line + '\n')
+print('RMSD in Q values')
 print(header)
 print(rmsd_line)
 
-Q_true.to_csv(Q_true_path, index = None, sep = '\t', float_format='%0.4f')
-Q_bmix.to_csv(Q_bmix_path, index = None, sep = '\t', float_format='%0.4f')
-Q_mosaic.to_csv(Q_mosaic_path, index = None, sep = '\t', float_format='%0.4f')
-Q_rfmix.to_csv(Q_rfmix_path, index = None, sep = '\t', float_format='%0.4f')
+Q_true.to_csv(Q_true_path, index=None, sep='\t', float_format='%0.4f')
+Q_bmix.to_csv(Q_bmix_path, index=None, sep='\t', float_format='%0.4f')
+Q_mosaic.to_csv(Q_mosaic_path, index=None, sep='\t', float_format='%0.4f')
+Q_rfmix.to_csv(Q_rfmix_path, index=None, sep='\t', float_format='%0.4f')

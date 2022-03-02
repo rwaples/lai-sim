@@ -22,7 +22,7 @@ true_anc_dosage = get_true_anc_dosage(load_true_la(true_path), n_anc=n_anc)
 
 
 rfmix_anc_dosage = get_ancestry_dosage(load_rfmix_fb(rfmix2_path), n_anc=n_anc)
-assert (len(rfmix_anc_dosage)-len(true_anc_dosage))<=5
+assert (len(rfmix_anc_dosage) - len(true_anc_dosage) <= 5)
 rfmix_anc_r2, rfmix_ind_r2 = r2_ancestry_dosage(
 	true_dosage=true_anc_dosage,
 	# addressing possible uneven lengths due to RFMix2 only reporting every fifth site
@@ -74,14 +74,14 @@ bmixML_anc_r2, bmixML_ind_r2 = r2_ancestry_dosage(
 del bmix_anc_dosage
 
 
-## Write R2 tables
+# Write R2 tables
 with open(R2_anc, 'w') as OUTFILE:
 	OUTFILE.write('\t'.join(['method'] + [f'anc_{x}' for x in range(n_anc)]) + '\n')
-	OUTFILE.write('\t'.join(['rfmix2'] + [f'{x:0.4f}' for x in rfmix_anc_r2])  + '\n')
-	OUTFILE.write('\t'.join(['mosaic'] + [f'{x:0.4f}' for x in mosaic_anc_r2])  + '\n')
-	OUTFILE.write('\t'.join(['bmix'] + [f'{x:0.4f}' for x in bmix_anc_r2])  + '\n')
+	OUTFILE.write('\t'.join(['rfmix2'] + [f'{x:0.4f}' for x in rfmix_anc_r2]) + '\n')
+	OUTFILE.write('\t'.join(['mosaic'] + [f'{x:0.4f}' for x in mosaic_anc_r2]) + '\n')
+	OUTFILE.write('\t'.join(['bmix'] + [f'{x:0.4f}' for x in bmix_anc_r2]) + '\n')
 
-	print(f'R^2 vs truth for LA calls:')
+	print('R^2 vs truth for LA calls:')
 	print('\t'.join(['method'] + [f'anc_{x}' for x in range(n_anc)]))
 	print('\t'.join(['rfmix2'] + [f'{x:0.4f}' for x in rfmix_anc_r2]))
 	print('\t'.join(['mosaic'] + [f'{x:0.4f}' for x in mosaic_anc_r2]))
@@ -89,25 +89,25 @@ with open(R2_anc, 'w') as OUTFILE:
 
 with open(R2_ind, 'w') as OUTFILE:
 	OUTFILE.write('\t'.join(['method'] + [f'ind_{x}' for x in range(len(bmix_ind_r2))]) + '\n')
-	OUTFILE.write('\t'.join(['rfmix2'] + [f'{x:0.4f}' for x in rfmix_ind_r2])  + '\n')
-	OUTFILE.write('\t'.join(['mosaic'] + [f'{x:0.4f}' for x in mosaic_ind_r2])  + '\n')
-	OUTFILE.write('\t'.join(['bmix'] + [f'{x:0.4f}' for x in bmix_ind_r2])  + '\n')
+	OUTFILE.write('\t'.join(['rfmix2'] + [f'{x:0.4f}' for x in rfmix_ind_r2]) + '\n')
+	OUTFILE.write('\t'.join(['mosaic'] + [f'{x:0.4f}' for x in mosaic_ind_r2]) + '\n')
+	OUTFILE.write('\t'.join(['bmix'] + [f'{x:0.4f}' for x in bmix_ind_r2]) + '\n')
 
 
-with open(R2_anc+ ".ML", 'w') as OUTFILE:
+with open(R2_anc + ".ML", 'w') as OUTFILE:
 	OUTFILE.write('\t'.join(['method'] + [f'anc_{x}' for x in range(n_anc)]) + '\n')
-	OUTFILE.write('\t'.join(['rfmix2'] + [f'{x:0.4f}' for x in rfmixML_anc_r2])  + '\n')
-	OUTFILE.write('\t'.join(['mosaic'] + [f'{x:0.4f}' for x in mosaicML_anc_r2])  + '\n')
-	OUTFILE.write('\t'.join(['bmix'] + [f'{x:0.4f}' for x in bmixML_anc_r2])  + '\n')
+	OUTFILE.write('\t'.join(['rfmix2'] + [f'{x:0.4f}' for x in rfmixML_anc_r2]) + '\n')
+	OUTFILE.write('\t'.join(['mosaic'] + [f'{x:0.4f}' for x in mosaicML_anc_r2]) + '\n')
+	OUTFILE.write('\t'.join(['bmix'] + [f'{x:0.4f}' for x in bmixML_anc_r2]) + '\n')
 
-	print(f'R^2 vs truth for [ML] LA calls:')
+	print('R^2 vs truth for [ML] LA calls:')
 	print('\t'.join(['method'] + [f'anc_{x}' for x in range(n_anc)]))
 	print('\t'.join(['rfmix2'] + [f'{x:0.4f}' for x in rfmixML_anc_r2]))
 	print('\t'.join(['mosaic'] + [f'{x:0.4f}' for x in mosaicML_anc_r2]))
 	print('\t'.join(['bmix'] + [f'{x:0.4f}' for x in bmixML_anc_r2]))
 
-with open(R2_ind+ ".ML", 'w') as OUTFILE:
+with open(R2_ind + ".ML", 'w') as OUTFILE:
 	OUTFILE.write('\t'.join(['method'] + [f'ind_{x}' for x in range(len(bmix_ind_r2))]) + '\n')
-	OUTFILE.write('\t'.join(['rfmix2'] + [f'{x:0.4f}' for x in rfmixML_ind_r2])  + '\n')
-	OUTFILE.write('\t'.join(['mosaic'] + [f'{x:0.4f}'for x in mosaicML_ind_r2])  + '\n')
-	OUTFILE.write('\t'.join(['bmix'] + [f'{x:0.4f}' for x in bmixML_ind_r2])  + '\n')
+	OUTFILE.write('\t'.join(['rfmix2'] + [f'{x:0.4f}' for x in rfmixML_ind_r2]) + '\n')
+	OUTFILE.write('\t'.join(['mosaic'] + [f'{x:0.4f}'for x in mosaicML_ind_r2]) + '\n')
+	OUTFILE.write('\t'.join(['bmix'] + [f'{x:0.4f}' for x in bmixML_ind_r2]) + '\n')

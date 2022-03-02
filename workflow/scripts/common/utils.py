@@ -322,7 +322,7 @@ def find_la(params):
 
 
 def get_local_ancestry_pop_multi(ts, pop, admixture_time, max_samples=100, per_rep=12, n_cores=8):
-	"""Returns a df describing local ancestry.
+	"""Return a df describing local ancestry.
 
 	Local ancestry is defined by the location of ancestors at admixture_time
 	reports local ancestry for nsample chromosomes per population
@@ -508,6 +508,7 @@ def load_true_la(path):
 
 
 def get_true_anc_dosage(true_la, n_anc):
+	"""Get true local ancestry dosage."""
 	hap1 = np.zeros((true_la.shape[0], int(true_la.shape[1] / 2 * n_anc)), dtype='int8')
 	hap2 = np.zeros((true_la.shape[0], int(true_la.shape[1] / 2 * n_anc)), dtype='int8')
 	aa = np.arange(true_la[:, ::2].shape[1]) * n_anc + true_la[:, ::2]
@@ -518,6 +519,7 @@ def get_true_anc_dosage(true_la, n_anc):
 
 
 def r2_ancestry_dosage(true_dosage, pred_dosage, n_anc):
+	"""Get ancestry- and individual-specific R2 values for LA vs truth."""
 	per_anc = []
 	for i in range(n_anc):
 		per_anc.append(
@@ -714,6 +716,7 @@ def add_reports(report_a, report_b):
 
 
 def plot_qq_report(report, title=None, reflines=True):
+	"""Plot a QQ report."""
 	if reflines:
 		point1 = [-.1, 0]
 		point2 = [.1, 0]
