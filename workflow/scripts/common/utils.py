@@ -1,3 +1,4 @@
+"""General utilty functions used in the Snakemake pipeline."""
 import numpy as np
 import pandas as pd
 import collections
@@ -10,18 +11,18 @@ from scipy.stats import pearsonr
 
 
 def sample_inds(ts, pop_id, nind, seed):
-	"""return the haploid sample ids representing sampling nind individuals from pop_id in ts"""
+	"""Return haploid ids based on selecting `nind` diploids from pop_id in ts."""
 	rng = np.random.default_rng(seed)
 
 	hap_samples = np.intersect1d(
-		ts.samples(population = pop_id),
-		np.where(ts.tables.nodes.asdict()['time']==0)[0]
+		ts.samples(population=pop_id),
+		np.where(ts.tables.nodes.asdict()['time'] == 0)[0]
 	)
 	# sample from the first haploids of each ind
 	take = rng.choice(hap_samples[::2], nind, replace=False)
-	samples = np.empty(nind*2, dtype=int)
+	samples = np.empty(nind * 2, dtype=int)
 	samples[0::2] = take
-	samples[1::2] = take+1
+	samples[1::2] = take + 1
 	return(samples)
 
 
@@ -50,17 +51,16 @@ def strip_MAC(ts, MAC):
 	ts = ts.delete_sites(sites_to_remove)
 	final_sites = ts.num_sites
 	print(f"MAC filter (<={MAC}):")
-	print(f"removed {initial_sites-final_sites} sites ({(initial_sites-final_sites)/(initial_sites):.0%}), {final_sites} sites remain")
+	print(f"removed {initial_sites-final_sites} sites ({(initial_sites-final_sites) / (initial_sites):.0%}), {final_sites} sites remain")
 	return ts
 
 
 def strip_adjacent_sites(ts, dist=1.5):
-	"""
-	Removes sites within dist bp of each other.
+	"""Remove sites within dist bp of each other.
+
 	Removes the right-most site in each pair.
 	Returns a new tree-sequence.
 	"""
-
 	initial_sites = ts.num_sites
 	present_samples = np.intersect1d(
 		ts.samples(),
@@ -80,13 +80,15 @@ def strip_adjacent_sites(ts, dist=1.5):
 	ts = ts.delete_sites(sites_to_remove)
 	final_sites = ts.num_sites
 	print('Adjacent sites filter:')
-	print(f"removed {initial_sites-final_sites} sites ({(initial_sites-final_sites)/(initial_sites):.0%}), {final_sites} sites remain")
+	print(f"removed {initial_sites-final_sites} sites ({(initial_sites-final_sites) / (initial_sites):.0%}), {final_sites} sites remain")
 	return(ts)
 
 
 def downsample_snps(ts, nsnps, seed, fail=False):
-	"""downsample a tree-sequence to a maximum number of snps
-	if fail is True, will fail if there are not at least nsnps"""
+	"""Downsample a ts to a maximum number of snps.
+
+	If fail is True, will fail if there are not at least nsnps
+	"""
 	initial_sites = ts.num_sites
 	if ts.num_mutations == nsnps:
 		return(ts)
@@ -98,38 +100,37 @@ def downsample_snps(ts, nsnps, seed, fail=False):
 	else:
 		rng = np.random.default_rng(seed)
 		keep = frozenset(np.random.choice(a=ts.num_sites, size=nsnps, replace=False))
-		sites_to_remove = list(frozenset(np.arange(ts.num_sites, dtype = np.int32)) - keep)
+		sites_to_remove = list(frozenset(np.arange(ts.num_sites, dtype=np.int32)) - keep)
 		ts = ts.delete_sites(sites_to_remove)
 		final_sites = ts.num_sites
 		print('Downsample filter:')
-		print(f"removed {initial_sites-final_sites} sites ({(initial_sites-final_sites)/(initial_sites):.0%}), {final_sites} sites remain")
+		print(f"removed {initial_sites-final_sites} sites ({(initial_sites-final_sites) / (initial_sites):.0%}), {final_sites} sites remain")
 		return(ts)
 
 
 def get_local_ancestry(ts, admixture_time, per_batch):
-	"""returns df describing local ancestry
+	"""Return a df describing local ancestry.
+
 	local ancestry is defined by the location of ancestors at admixture_time
 	reports local ancestry for nsample chromosomes per population
 	and does this by considering per_rep samples at once
 	"""
-
-
 	# target_samples are at time==0
 	target_samples = np.intersect1d(
-				ts.samples(),
-				np.where(ts.tables.nodes.asdict()['time']==0)[0]
-			)
+		ts.samples(),
+		np.where(ts.tables.nodes.asdict()['time'] == 0)[0]
+	)
 	# target ancestors are at time==admixture_time
-	target_ancestors = np.where(ts.tables.nodes.asdict()['time']==admixture_time)[0]
+	target_ancestors = np.where(ts.tables.nodes.asdict()['time'] == admixture_time)[0]
 
 	nsample = len(target_samples)
 	l = [x for x in range(0, nsample, per_batch)]
-	r = [x for x in range(per_batch, nsample+per_batch, per_batch)]
+	r = [x for x in range(per_batch, nsample + per_batch, per_batch)]
 	dfs = []
 	for i in range(len(l)):
 		local = ts.tables.link_ancestors(
-			samples = target_samples[l[i]:r[i]],
-			ancestors = target_ancestors
+			samples=target_samples[l[i]:r[i]],
+			ancestors=target_ancestors
 		)
 
 		local_df = pd.DataFrame({
@@ -642,17 +643,32 @@ def max_la(vals, n_anc):
 	return(vals)
 
 
-def plot_ancestry_dosage(pred_dosage, start_index, n_anc, title, path=None, format='pdf', reference_dosage=None):
-	"""    """
+def plot_ancestry_dosage(
+	pred_dosage,
+	start_index,
+	n_anc, title,
+	path=None,
+	format='pdf',
+	reference_dosage=None
+):
+	"""Plot ancestry dosage."""
+
 	colors = ['blue', 'orange', 'green', 'purple']
 
-	fig, ax = plt.subplots(figsize = (12, n_anc*1.5), nrows=n_anc, sharex=True, sharey=True)
+	fig, ax = plt.subplots(
+		figsize=(12, n_anc * 1.5),
+		nrows=n_anc,
+		sharex=True,
+		sharey=True
+	)
 	f = []
 	for i in range(n_anc):
-		l, = ax[i].plot(pred_dosage[:, start_index+i], c=colors[i])
+		l, = ax[i].plot(pred_dosage[:, start_index + i], c=colors[i])
 		f.append(l)
 		if reference_dosage is not None:
-			l, = ax[i].plot(reference_dosage[:, start_index+i], c=colors[i], alpha=.3, ls='--')
+			l, = ax[i].plot(
+				reference_dosage[:, start_index + i], c=colors[i], alpha=.3, ls='--'
+			)
 
 	plt.legend(f, [f'pop{p}' for p in range(n_anc)])
 
@@ -665,19 +681,20 @@ def plot_ancestry_dosage(pred_dosage, start_index, n_anc, title, path=None, form
 
 
 def make_qq_report(inferred_dosage, true_dosage, nbins=100):
-    qq = pd.DataFrame({
-        'true':true_dosage.flatten(),
-        'inferred':inferred_dosage.flatten()
-    })
-    qq['bin'] = pd.cut(
-        qq['inferred'],
-        bins = np.linspace(0, 2, nbins+1),
-        include_lowest=True,
-        labels=False
-    )
-    report = qq.groupby(['bin'])['true'].agg([np.mean, len]).reset_index()
-    report.columns = ['bin', 'mean', 'n']
-    return(report)
+	"""Write a report of observed vs inferred mean ancestry dosage."""
+	qq = pd.DataFrame({
+		'true': true_dosage.flatten(),
+		'inferred': inferred_dosage.flatten()
+	})
+	qq['bin'] = pd.cut(
+		qq['inferred'],
+		bins=np.linspace(0, 2, nbins + 1),
+		include_lowest=True,
+		labels=False
+	)
+	report = qq.groupby(['bin'])['true'].agg([np.mean, len]).reset_index()
+	report.columns = ['bin', 'mean', 'n']
+	return(report)
 
 
 def add_reports(report_a, report_b):
