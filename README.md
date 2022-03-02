@@ -3,29 +3,29 @@ A Snakemake workflow for simulating admixture and evaluating local ancestry infe
 
 ## Required external programs
 * SLiM [link](https://messerlab.org/slim/)
-	msprime [(link)](https://tskit.dev/msprime/docs/stable/intro.html)
+* msprime [(link)](https://tskit.dev/msprime/docs/stable/intro.html)
 * RFMix version 2 [(link)](https://github.com/slowkoni/rfmix)
 * bmix [(link)](https://github.com/browning-lab/bmix)
 * MOSAIC [(link)](https://maths.ucd.ie/~mst/MOSAIC/)
-	BCFTOOLS [(link)](http://samtools.github.io/bcftools/howtos/index.html)
+* BCFTOOLS [(link)](http://samtools.github.io/bcftools/howtos/index.html)
 * BEAGLE [(link)](http://faculty.washington.edu/browning/beagle/beagle.html)
 * add_err (link pending)
 * Snakemake and conda (see below)
 
-# create the conda environment
-## uses mamba, rather than conda, as suggested by Snakemake
+### create the conda environment
+#### uses mamba, rather than conda, as suggested by Snakemake
 `mamba env create -f environment.yml --prefix ./env`
 
-# activate conda environment (from base directory)
+### activate conda environment (from base directory)
 `conda activate ./env`
 
-# dry run the full pipeline
+### dry run the full pipeline
 `snakemake all -c1 --configfile profiles/personal/config.yaml --dry-run`
 
-# run the full pipeline
+### run the full pipeline
 `snakemake all -c1 --configfile profiles/personal/config.yaml`
 
-# view the directed acyclic graph (DAG) that is used for each analysis
+### view the directed acyclic graph (DAG) that is used for each analysis
 `snakemake all -c1 --configfile profiles/personal/config.yaml --rulegraph | dot | display`
 
 <!--- # patch MOSAIC to allow random number seeds
@@ -33,9 +33,9 @@ A Snakemake workflow for simulating admixture and evaluating local ancestry infe
 ## patches the R code, allowing the passing of a random seed to the mosaic executable
 `snakemake --cores 1 --force install_mosaic` --->
 
-# to test the MOSAIC installation:
-## run this cmd from programs/MOSAIC/MOSAIC
+### to test the MOSAIC installation:
+run from programs/MOSAIC/MOSAIC
 `Rscript ./mosaic.R simulated ./example_data/ -c 18:22 -n 3 -p "English Mandenka" --gens "30"`
 
-# TODO
-	- add seed to add-err.jar
+### TODO
+* add seed to add-err.jar
