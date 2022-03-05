@@ -14,60 +14,60 @@ include: "rules/reports.smk"
 
 
 wildcard_constraints:
-	anal_name="\w+",
-	asc_name="\w+",
-	sim_name="\w+",
+	anal_name = "\w+",
+	asc_name = "\w+",
+	sim_name = "\w+",
 
 report: "report/workflow.rst"
 
+
 rule all:
 	input:
-		diag_coal=[
+		diag_coal = [
 			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/pop_coal_time.png"
 			for u in units.itertuples()
 		],
-		diag_fst=[
+		diag_fst = [
 			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png"
 			for u in units.itertuples()
 		],
-		diag_qq=[
+		diag_qq = [
 			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/qq.png"
 			for u in units.itertuples()
 		],
 
-		R2_anc=[
+		R2_anc = [
 			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.ancestry.tsv"
 			for u in units.itertuples()
 		],
-		R2_ind=[
+		R2_ind = [
 			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.individuals.tsv"
 			for u in units.itertuples()
 		],
-		Q_RMSD=[
+		Q_RMSD = [
 			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/Q_RMSD.tsv"
 			for u in units.itertuples()
 		],
-		
-		R2="results/reports/R2_report.txt",
-		Q="results/reports/Q_report.txt",
-		QQ_bmix="results/reports/QQ.bmix.txt",
-		QQ_rfmix="results/reports/QQ.rfmix.txt",
-		QQ_mosaic="results/reports/QQ.mosaic.txt",
+
+		R2 = "results/reports/R2_report.txt",
+		Q = "results/reports/Q_report.txt",
+		QQ_bmix = "results/reports/QQ.bmix.txt",
+		QQ_rfmix = "results/reports/QQ.rfmix.txt",
+		QQ_mosaic = "results/reports/QQ.mosaic.txt",
 
 
 rule just_sim:
 	input:
-		sim=[
+		sim = [
 			f"results/{u.model_name}/{u.sim_name}/full.tsz" for u in units.itertuples()
 		],
 
 
 rule just_ascertain:
 	input:
-		asc=[
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/ascertained.tsz"	for u in units.itertuples()
+		asc = [
+			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/ascertained.tsz" for u in units.itertuples()
 		],
-
 
 rule just_bmix:
 	input:
@@ -76,19 +76,19 @@ rule just_bmix:
 
 rule diagnostic_plots:
 	input:
-		pop_coal_time=[
+		pop_coal_time = [
 			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/pop_coal_time.png"
 			for u in units.itertuples()
 		],
-		pairwise_Fst=[
+		pairwise_Fst = [
 			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png"
 			for u in units.itertuples()
 		],
-		true_local_ancestry=[
+		true_local_ancestry = [
 			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/true_local_ancestry.png"
 			for u in units.itertuples()
 		],
-		ancestry_dosage=[
+		ancestry_dosage = [
 			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.0.bmix.pdf"
 			for u in units.itertuples()
 		]

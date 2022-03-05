@@ -1,3 +1,4 @@
+"""Select sites where local ancestry is recorded."""
 import tszip
 import numpy as np
 from common.utils import strip_MAC, strip_adjacent_sites, downsample_snps
