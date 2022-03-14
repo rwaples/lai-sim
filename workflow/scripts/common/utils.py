@@ -526,7 +526,7 @@ def r2_ancestry_dosage(true_dosage, pred_dosage, n_anc):
 			pearsonr(
 				true_dosage[:, i::n_anc].ravel(),
 				pred_dosage[:, i::n_anc].ravel()
-			)[0]
+			)[0]**2
 		)
 	per_ind = []
 	for i in range(int(true_dosage.shape[1] / n_anc)):
@@ -534,7 +534,7 @@ def r2_ancestry_dosage(true_dosage, pred_dosage, n_anc):
 			pearsonr(
 				true_dosage[:, i * n_anc:i * n_anc + n_anc].ravel(),
 				pred_dosage[:, i * n_anc:i * n_anc + n_anc].ravel()
-			)[0]
+			)[0]**2
 		)
 	return(per_anc, per_ind)
 
