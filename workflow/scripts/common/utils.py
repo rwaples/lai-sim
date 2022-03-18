@@ -627,10 +627,11 @@ def get_RMSD_Q(Q1, Q2):
 
 def max_la(vals, n_anc):
 	"""
-	Replace each probabalistic local ancestry call with a categorical call.
+	Replace each probabalistic local ancestry call with a `hard` call.
 
 	Calls the ancestry with the highest posterior probability.
-	Breaks ties by going to the lower-numbered population
+	All other ancestries are assigned probability of zero.
+	Breaks ties by going to the lower-numbered population.
 	NOTICE - Modifies the passed array in place.
 	"""
 	idxs = np.arange(0, vals.shape[1] + n_anc, n_anc)
@@ -680,7 +681,10 @@ def plot_ancestry_dosage(
 
 
 def make_qq_report(inferred_dosage, true_dosage, nbins=100):
-	"""Write a report of observed vs inferred mean ancestry dosage."""
+	"""Generate a report of observed vs inferred mean ancestry dosage.
+
+	Bins are equally spaced between 0 to 2.
+	"""
 	qq = pd.DataFrame({
 		'true': true_dosage.flatten(),
 		'inferred': inferred_dosage.flatten()
@@ -697,7 +701,7 @@ def make_qq_report(inferred_dosage, true_dosage, nbins=100):
 
 
 def add_reports(report_a, report_b):
-	"""Add two QQ reports.
+	"""Add two QQ reports to take a weighted average.
 
 	New report is a weighted average.
 	"""
