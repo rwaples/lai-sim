@@ -52,7 +52,7 @@ def strip_MAC(ts, MAC):
 	final_sites = ts.num_sites
 	print(f"MAC filter (<={MAC}):")
 	print(f"removed {initial_sites-final_sites} sites ({(initial_sites-final_sites) / (initial_sites):.0%}), {final_sites} sites remain")
-	return ts
+	return(ts)
 
 
 def strip_adjacent_sites(ts, dist=1.5):
@@ -120,7 +120,7 @@ def get_local_ancestry(ts, admixture_time, per_batch):
 		ts.samples(),
 		np.where(ts.tables.nodes.asdict()['time'] == 0)[0]
 	)
-	# target ancestors are at time==admixture_time
+	# target ancestors exist at time==admixture_time
 	target_ancestors = np.where(ts.tables.nodes.asdict()['time'] == admixture_time)[0]
 
 	nsample = len(target_samples)
@@ -189,9 +189,8 @@ def get_local_ancestry_pop(ts, pop, admixture_time, max_samples=100, per_rep=12)
 	local_ancestry_df = pd.concat(dfs)
 	pop_of_node = dict(zip(range(len(ts.tables.nodes)), ts.tables.nodes.population))
 	# record the population of the ancestor, ie the local ancestry (localpop)
-	# record the population of the sample (samplepop)
 	local_ancestry_df['localpop'] = [pop_of_node[x] for x in local_ancestry_df['parent']]
-	# sampling population
+	# record the population of the sample (samplepop)
 	local_ancestry_df['samplepop'] = [pop_of_node[x] for x in local_ancestry_df['child']]
 	local_ancestry_df = local_ancestry_df.sort_values(['samplepop', 'child', 'left']).reset_index(drop=True)
 	return local_ancestry_df
@@ -209,8 +208,7 @@ def get_la_mat(ts, df, mapping=None):
 	sample_order = df['child'].unique()  # preserves order of occurance
 	# this will be the output order of the columns in the la_mat
 
-	# create an empty output matrix
-	# fill with negative ones
+	# create an empty output matrix and fill with negative ones
 	# same size as the genotype matrix
 	la_mat = np.zeros((ts.num_sites, ts.num_samples)).astype(int) - 1
 
@@ -253,7 +251,6 @@ def get_la_mat_large(ts, df, mapping):
 	the ts should be simplified with with only the target samples retained.
 	The node re-mapping produced by simplify(map_nodes=True) should be supplied here.
 	"""
-
 	# make sure the local ancestry df is sorted by samplepop
 	df = df.sort_values(['samplepop', 'child', 'left']).reset_index(drop=True)
 	sample_order = df['child'].unique()  # preserves order of occurance
@@ -328,7 +325,6 @@ def get_local_ancestry_pop_multi(ts, pop, admixture_time, max_samples=100, per_r
 	reports local ancestry for nsample chromosomes per population
 	and does this by considering per_rep samples at once.
 	"""
-
 	ancestors = np.where(ts.tables.nodes.asdict()['time'] == admixture_time)[0]
 	pop_samples = ts.samples(population=pop)
 	if max_samples:
@@ -384,7 +380,11 @@ def make_ind_labels(ts):
 
 
 def vcfheader(ts, target_pop):
-	"""Construct an appropriate vcf header."""
+	"""Construct an appropriate vcf header.
+
+	Always uses chr22 as contig ID.
+	Includes current date.
+	"""
 	from datetime import date
 	fileformat = '##fileformat=VCFv4.2\n'
 	fileDate = f'##filedate={date.today().ctime()}\n'
@@ -436,10 +436,10 @@ def get_mean_allele_frequencies(freqs):
 
 
 def get_fst_faser(ts, popA, popB):
-	"""	Hudson Fst for popA and popB.
+	"""Return Fst (Hudson) for popA and popB.
 
 	Uses the allel.hudson_fst() function from scikit-allel.
-	popA and popB are the samples from each pop
+	popA and popB give the samples to use from each pop.
 	"""
 	popA_samples = ts.samples(popA)
 	popB_samples = ts.samples(popB)
@@ -465,11 +465,9 @@ def get_fst_faser(ts, popA, popB):
 
 	npopA = len(popA_samples)
 	npopB = len(popB_samples)
-
 	# get the number of ancestral and derived alleles within each pop
 	acA = np.array([npopA - popA_counts, popA_counts]).T
 	acB = np.array([npopB - popB_counts, popB_counts]).T
-
 	num, denom = allel.hudson_fst(acA, acB)
 	fst = np.sum(num) / np.sum(denom)
 	return(fst)
@@ -543,6 +541,7 @@ def load_rfmix_fb(path):
 	"""Load an array of the posterior local ancestry probabilities from RFMixv2."""
 	rfmix_res = pd.read_csv(path, sep='\t', comment='#')
 	# expand out to each site
+	# needed because RFMix2 only reports LA every fifth site.
 	rfmix_res = np.repeat(rfmix_res.iloc[:, 4:].values, [5], axis=0)
 	return(rfmix_res)
 
@@ -576,9 +575,9 @@ def load_mosaic(path):
 
 def get_Q(arr, n_anc):
 	"""
-	Return a data frame of ancestry fractions (Q).
+	Return a data frame of `global` ancestry fractions (Q).
 
-	Calculated from probabalistic local ancestry proportions.
+	Calculated as sums over probabalistic local ancestry proportions.
 	"""
 	nsites = arr.shape[0]
 	# avoid overflow and sum over sites
@@ -615,7 +614,9 @@ def get_Q(arr, n_anc):
 
 
 def get_RMSD_Q(Q1, Q2):
-	"""Return the RMSD between two sets of ancestry proportions (Q)."""
+	"""Return the RMSD between two sets of ancestry proportions (Q).
+
+	RMSD = root mean squared deviation."""
 	assert(Q1.shape == Q2.shape)
 	D = Q1 - Q2
 	SD = D * D
