@@ -1,6 +1,4 @@
-import numpy as np
-import pandas as pd
-import os
+"""calculates R2 scores for each method - on each ancestry and each ind"""
 from common.utils import max_la
 from common.utils import get_true_anc_dosage, get_ancestry_dosage, load_true_la, load_bmix, load_mosaic, load_rfmix_fb, r2_ancestry_dosage
 
@@ -12,7 +10,6 @@ mosaic_path = str(snakemake.input.mosaic_la)
 rfmix2_path = str(snakemake.input.rfmix2_la)
 bmix_path = str(snakemake.input.bmix_la)
 sites_file = str(snakemake.input.sites_file)
-
 
 R2_anc = str(snakemake.output.R2_anc)
 R2_ind = str(snakemake.output.R2_ind)
