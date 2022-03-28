@@ -34,3 +34,7 @@ fourpop_rep3_seq	fourpop_rep3	1	0.00	5000000	155
 fourpop_rep3_arr	fourpop_rep3	1	0.05	5000000	156
 fourpop_rep4_seq	fourpop_rep4	1	0.00	5000000	157
 fourpop_rep4_arr	fourpop_rep4	1	0.05	5000000	158
+
+# the big one
+threepop_GIGA_rep1_seq	threepop_LARGE_rep1	1	0.00	5000000	141
+threepop_GIGA_rep1_arr	threepop_LARGE_rep1	1	0.05	5000000	142
