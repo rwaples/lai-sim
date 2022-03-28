@@ -155,7 +155,7 @@ rule run_bmix:
 	benchmark:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_bmix.tsv',
 	shell:
-		"java -Xmx80g -jar {params.BMIX} "
+		"java -Xmx200g -jar {params.BMIX} "
 		"ref={input.reference_vcf} "
 		"ref-panel={input.sample_map} "
 		"gt={input.target_vcf} "

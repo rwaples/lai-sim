@@ -72,7 +72,7 @@ rule just_ascertain:
 rule just_bmix:
 	input:
 		anc = [f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/bmix/bmix.anc.vcf.gz' for u in units.itertuples()],
-		QQ_bmix = "results/reports/QQ.bmix.txt",
+		#QQ_bmix = "results/reports/QQ.bmix.txt",
 
 
 rule diagnostic_plots:
