@@ -7,10 +7,12 @@ include: "rules/common.smk"
 include: "rules/simulate.smk"
 include: "rules/la_and_vcf.smk"
 include: "rules/genotype_error.smk"
-include: "rules/phasing.smk"
-include: "rules/analysis.smk"
-include: "rules/diagnostic_plots.smk"
-include: "rules/reports.smk"
+include: "rules/phase.smk"
+include: "rules/analyze.smk"
+include: "rules/evaluate.smk"
+# include: "rules/diagnostic_plots.smk"
+include: "rules/report.smk"
+include: "rules/plot.smk"
 
 
 wildcard_constraints:
@@ -69,10 +71,11 @@ rule just_ascertain:
 			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/ascertained.tsz" for u in units.itertuples()
 		],
 
+
 rule just_bmix:
 	input:
 		anc = [f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/bmix/bmix.anc.vcf.gz' for u in units.itertuples()],
-		#QQ_bmix = "results/reports/QQ.bmix.txt",
+		# QQ_bmix = "results/reports/QQ.bmix.txt",
 
 
 rule diagnostic_plots:

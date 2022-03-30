@@ -1,12 +1,3 @@
-rule reports:
-	input:
-		R2 = "results/reports/R2_report.txt",
-		Q = "results/reports/Q_report.txt",
-		QQ_bmix = "results/reports/QQ.bmix.txt",
-		QQ_rfmix = "results/reports/QQ.rfmix.txt",
-		QQ_mosaic = "results/reports/QQ.mosaic.txt",
-
-
 rule ancestry_dosage_plots:
 	input:
 		bmix = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.{i}.bmix.pdf"
@@ -15,49 +6,6 @@ rule ancestry_dosage_plots:
 												for u in units.itertuples() for i in range(3)],
 		mosaic = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.{i}.mosaic.pdf"
 												for u in units.itertuples() for i in range(3)]
-
-
-rule R2_report:
-	input:
-		[f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.ancestry.tsv"
-			for u in units.itertuples()],
-	output:
-		"results/reports/R2_report.txt",
-	params:
-		files = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.ancestry.tsv"
-											for u in units.itertuples()],
-		names = [f"{u.model_name}\t{u.sim_name}\t{u.asc_name}\t{u.anal_name}" for u in units.itertuples()],
-		nind_ref = [units.loc[(u.sim_name, u.asc_name, u.anal_name)].nind_ref for u in units.itertuples()],
-	script:
-		'../scripts/make_R2_report.py'
-
-
-rule Q_report:
-	input:
-		[f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/Q_RMSD.tsv"
-			for u in units.itertuples()]
-	output:
-		"results/reports/Q_report.txt"
-	params:
-		files = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/Q_RMSD.tsv"
-											for u in units.itertuples()],
-		names = [f"{u.model_name}\t{u.sim_name}\t{u.asc_name}\t{u.anal_name}" for u in units.itertuples()],
-		nind_ref = [units.loc[(u.sim_name, u.asc_name, u.anal_name)].nind_ref for u in units.itertuples()],
-	script:
-		'../scripts/make_Q_report.py'
-
-
-rule combine_qq_reports:
-	input:
-		reports = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/qq_{{lai_program}}.txt"
-													for u in units.itertuples()],
-	output:
-		"results/reports/QQ.{lai_program}.txt"
-	params:
-		reports = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/qq_{{lai_program}}.txt"
-													for u in units.itertuples()],
-	script:
-		'../scripts/combine_qq_reports.py'
 
 
 rule plot_ancestry_dosage:
@@ -96,3 +44,51 @@ rule plot_ancestry_dosage:
 		format = 'pdf'
 	script:
 		'../scripts/plot_ancestry_dosage.py'
+
+
+rule plot_pop_coal_time:
+	input:
+		site_ts = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/sample.filter.tsz'
+	output:
+		plot = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/pop_coal_time.png'
+	script:
+		'../scripts/plot_pop_coal_time.py'
+
+
+rule plot_pairwise_Fst:
+	input:
+		site_ts = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/sample.filter.tsz',
+	output:
+		plot = report(
+			'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/pairwise_Fst.png',
+			caption="../report/pairwise_Fst.rst",
+			category="Diagnostics",
+			subcategory="{model_name}  {sim_name}  {asc_name}  {anal_name}"
+		),
+	script:
+		'../scripts/plot_pairwise_Fst.py'
+
+
+rule plot_local_ancestry:
+	input:
+		la_mat = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/true_local_ancestry.site_matrix.npz',
+	output:
+		plot = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/true_local_ancestry.png',
+	script:
+		'../scripts/plot_true_local_ancestry.py'
+
+
+rule plot_qq_reports:
+	input:
+		bmix_report = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/qq_bmix.txt',
+		mosaic_report = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/qq_mosaic.txt',
+		rfmix_report = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/qq_rfmix.txt',
+	output:
+		plot_path = report(
+			'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/qq.png',
+			caption="../report/qq_plot.rst",
+			category="Diagnostics",
+			subcategory="{model_name}  {sim_name}  {asc_name}  {anal_name}"
+		),
+	script:
+		'../scripts/plot_qq.py'

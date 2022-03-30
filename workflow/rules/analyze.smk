@@ -1,46 +1,3 @@
-rule get_Q_score:
-	input:
-		true_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/true_local_ancestry.site_matrix.npz',
-		mosaic_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/la_probs.npz',
-		rfmix2_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.fb.tsv.gz',
-		bmix_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/bmix/bmix.anc.vcf.gz',
-		sites_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
-	output:
-		RMSD_path = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/Q_RMSD.tsv',
-		Q_true_path = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/Q_true.tsv',
-		Q_bmix_path = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/Q_bmix.tsv',
-		Q_mosaic_path = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/Q_mosaic.tsv',
-		Q_rfmix_path = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/Q_rfmix.tsv',
-	params:
-		bcftools = config['PATHS']['BCFTOOLS'],
-		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
-	log:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/get_Q_score.log',
-	conda:
-		'./env'
-	script:
-		"../scripts/get_Q_score.py"
-
-
-rule get_R2_score:
-	input:
-		true_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/true_local_ancestry.site_matrix.npz',
-		mosaic_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/la_probs.npz',
-		rfmix2_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.fb.tsv.gz',
-		bmix_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/bmix/bmix.anc.vcf.gz',
-		sites_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
-	output:
-		R2_anc = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/R2_score.ancestry.tsv',
-		R2_ind = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/R2_score.individuals.tsv',
-	params:
-		bcftools = config['PATHS']['BCFTOOLS'],
-		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
-	log:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/get_R2_score.log',
-	script:
-		"../scripts/get_R2_score.py"
-
-
 rule export_mosaic:
 	input:
 		la_results = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/localanc_admixed.RData',
@@ -255,4 +212,31 @@ rule run_RFMix2:
 		gzip {params.fb}
 		gzip {params.Q}
 		gzip {params.msp}
+		"""
+
+
+rule run_beagle:
+	input:
+		gt = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/genotypes.witherror.vcf.gz',
+		map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/plink_map.txt',
+	output:
+		vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.gz',
+		index = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.gz.csi',
+	log:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.beagle.log',
+	params:
+		prefix = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased',
+		bcftools = config['PATHS']['BCFTOOLS'],
+		BEAGLE = config['PATHS']['BEAGLE'],
+		seed = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].anal_seed,
+	shell:
+		"java -jar {params.BEAGLE} "
+		"gt={input.gt} "
+		"map={input.map} "
+		"seed={params.seed} "
+		"out={params.prefix} 2>&1 | tee {log} "
+
+		"""
+
+		{params.bcftools} index {output.vcf}
 		"""
