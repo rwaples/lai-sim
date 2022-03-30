@@ -155,7 +155,7 @@ rule run_bmix:
 	benchmark:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_bmix.tsv',
 	shell:
-		"java -Xmx200g -jar {params.BMIX} "
+		"java -Xmx80g -jar {params.BMIX} "
 		"ref={input.reference_vcf} "
 		"ref-panel={input.sample_map} "
 		"gt={input.target_vcf} "
@@ -247,7 +247,7 @@ rule run_RFMix2:
 		"{params.rfmix2} -f {input.target_vcf} -r {input.reference_vcf} "
 		"-m {input.sample_map} -g {input.genetic_map} -o {params.output} "
 		# "--reanalyze-reference "
-		# "-e 5 "
+		"-e 5 "
 		"--n-threads={params.nthreads} --chromosome={params.chr} "
 		"--random-seed={params.seed} 2>&1 | tee {log} "
 
