@@ -1,3 +1,4 @@
+"""Create data and files for LA analyses, prior to phasing"""
 rule write_vcfs:
 	input:
 		site_matrix = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/true_local_ancestry.site_matrix.npz',
@@ -22,7 +23,6 @@ rule write_vcfs:
 
 
 rule split_vcf:
-	# split vcfs after phasing
 	input:
 		vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.gz',
 		samples = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/{sample_group}.txt',

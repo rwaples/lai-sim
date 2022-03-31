@@ -1,3 +1,4 @@
+"""Run phasing and LA analyses."""
 rule export_mosaic:
 	input:
 		la_results = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/localanc_admixed.RData',
