@@ -6,6 +6,8 @@ import numpy as np
 
 site_ts = str(snakemake.input.site_ts)
 plot_path = str(snakemake.output.plot)
+
+
 ts = tszip.decompress(site_ts)
 
 

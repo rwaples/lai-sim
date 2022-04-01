@@ -241,3 +241,49 @@ rule run_beagle:
 
 		{params.bcftools} index {output.vcf}
 		"""
+
+
+rule get_dosage_true:
+	input:
+		true_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/true_local_ancestry.site_matrix.npz',
+	output:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.true.npz',
+	params:
+		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
+	script:
+		'../scripts/get_dosage.true.py'
+
+
+rule get_dosage_bmix:
+	input:
+		bmix_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/bmix/bmix.anc.vcf.gz',
+	output:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.bmix.npz',
+	params:
+		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
+		sites_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
+		BCFTOOLS = config['PATHS']['BCFTOOLS'],
+	script:
+		'../scripts/get_dosage.bmix.py'
+
+
+rule get_dosage_mosaic:
+	input:
+		mosaic_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/la_probs.npz',
+	output:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.mosaic.npz',
+	params:
+		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
+	script:
+		'../scripts/get_dosage.mosaic.py'
+
+
+rule get_dosage_rfmix2:
+	input:
+		rfmix2_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.fb.tsv.gz',
+	output:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.rfmix2.npz',
+	params:
+		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
+	script:
+		'../scripts/get_dosage.rfmix2.py'

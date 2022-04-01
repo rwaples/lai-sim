@@ -1,8 +1,8 @@
 """Load output from bmix and save diploid ancestry dosages as compressed numpy array."""
 import numpy as np
 from common.utils import get_ancestry_dosage, load_mosaic
-n_anc = int(snakemake.params.nsource)
 mosaic_path = str(snakemake.input.mosaic_la)
+n_anc = int(snakemake.params.nsource)
 out_path = str(snakemake.output)
 
 mosaic_anc_dosage = get_ancestry_dosage(

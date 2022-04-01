@@ -1,6 +1,6 @@
 """Load output from bmix and save diploid ancestry dosages as compressed numpy array."""
 import numpy as np
-from common.utils import get_ancestry_dosage, load_true_la
+from common.utils import get_true_anc_dosage, load_true_la
 true_path = str(snakemake.input.true_la)
 n_anc = int(snakemake.params.nsource)
 out_path = str(snakemake.output)

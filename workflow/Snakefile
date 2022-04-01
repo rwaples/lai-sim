@@ -35,16 +35,36 @@ rule all:
 			for u in units.itertuples()
 		],
 
-		R2_anc = [
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.ancestry.tsv"
+		#R2_anc = [
+		#	f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.ancestry.tsv"
+		#	for u in units.itertuples()
+		#],
+		#R2_ind = [
+		#	f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.individuals.tsv"
+		#	for u in units.itertuples()
+		#],
+		#Q_RMSD = [
+		#	f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/Q_RMSD.tsv"
+		#	for u in units.itertuples()
+		#],
+
+		temp1 = [
+			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.bmix.ancestry.tsv"
 			for u in units.itertuples()
 		],
-		R2_ind = [
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.individuals.tsv"
+
+		temp2 = [
+			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.mosaic.ancestry.tsv"
 			for u in units.itertuples()
 		],
-		Q_RMSD = [
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/Q_RMSD.tsv"
+
+		temp3 = [
+			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.rfmix2.ancestry.tsv"
+			for u in units.itertuples()
+		],
+
+		temp4 = [
+			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/RMSD.bmix.tsv"
 			for u in units.itertuples()
 		],
 

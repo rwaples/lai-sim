@@ -122,8 +122,8 @@ gmap.columns = ['chr', 'rsID', 'cM', 'bp']
 snpfile = gmap[['rsID', 'chr', 'cM', 'bp']].copy()
 snpfile['rsID'] = [f'        mosaic_SNP_{i}' for i in range(len(snpfile))]
 snpfile['chr'] = [f'{c[3:]}' for c in snpfile['chr']]
-snpfile['A1'] = 'A'
-snpfile['A2'] = 'T'
+snpfile['A1'] = 'A'  # arbitrary alleles
+snpfile['A2'] = 'T'  # arbitrary alleles
 snpfile.to_csv(
 	os.path.join(folder, f'snpfile.{chrom_id}'), sep=' ',
 	index=None, header=None, quoting=csv.QUOTE_NONE, escapechar=' '
