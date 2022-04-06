@@ -4,13 +4,15 @@ import pyreadr
 import os.path
 from common.utils import get_Q, get_RMSD_Q
 
-n_anc = int(snakemake.params.nsource)
 true_path = str(snakemake.input.true_dosage)
 target_path = str(snakemake.input.target_path)
-# output
-Q_true_path = str(snakemake.output.Q_true)
-Q_path = str(snakemake.output.Q)
-RMSD_path = str(snakemake.output.RMSD)
+# params
+n_anc = int(snakemake.params.nsource)
+Q_true_path = str(snakemake.params.Q_true)
+
+#output
+Q_path = str(snakemake.output.Q_path)
+RMSD_path = str(snakemake.output.RMSD_path)
 
 true_dosage = np.load(true_path)['arr_0']
 target_dosage = np.load(target_path)['arr_0']

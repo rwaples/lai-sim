@@ -1,3 +1,8 @@
+wildcard_constraints:
+	anal_name = "\w+",
+	asc_name = "\w+",
+	sim_name = "\w+",
+
 rule recap_and_mutate:
 	input:
 		"results/{model_name}/{sim_name}/from_slim.trees",
@@ -16,6 +21,7 @@ rule recap_and_mutate:
 		'results/{model_name}/{sim_name}/benchmark/recap_and_mutate.tsv',
 	script:
 		"../scripts/recap_and_mutate.py"
+
 
 
 rule simulate_admixture:
