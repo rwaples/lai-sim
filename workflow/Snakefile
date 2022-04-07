@@ -15,6 +15,7 @@ include: "rules/analyze.smk"
 include: "rules/evaluate.smk"
 include: "rules/report.smk"
 include: "rules/plot.smk"
+include: "rules/resolve.smk"
 
 
 report: "report/workflow.rst"
@@ -71,9 +72,18 @@ rule all:
 
 rule do_R2_report:
 	input:
-		#R2 = "results/reports/R2_report.txt",
+		R2 = "results/reports/R2_report.txt",
 		temp4 = [
 			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_report.txt"
+			for u in units.itertuples()
+		],
+
+
+rule do_Q_report:
+	input:
+		# Q = "results/reports/Q_report.txt",
+		temp4 = [
+			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/Q_report.txt"
 			for u in units.itertuples()
 		],
 

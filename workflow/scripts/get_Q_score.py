@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import pyreadr
+import os
 import os.path
 from common.utils import get_Q, get_RMSD_Q
 
@@ -10,12 +11,18 @@ target_path = str(snakemake.input.target_path)
 n_anc = int(snakemake.params.nsource)
 Q_true_path = str(snakemake.params.Q_true)
 
-#output
 Q_path = str(snakemake.output.Q_path)
 RMSD_path = str(snakemake.output.RMSD_path)
 
 true_dosage = np.load(true_path)['arr_0']
-target_dosage = np.load(target_path)['arr_0']
+try:
+	target_dosage = np.load(target_path)['arr_0']
+except ValueError:
+	# check file is empty
+	assert os.stat(target_path).st_size == 0
+	# use an empty dosage as stand in.
+	target_dosage = np.zeros_like(true_dosage)
+
 
 Q_true = get_Q(true_dosage, n_anc=n_anc)
 Q_target = get_Q(target_dosage, n_anc=n_anc)

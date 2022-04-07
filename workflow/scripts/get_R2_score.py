@@ -1,4 +1,5 @@
 """calculates R2 score vs truth for each ancestry and each ind"""
+import os
 import numpy as np
 from common.utils import max_la, r2_ancestry_dosage
 
@@ -11,7 +12,15 @@ R2_ind = str(snakemake.output.R2_ind)
 
 # load dosages
 true_dosage = np.load(true_path)['arr_0']
-target_dosage = np.load(target_path)['arr_0']
+# deal with proxy (empty) target dosage files.
+try:
+	target_dosage = np.load(target_path)['arr_0']
+except ValueError:
+	# check file is empty
+	assert os.stat(target_path).st_size == 0
+	# use an empty dosage as stand in.
+	target_dosage = np.zeros_like(true_dosage)
+
 assert (len(target_dosage) - len(true_dosage) <= 5)
 
 anc_r2, ind_r2 = r2_ancestry_dosage(
