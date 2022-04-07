@@ -1,4 +1,4 @@
-checkpoint get_R2_score:
+rule get_R2_score:
 	input:
 		true_dosage = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.true.npz',
 		target_dosage = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.{method}.npz',
@@ -14,33 +14,21 @@ checkpoint get_R2_score:
 
 
 def gather_R2(wildcards):
-	# R2_anc_output = checkpoints.get_R2_score.get(**wildcards).output.R2_anc
-	#
-	#checkpoints.get_R2_score.get(
-	#	model_name=wildcards.model_name,
-	#	sim_name=wildcards.sim_name,
-	#	asc_name=wildcards.asc_name,
-	#	anal_name=wildcards.anal_name,
-	#)
 	checkpoints.get_R2_score.get(**wildcards)
 	#methods = glob_wildcards(f'results/{wildcards.model_name}/{wildcards.sim_name}/{wildcards.asc_name}/{wildcards.anal_name}/SUMMARY/R2_score.{{method}}.ancestry.tsv').method
 	#ret = expand('results/{wildcards.model_name}/{wildcards.sim_name}/{wildcards.asc_name}/{wildcards.anal_name}/SUMMARY/R2_score.{{method}}.ancestry.tsv', method=methods)
+	#meth, = glob_wildcards(
+	#	f'results/{wildcards.model_name}/{wildcards.sim_name}/{wildcards.asc_name}/{wildcards.anal_name}/SUMMARY/R2_score.{{method}}.ancestry.tsv'
+	#).method
 	ret = expand(
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/R2_score.{method}.ancestry.tsv',
 		model_name=wildcards.model_name,
 		sim_name=wildcards.sim_name,
 		asc_name=wildcards.asc_name,
 		anal_name=wildcards.anal_name,
-		method = glob_wildcards(
-			f'results/{wildcards.model_name}/{wildcards.sim_name}/{wildcards.asc_name}/{wildcards.anal_name}/SUMMARY/R2_score.{{method}}.ancestry.tsv').method)
+		method=method
+	)
 	return(ret)
-
-
-def aggregate_input(wildcards):
-	checkpoint_output = checkpoints.clustering.get(**wildcards).output[0]
-	return expand("post/{sample}/{i}.txt",
-			sample=wildcards.sample,
-			i=glob_wildcards(os.path.join(checkpoint_output, "{i}.txt")).i)
 
 
 rule make_R2_report_local:
@@ -48,8 +36,9 @@ rule make_R2_report_local:
 		gather_R2
 	output:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/R2_report.txt',
-	# params:
-		# dummy = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.true.npz',
+	params:
+		None
+		# dummy = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/R2_score.{method}.ancestry.tsv',
 		# files = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.ancestry.tsv"
 		# 									for u in units.itertuples()],
 		# names = [f"{u.model_name}\t{u.sim_name}\t{u.asc_name}\t{u.anal_name}" for u in units.itertuples()],
@@ -58,22 +47,22 @@ rule make_R2_report_local:
 		'../scripts/make_R2_report.local.py'
 
 
-rule make_R2_report_global:
-	input:
-		gather_R2
-	output:
-		"results/reports/R2_report.txt",
-	params:
-		dummy = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.true.npz',
-		# files = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.ancestry.tsv"
-		# 									for u in units.itertuples()],
-		# names = [f"{u.model_name}\t{u.sim_name}\t{u.asc_name}\t{u.anal_name}" for u in units.itertuples()],
-		# nind_ref = [units.loc[(u.sim_name, u.asc_name, u.anal_name)].nind_ref for u in units.itertuples()],
-	script:
-		'../scripts/make_R2_report.py'
+#rule make_R2_report_global:
+#	input:
+#		gather_R2
+#	output:
+#		"results/reports/R2_report.txt",
+#	params:
+#		dummy = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.true.npz',
+#		# files = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.ancestry.tsv"
+#		# 									for u in units.itertuples()],
+#		# names = [f"{u.model_name}\t{u.sim_name}\t{u.asc_name}\t{u.anal_name}" for u in units.itertuples()],
+#		# nind_ref = [units.loc[(u.sim_name, u.asc_name, u.anal_name)].nind_ref for u in units.itertuples()],
+#	script:
+#		'../scripts/make_R2_report.py'
 
 
-checkpoint get_Q_score:
+rule get_Q_score:
 	input:
 		true_dosage = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.true.npz',
 		target_path = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.{method}.npz',
@@ -89,9 +78,6 @@ checkpoint get_Q_score:
 		'./env'
 	script:
 		"../scripts/get_Q_score.py"
-
-
-
 
 
 rule write_qq_reports:
