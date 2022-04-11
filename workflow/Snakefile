@@ -81,7 +81,7 @@ rule do_R2_report:
 
 rule do_Q_report:
 	input:
-		# Q = "results/reports/Q_report.txt",
+		Q = "results/reports/Q_report.txt",
 		temp4 = [
 			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/Q_report.txt"
 			for u in units.itertuples()
