@@ -46,7 +46,7 @@ rule make_R2_report_local:
 	output:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/R2_report.txt',
 	script:
-		'../scripts/write_local_report.py'
+		'../scripts/write_local_R2_report.py'
 
 
 rule make_Q_report_local:
@@ -55,7 +55,7 @@ rule make_Q_report_local:
 	output:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/Q_report.txt',
 	script:
-		'../scripts/write_local_report.py'
+		'../scripts/write_local_Q_report.py'
 
 
 
