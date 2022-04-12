@@ -102,3 +102,16 @@ rule write_qq_reports:
 		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
 	script:
 		"../scripts/write_qq_reports.py"
+
+
+rule combine_qq_reports:
+	input:
+		reports = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/qq_{{method}}.txt"
+													for u in units.itertuples()],
+	output:
+		"results/reports/QQ.{method}.txt"
+	params:
+		reports = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/qq_{{method}}.txt"
+													for u in units.itertuples()],
+	script:
+		'../scripts/combine_qq_reports.py'
