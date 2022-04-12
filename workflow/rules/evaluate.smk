@@ -40,32 +40,32 @@ def all_Q(wildcards):
 	return(ret)
 
 
-rule make_R2_report_local:
+rule make_R2_report:
 	input:
 		all_R2
 	output:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/R2_report.txt',
+		"results/reports/R2_report.txt",
 	script:
-		'../scripts/write_local_R2_report.py'
+		'../scripts/write_R2_report.py'
 
 
-rule make_Q_report_local:
+rule make_Q_report:
 	input:
 		all_Q
 	output:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/Q_report.txt',
+		'results/reports/Q_report.txt',
 	script:
-		'../scripts/write_local_Q_report.py'
+		'../scripts/write_Q_report.py'
 
 
 
-rule make_R2_report_global:
-	input:
-		[f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_report.txt' for u in units.itertuples()]
-	output:
-		"results/reports/R2_report.txt",
-	script:
-		'../scripts/make_R2_report.py'
+#rule make_R2_report_global:
+#	input:
+#		[f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_report.txt' for u in units.itertuples()]
+#	output:
+#		"results/reports/R2_report.txt",
+#	script:
+#		'../scripts/make_R2_report.py'
 
 
 rule get_Q_score:
