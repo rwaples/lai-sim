@@ -9,33 +9,21 @@ A Snakemake workflow for simulating admixture and evaluating local ancestry infe
 * MOSAIC [(link)](https://maths.ucd.ie/~mst/MOSAIC/)
 * BCFTOOLS [(link)](http://samtools.github.io/bcftools/howtos/index.html)
 * BEAGLE [(link)](http://faculty.washington.edu/browning/beagle/beagle.html)
-* add_err (link pending)
-* Snakemake and conda (see below)
+* add_err (no link provided)
+* Snakemake [(link)](https://snakemake.readthedocs.io/en/stable/)
+* conda [(link)](https://docs.conda.io/en/latest/)
 
-### create the conda environment
+### create and activate the conda environment
 #### uses mamba, rather than conda, as suggested by Snakemake
 `mamba env create -f environment.yml --prefix ./env`
-
-### activate conda environment (from base directory)
+#### activate conda environment (from base directory)
 `conda activate ./env`
 
-### dry run the full pipeline
+### dry run of the test pipeline
 `snakemake all -c1 --configfile profiles/personal/config.yaml --dry-run`
 
 ### run the full pipeline
-`snakemake all -c1 --configfile profiles/personal/config.yaml`
+`snakemake all -c1 --configfile profiles/cluster/config.yaml`
 
-### view the directed acyclic graph (DAG) that is used for each analysis
+### view the directed acyclic graph (DAG) produced by Snakemake.
 `snakemake all -c1 --configfile profiles/personal/config.yaml --rulegraph | dot | display`
-
-<!--- # patch MOSAIC to allow random number seeds
-## needs to be run each time a new env is made
-## patches the R code, allowing the passing of a random seed to the mosaic executable
-`snakemake --cores 1 --force install_mosaic` --->
-
-### to test the MOSAIC installation:
-run from programs/MOSAIC/MOSAIC
-`Rscript ./mosaic.R simulated ./example_data/ -c 18:22 -n 3 -p "English Mandenka" --gens "30"`
-
-### TODO
-* add seed to add-err.jar
