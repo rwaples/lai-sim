@@ -1,7 +1,9 @@
 """Rules to evaluate the local ancestry methods."""
 def all_sites(wildcards):
+	import itertools
 	sites = [f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/site.positions' for u in units.itertuples()],
-	return(sites)
+	ret = list(itertools.chain(*sites))  # flatten
+	return(ret)
 
 
 def all_dosage(wildcards):
