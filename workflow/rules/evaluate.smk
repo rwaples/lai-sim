@@ -1,16 +1,7 @@
-rule get_R2_score:
-	input:
-		true_dosage = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.true.npz',
-		target_dosage = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.{method}.npz',
-	output:
-		R2_anc = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/R2_score.{method}.ancestry.tsv',
-		R2_ind = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/R2_score.{method}.individuals.tsv',
-	params:
-		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
-	log:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/get_R2_score.{method}.log',
-	script:
-		"../scripts/get_R2_score.py"
+"""Rules to evaluate the local ancestry methods."""
+def all_sites(wildcards):
+	sites = [f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/site.positions' for u in units.itertuples()],
+	return(sites)
 
 
 def all_dosage(wildcards):
@@ -40,11 +31,20 @@ def all_Q(wildcards):
 	return(ret)
 
 
+rule get_nsites:
+	input:
+		all_sites
+	output:
+		'results/reports/sites_report.txt',
+	script:
+		'../scripts/write_sites_report.py'
+
+
 rule make_R2_report:
 	input:
 		all_R2
 	output:
-		"results/reports/R2_report.txt",
+		'results/reports/R2_report.txt',
 	script:
 		'../scripts/write_R2_report.py'
 
@@ -58,14 +58,19 @@ rule make_Q_report:
 		'../scripts/write_Q_report.py'
 
 
-
-#rule make_R2_report_global:
-#	input:
-#		[f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_report.txt' for u in units.itertuples()]
-#	output:
-#		"results/reports/R2_report.txt",
-#	script:
-#		'../scripts/make_R2_report.py'
+rule get_R2_score:
+	input:
+		true_dosage = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.true.npz',
+		target_dosage = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.{method}.npz',
+	output:
+		R2_anc = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/R2_score.{method}.ancestry.tsv',
+		R2_ind = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/R2_score.{method}.individuals.tsv',
+	params:
+		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
+	log:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/get_R2_score.{method}.log',
+	script:
+		"../scripts/get_R2_score.py"
 
 
 rule get_Q_score:

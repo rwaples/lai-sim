@@ -87,6 +87,11 @@ rule do_Q_report:
 		],
 
 
+rule do_sites_report:
+	input:
+		sites = 'results/reports/sites_report.txt',
+
+
 rule reports:
 	input:
 		R2 = "results/reports/R2_report.txt",
