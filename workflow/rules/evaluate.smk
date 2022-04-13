@@ -33,6 +33,15 @@ def all_Q(wildcards):
 	return(ret)
 
 
+def all_runtime_benchmark(wildcards):
+	import itertools
+	bmix = [f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/benchmark/run_bmix.tsv' for u in units.itertuples()],
+	mosaic = [f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/benchmark/run_mosaic.tsv' for u in units.itertuples()],
+	rfmix2 = [f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/benchmark/run_RFMix2.tsv' for u in units.itertuples()],
+	ret = list(itertools.chain(*(bmix + mosaic + rfmix2)))  # flatten
+	return(ret)
+
+
 rule get_nsites:
 	input:
 		all_sites
@@ -40,6 +49,15 @@ rule get_nsites:
 		'results/reports/sites_report.txt',
 	script:
 		'../scripts/write_sites_report.py'
+
+
+rule get_runtime_benchmark:
+	input:
+		all_runtime_benchmark
+	output:
+		'results/reports/runtime_report.txt',
+	script:
+		'../scripts/write_runtime_report.py'
 
 
 rule make_R2_report:
