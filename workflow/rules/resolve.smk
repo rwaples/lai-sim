@@ -1,9 +1,8 @@
 """Rules to fill in missing results from local ancestry analyses."""
-
 rule fill_missing:
 	input:
 		reports = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/missing.LA.txt"
-																for u in units.itertuples()],
+													for u in units.itertuples()],
 
 rule add_missing_dosage:
 	output:
