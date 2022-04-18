@@ -543,6 +543,7 @@ def load_rfmix_fb(path):
 	# expand out to each site
 	# needed because RFMix2 only reports LA every fifth site.
 	rfmix_res = np.repeat(rfmix_res.iloc[:, 4:].values, [5], axis=0)
+	rfmix_res = rfmix_res.astype(np.half)
 	return(rfmix_res)
 
 
@@ -558,14 +559,15 @@ def load_bmix(path, sites_file, BCFTOOLS):
 	bmix = bmix.dropna(axis=1)
 	res = bmix.iloc[:, 2:].values
 	res = np.concatenate([res[:1], res])
-
 	res = res.astype(np.half)
 
+	# account for any sites filtered by bmix (e.g. due to MAF)
 	pre_sites = pd.read_csv(sites_file, header=None).values.flatten()
 	post_sites = pd.read_csv(bmix_sites, header=None).values.flatten()
 	post_indexes = np.searchsorted(post_sites, pre_sites)
 	del pre_sites, post_sites
 	res = res[post_indexes]
+
 	return(res)
 
 
@@ -573,6 +575,7 @@ def load_mosaic(path):
 	"""Return an array of the posterior LA probabilities from MOSAIC."""
 	arr = np.load(path)['arr']
 	res = arr.T.reshape((arr.shape[2], -1), order='C')
+	res = res.astype(np.half)
 	return(res)
 
 
