@@ -559,7 +559,7 @@ def load_bmix(path, sites_file, BCFTOOLS):
 	res = bmix.iloc[:, 2:].values
 	res = np.concatenate([res[:1], res])
 
-	res = res.astype(np.float32)
+	res = res.astype(np.half)
 
 	pre_sites = pd.read_csv(sites_file, header=None).values.flatten()
 	post_sites = pd.read_csv(bmix_sites, header=None).values.flatten()
