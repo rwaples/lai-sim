@@ -502,7 +502,7 @@ def get_ancestry_dosage(arr, n_anc):
 
 def load_true_la(path):
 	"""Load true local ancestry."""
-	return(np.load(path)['arr'])
+	return(np.load(path)['arr'].astype(np.half))
 
 
 def get_true_anc_dosage(true_la, n_anc):
@@ -516,8 +516,9 @@ def get_true_anc_dosage(true_la, n_anc):
 	return(hap1 + hap2)
 
 
-def r2_ancestry_dosage(true_dosage, pred_dosage, n_anc):
+def r2_dosage_ancestry(true_dosage, pred_dosage, n_anc):
 	"""Get ancestry- and individual-specific R2 values for LA vs truth."""
+
 	per_anc = []
 	for i in range(n_anc):
 		per_anc.append(
@@ -526,6 +527,12 @@ def r2_ancestry_dosage(true_dosage, pred_dosage, n_anc):
 				pred_dosage[:, i::n_anc].ravel()
 			)[0]**2
 		)
+	return(per_anc)
+
+
+def r2_dosage_individual(true_dosage, pred_dosage, n_anc):
+	"""Get ancestry- and individual-specific R2 values for LA vs truth."""
+
 	per_ind = []
 	for i in range(int(true_dosage.shape[1] / n_anc)):
 		per_ind.append(
@@ -534,7 +541,7 @@ def r2_ancestry_dosage(true_dosage, pred_dosage, n_anc):
 				pred_dosage[:, i * n_anc:i * n_anc + n_anc].ravel()
 			)[0]**2
 		)
-	return(per_anc, per_ind)
+	return(per_ind)
 
 
 def load_rfmix_fb(path):
