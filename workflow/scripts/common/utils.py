@@ -559,9 +559,12 @@ def load_bmix(path, sites_file, BCFTOOLS):
 	res = bmix.iloc[:, 2:].values
 	res = np.concatenate([res[:1], res])
 
+	res = res.astype(np.float32)
+
 	pre_sites = pd.read_csv(sites_file, header=None).values.flatten()
 	post_sites = pd.read_csv(bmix_sites, header=None).values.flatten()
 	post_indexes = np.searchsorted(post_sites, pre_sites)
+	del pre_sites, del post_sites
 	res = res[post_indexes]
 	return(res)
 
