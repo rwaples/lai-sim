@@ -5,7 +5,7 @@ channels:
 dependencies:
   - python
   - snakemake
-  - numpy
+  - numpy<1.22
   - pandas
   - scipy
   - matplotlib
