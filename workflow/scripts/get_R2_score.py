@@ -10,16 +10,18 @@ target_path = str(snakemake.input.target_dosage)
 R2_anc = str(snakemake.output.R2_anc)
 R2_ind = str(snakemake.output.R2_ind)
 
+
+dtype = np.float32
 # load dosages
-true_dosage = np.load(true_path)['arr_0'].astype(np.half)
+true_dosage = np.load(true_path)['arr_0'].astype(dtype)
 # deal with proxy (empty) target dosage files.
 try:
-	target_dosage = np.load(target_path)['arr_0'].astype(np.half)
+	target_dosage = np.load(target_path)['arr_0'].astype(dtype)
 except ValueError:
 	# check file is empty
 	assert os.stat(target_path).st_size == 0
 	# use an empty dosage as stand in.
-	target_dosage = np.zeros_like(true_dosage, dtype=np.half)
+	target_dosage = np.zeros_like(true_dosage, dtype=dtype)
 
 assert (len(target_dosage) - len(true_dosage) <= 5)
 
