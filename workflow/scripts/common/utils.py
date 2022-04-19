@@ -701,11 +701,16 @@ def max_la(vals, n_anc):
 	idxs = np.arange(0, vals.shape[1] + n_anc, n_anc)
 	for i in range(1, len(idxs)):
 		b = vals[:, idxs[i - 1]:idxs[i]]
-		a = b.argmax(1, keepdims=True)  # breaks ties by assigning the lower pop
+		dims = list(b.shape)
+		dims[1] = 1
+		# a = b.argmax(1, keepdims=True)  # breaks ties by assigning the lower pop
+		a = b.argmax(1).reshape(dims)
 		c = np.zeros_like(b)
 		np.put_along_axis(c, a, 1, axis=1)
 		vals[:, idxs[i - 1]:idxs[i]] = c
 	return(vals)
+
+    return np.argmax(x, axis=axis).reshape(output_shape)
 
 
 def plot_ancestry_dosage(
