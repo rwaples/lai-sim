@@ -9,6 +9,7 @@ import multiprocessing
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import pearsonr
+import numba
 
 
 def sample_inds(ts, pop_id, nind, seed):
@@ -516,16 +517,66 @@ def get_true_anc_dosage(true_la, n_anc):
 	return(hap1 + hap2)
 
 
+@numba.jit(
+	numba.float64(
+		numba.float32[:],
+		numba.float32[:],
+		numba.float32[:],
+		numba.float32[:]
+	),
+	nopython=True
+)
+def pearsonr2_numba(x, y, xm, ym):
+	"""
+	Return the squared pearson correlation coef.
+	x and y are not modified
+	"""
+	assert len(x) == len(y)
+	# return Nan if either x or y is constant
+	if (x == x[0]).all() or (y == y[0]).all():
+		return(np.nan)
+
+	n = len(x)
+	# mean of x and y
+	xmean = numba.float32(0.0)
+	ymean = numba.float32(0.0)
+	for i in range(n):
+		xmean += x[i]
+		ymean += y[i]
+	xmean = xmean / n
+	ymean = ymean / n
+	print(xmean)
+	# difference from the mean
+	xm.fill(0)
+	ym.fill(0)
+	for i in range(n):
+		xm[i] = x[i] - xmean
+		ym[i] = y[i] - ymean
+	r_num = numba.float64(0.0)
+	r_dena = numba.float64(0.0)
+	r_denb = numba.float64(0.0)
+	for i in range(n):
+		r_num += xm[i] * ym[i]
+		r_dena += xm[i] * xm[i]
+		r_denb += ym[i] * ym[i]
+	r2 = (r_num * r_num) / (r_dena * r_denb)
+	return(r2)
+
+
 def r2_dosage_ancestry(true_dosage, pred_dosage, n_anc):
 	"""Get ancestry- and individual-specific R2 values for LA vs truth."""
-
 	per_anc = []
+	m = int(true_dosage.shape[0] * true_dosage.shape[1] / n_anc)
+	xm = np.zeros(m, dtype=np.float32)
+	ym = np.zeros(m, dtype=np.float32)
 	for i in range(n_anc):
 		per_anc.append(
-			pearsonr(
+			pearsonr2_numba(
 				true_dosage[:, i::n_anc].reshape(-1),
-				pred_dosage[:, i::n_anc].reshape(-1)
-			)[0]**2
+				pred_dosage[:, i::n_anc].reshape(-1),
+				xm,
+				ym
+			)
 		)
 	return(per_anc)
 

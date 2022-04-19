@@ -21,6 +21,7 @@ dependencies:
   - pip
   - xarray
   - scikit-allel
+  - numba
   - pip:
     - pyreadr
   - r-base
