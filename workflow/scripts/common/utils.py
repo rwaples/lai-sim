@@ -710,8 +710,6 @@ def max_la(vals, n_anc):
 		vals[:, idxs[i - 1]:idxs[i]] = c
 	return(vals)
 
-    return np.argmax(x, axis=axis).reshape(output_shape)
-
 
 def plot_ancestry_dosage(
 	pred_dosage,
