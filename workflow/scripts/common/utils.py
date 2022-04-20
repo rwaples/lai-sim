@@ -564,7 +564,7 @@ def pearsonr2_numba(x, y, xm, ym):
 
 
 def r2_dosage_ancestry(true_dosage, pred_dosage, n_anc):
-	"""Get ancestry- and individual-specific R2 values for LA vs truth."""
+	"""Get ancestry-specific R2 values for LA vs truth."""
 	per_anc = []
 	m = int(true_dosage.shape[0] * true_dosage.shape[1] / n_anc)
 	xm = np.zeros(m, dtype=np.float32)
@@ -582,15 +582,19 @@ def r2_dosage_ancestry(true_dosage, pred_dosage, n_anc):
 
 
 def r2_dosage_individual(true_dosage, pred_dosage, n_anc):
-	"""Get ancestry- and individual-specific R2 values for LA vs truth."""
-
+	"""Get individual-specific R2 values for LA vs truth."""
 	per_ind = []
+	m = int(true_dosage.shape[0] * n_anc * 2)
+	xm = np.zeros(m, dtype=np.float32)
+	ym = np.zeros(m, dtype=np.float32)
 	for i in range(int(true_dosage.shape[1] / n_anc)):
 		per_ind.append(
-			pearsonr(
+			pearsonr2_numba(
 				true_dosage[:, i * n_anc:i * n_anc + n_anc].reshape(-1),
-				pred_dosage[:, i * n_anc:i * n_anc + n_anc].reshape(-1)
-			)[0]**2
+				pred_dosage[:, i * n_anc:i * n_anc + n_anc].reshape(-1),
+				xm,
+				ym
+			)
 		)
 	return(per_ind)
 
@@ -680,7 +684,8 @@ def get_Q(arr, n_anc):
 def get_RMSD_Q(Q1, Q2):
 	"""Return the RMSD between two sets of ancestry proportions (Q).
 
-	RMSD = root mean squared deviation."""
+	RMSD = root mean squared deviation.
+	"""
 	assert(Q1.shape == Q2.shape)
 	D = Q1 - Q2
 	SD = D * D
