@@ -521,15 +521,15 @@ def get_true_anc_dosage(true_la, n_anc):
 	numba.float64(
 		numba.float32[:],
 		numba.float32[:],
-		numba.float32[:],
-		numba.float32[:]
 	),
 	nopython=True
 )
 def pearsonr2_numba(x, y):
 	"""Return the *squared* pearson correlation coef.
 
-	x and y are not modified
+	x and y are not modified.
+
+	Input arrays should be np.float32, output is a single float64 value.
 	"""
 	assert len(x) == len(y)
 	# return Nan if either x or y is constant
@@ -546,14 +546,11 @@ def pearsonr2_numba(x, y):
 	xmean = xmean / n
 	ymean = ymean / n
 
-	# difference from the mean
-	# xm.fill(0)
-	# ym.fill(0)
 	r_num = numba.float64(0.0)
 	r_dena = numba.float64(0.0)
 	r_denb = numba.float64(0.0)
 	for i in range(n):
-		xd = x[i] - xmean
+		xd = x[i] - xmean  # difference from the mean
 		yd = y[i] - ymean
 		r_num += xd * yd
 		r_dena += xd * xd
