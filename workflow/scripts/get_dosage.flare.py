@@ -1,16 +1,21 @@
 """Load output from flare and save diploid ancestry dosages as compressed numpy array."""
 import numpy as np
+#import snakemake
 from common.utils import get_ancestry_dosage, load_flare
-flare_path = str(snakemake.input.flare_la)
+flare_csv = str(snakemake.input.flare_csv)
+flare_sites = str(snakemake.input.flare_sites)
+
 n_anc = int(snakemake.params.nsource)
 sites_file = str(snakemake.params.sites_file)
-out_path = str(snakemake.output)
 BCFTOOLS = str(snakemake.params.BCFTOOLS)
+
+out_path = str(snakemake.output)
 
 flare_anc_dosage = get_ancestry_dosage(
 	load_flare(
-		flare_path,
+		flare_csv,
 		sites_file=sites_file,
+		flare_sites=flare_sites,
 		BCFTOOLS=BCFTOOLS
 	),
 	n_anc=n_anc

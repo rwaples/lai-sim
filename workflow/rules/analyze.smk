@@ -1,4 +1,3 @@
-"""Run phasing and LA analyses."""
 rule export_mosaic:
 	input:
 		la_results = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/localanc_admixed.RData',
@@ -205,7 +204,7 @@ rule run_RFMix2:
 		"{params.rfmix2} -f {input.target_vcf} -r {input.reference_vcf} "
 		"-m {input.sample_map} -g {input.genetic_map} -o {params.output} "
 		# "--reanalyze-reference "
-		"-e 5 "
+		# "-e 5 "
 		"--n-threads={params.nthreads} --chromosome={params.chr} "
 		"--random-seed={params.seed} 2>&1 | tee {log} "
 
@@ -254,9 +253,27 @@ rule get_dosage_true:
 		'../scripts/get_dosage.true.py'
 
 
-rule get_dosage_flare:
+rule convert_flare_vcf:
 	input:
 		flare_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.vcf.gz',
+	output:
+		flare_csv = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.csv',
+		flare_sites = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.flare_sites',
+	params:
+		BCFTOOLS = config['PATHS']['BCFTOOLS'],
+		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
+	shell:
+		"""
+		{params.BCFTOOLS} query -f '%CHROM, %POS, [%ANP1, %ANP2,]\\n' {input.flare_la} > {output.flare_csv}
+
+		{params.BCFTOOLS} query -f '%POS\n' {input.flare_la}>  {output.flare_sites}
+		"""
+
+rule get_dosage_flare:
+	input:
+		# flare_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.vcf.gz',
+		flare_csv = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.csv',
+		flare_sites = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.flare_sites',
 	output:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.flare.npz',
 	params:

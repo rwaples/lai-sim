@@ -1,0 +1,85 @@
+anal_name	asc_name	nind_admixed	nind_ref	MAC_filter	max_snps	anal_seed	gt_err	target_pop	nthreads
+p2_seq1	twopop_rep1_seq	400	100,100	1	1000000	41	0.0002	2	20
+p2_arr1	twopop_rep1_arr	400	100,100	1	20000	42	0.0002	2	20
+p2_seq2	twopop_rep2_seq	400	100,100	1	1000000	43	0.0002	2	20
+p2_arr2	twopop_rep2_arr	400	100,100	1	20000	44	0.0002	2	20
+p2_seq3	twopop_rep3_seq	400	100,100	1	1000000	45	0.0002	2	20
+p2_arr3	twopop_rep3_arr	400	100,100	1	20000	46	0.0002	2	20
+p2_seq4	twopop_rep4_seq	400	100,100	1	1000000	47	0.0002	2	20
+p2_arr4	twopop_rep4_arr	400	100,100	1	20000	48	0.0002	2	20
+									
+p3_LARGE_seq1	threepop_LARGE_rep1_seq	400	400,400,400	1	1000000	61	0.0002	3	20
+p3_LARGE_arr1	threepop_LARGE_rep1_arr	400	400,400,400	1	20000	62	0.0002	3	20
+p3_LARGE_seq2	threepop_LARGE_rep2_seq	400	400,400,400	1	1000000	63	0.0002	3	20
+p3_LARGE_arr2	threepop_LARGE_rep2_arr	400	400,400,400	1	20000	64	0.0002	3	20
+p3_LARGE_seq3	threepop_LARGE_rep3_seq	400	400,400,400	1	1000000	65	0.0002	3	20
+p3_LARGE_arr3	threepop_LARGE_rep3_arr	400	400,400,400	1	20000	66	0.0002	3	20
+p3_LARGE_seq4	threepop_LARGE_rep4_seq	400	400,400,400	1	1000000	67	0.0002	3	20
+p3_LARGE_arr4	threepop_LARGE_rep4_arr	400	400,400,400	1	20000	68	0.0002	3	20
+									
+p4_seq1	fourpop_rep1_seq	400	400,400,400,400	1	1000000	71	0.0002	4	20
+p4_arr1	fourpop_rep1_arr	400	400,400,400,400	1	20000	72	0.0002	4	20
+p4_seq2	fourpop_rep2_seq	400	400,400,400,400	1	1000000	73	0.0002	4	20
+p4_arr2	fourpop_rep2_arr	400	400,400,400,400	1	20000	74	0.0002	4	20
+p4_seq3	fourpop_rep3_seq	400	400,400,400,400	1	1000000	75	0.0002	4	20
+p4_arr3	fourpop_rep3_arr	400	400,400,400,400	1	20000	76	0.0002	4	20
+p4_seq4	fourpop_rep4_seq	400	400,400,400,400	1	1000000	77	0.0002	4	20
+p4_arr4	fourpop_rep4_arr	400	400,400,400,400	1	20000	78	0.0002	4	20
+									
+# uneven ref sizes									
+p2_seqU1_20	twopop_rep1_seq	400	20,100	1	1000000	221	0.0002	2	20
+p2_arrU1_20	twopop_rep1_arr	400	20,100	1	20000	222	0.0002	2	20
+p2_seqU2_20	twopop_rep2_seq	400	100,20	1	1000000	223	0.0002	2	20
+p2_arrU2_20	twopop_rep2_arr	400	100,20	1	20000	224	0.0002	2	20
+p2_seqU1_50	twopop_rep1_seq	400	50,100	1	1000000	225	0.0002	2	20
+p2_arrU1_50	twopop_rep1_arr	400	50,100	1	20000	226	0.0002	2	20
+p2_seqU2_50	twopop_rep2_seq	400	100,50	1	1000000	227	0.0002	2	20
+p2_arrU2_50	twopop_rep2_arr	400	100,50	1	20000	228	0.0002	2	20
+									
+p3_seqU1_20	threepop_LARGE_rep1_seq	400	20,400,400	1	1000000	231	0.0002	3	20
+p3_arrU1_20	threepop_LARGE_rep1_arr	400	20,400,400	1	20000	232	0.0002	3	20
+p3_seqU2_20	threepop_LARGE_rep2_seq	400	400,20,400	1	1000000	233	0.0002	3	20
+p3_arrU2_20	threepop_LARGE_rep2_arr	400	400,20,400	1	20000	234	0.0002	3	20
+p3_seqU3_20	threepop_LARGE_rep3_seq	400	400,400,20	1	1000000	235	0.0002	3	20
+p3_arrU3_20	threepop_LARGE_rep3_arr	400	400,400,20	1	20000	236	0.0002	3	20
+									
+p3_seqU1_50	threepop_LARGE_rep1_seq	400	50,400,400	1	1000000	251	0.0002	3	20
+p3_arrU1_50	threepop_LARGE_rep1_arr	400	50,400,400	1	20000	252	0.0002	3	20
+p3_seqU2_50	threepop_LARGE_rep2_seq	400	400,50,400	1	1000000	253	0.0002	3	20
+p3_arrU2_50	threepop_LARGE_rep2_arr	400	400,50,400	1	20000	254	0.0002	3	20
+p3_seqU3_50	threepop_LARGE_rep3_seq	400	400,400,50	1	1000000	255	0.0002	3	20
+p3_arrU3_50	threepop_LARGE_rep3_arr	400	400,400,50	1	20000	256	0.0002	3	20
+									
+p4_seqU1_20	fourpop_rep1_seq	400	20,400,400,400	1	1000000	241	0.0002	4	20
+p4_arrU1_20	fourpop_rep1_arr	400	20,400,400,400	1	20000	242	0.0002	4	20
+p4_seqU2_20	fourpop_rep2_seq	400	400,20,400,400	1	1000000	243	0.0002	4	20
+p4_arrU2_20	fourpop_rep2_arr	400	400,20,400,400	1	20000	244	0.0002	4	20
+p4_seqU3_20	fourpop_rep1_seq	400	400,400,20,400	1	1000000	245	0.0002	4	20
+p4_arrU3_20	fourpop_rep1_arr	400	400,400,20,400	1	20000	246	0.0002	4	20
+p4_seqU4_20	fourpop_rep2_seq	400	400,400,400,20	1	1000000	247	0.0002	4	20
+p4_arrU4_20	fourpop_rep2_arr	400	400,400,400,20	1	20000	248	0.0002	4	20
+									
+p4_seqU1_50	fourpop_rep1_seq	400	20,400,400,400	1	1000000	281	0.0002	4	20
+									
+p4_arrU1_50	fourpop_rep1_arr	400	20,400,400,400	1	20000	282	0.0002	4	20
+p4_seqU2_50	fourpop_rep2_seq	400	400,20,400,400	1	1000000	283	0.0002	4	20
+p4_arrU2_50	fourpop_rep2_arr	400	400,20,400,400	1	20000	284	0.0002	4	20
+p4_seqU3_50	fourpop_rep1_seq	400	400,400,20,400	1	1000000	285	0.0002	4	20
+p4_arrU3_50	fourpop_rep1_arr	400	400,400,20,400	1	20000	286	0.0002	4	20
+p4_seqU4_50	fourpop_rep2_seq	400	400,400,400,20	1	1000000	287	0.0002	4	20
+p4_arrU4_50	fourpop_rep2_arr	400	400,400,400,20	1	20000	288	0.0002	4	20
+									
+# larger ref sizes for flare									
+BIGp3_LARGE_seq1	threepop_LARGE_rep1_seq	400	2000,2000,2000	1	1000000	961	0.0002	3	20
+BIGp3_LARGE_arr1	threepop_LARGE_rep1_arr	400	2000,2000,2000	1	20000	962	0.0002	3	20
+BIGp3_LARGE_seq2	threepop_LARGE_rep2_seq	400	10000,10000,10000	1	1000000	961	0.0002	3	20
+BIGp3_LARGE_arr2	threepop_LARGE_rep2_arr	400	10000,10000,10000	1	20000	962	0.0002	3	20
+BIGp3_LARGE_seq1c	threepop_LARGE_rep1_seq	400	50000,50000,50000	1	600000	961	0.0002	3	20
+BIGp3_LARGE_arr1c	threepop_LARGE_rep1_arr	400	50000,50000,50000	1	20000	962	0.0002	3	20
+									
+BIGp3_LARGE_seq3	threepop_LARGE_rep3_seq	2000	10000,10000,10000	1	1000000	1961	0.0002	3	20
+BIGp3_LARGE_arr3	threepop_LARGE_rep3_arr	2000	10000,10000,10000	1	20000	1962	0.0002	3	20
+									
+# the biggest one									
+BIGp3_LARGE_seq1dd	threepop_GIGA_rep1_seq	10000	50000,50000,50000	1	600000	6001	0.0002	3	20
+BIGp3_LARGE_arr1dd	threepop_GIGA_rep1_arr	10000	50000,50000,50000	1	20000	6002	0.0002	3	20

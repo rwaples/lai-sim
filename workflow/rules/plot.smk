@@ -3,9 +3,9 @@ rule ancestry_dosage_plots:
 		flare = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.{i}.flare.pdf"
 										for u in units.itertuples() for i in range(3)],
 		rfmix2 = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.{i}.rfmix2.pdf"
-												for u in units.itertuples() for i in range(3)],
+										for u in units.itertuples() for i in range(3)],
 		mosaic = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.{i}.mosaic.pdf"
-												for u in units.itertuples() for i in range(3)]
+										for u in units.itertuples() for i in range(3)]
 
 
 rule plot_ancestry_dosage:

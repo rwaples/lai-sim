@@ -11,6 +11,5 @@ true_anc_dosage = get_true_anc_dosage(
 )
 
 np.savez_compressed(out_path, true_anc_dosage)
-
 # can be loaded with:
 # np.load(out_path)['arr_0']

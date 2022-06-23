@@ -105,8 +105,8 @@ rule get_Q_score:
 		Q_true = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/Q.true.tsv',
 	log:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/SUMMARY/get_Q_score.{method}.log',
-	conda:
-		'./env'
+	# conda:
+	# 	'./env'
 	script:
 		"../scripts/get_Q_score.py"
 
@@ -116,7 +116,8 @@ rule write_qq_reports:
 		true_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/true_local_ancestry.site_matrix.npz',
 		mosaic_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/la_probs.npz',
 		rfmix2_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.fb.tsv.gz',
-		flare_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.vcf.gz',
+		flare_csv = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.csv',
+		flare_sites = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.flare_sites',
 		sites_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
 	output:
 		flare_report = report('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/qq_flare.txt'),

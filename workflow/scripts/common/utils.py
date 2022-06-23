@@ -8,7 +8,6 @@ import os
 import multiprocessing
 import matplotlib.pyplot as plt
 import seaborn as sns
-from scipy.stats import pearsonr
 import numba
 
 
@@ -100,7 +99,7 @@ def downsample_snps(ts, nsnps, seed, fail=False):
 			return(ts)
 	else:
 		rng = np.random.default_rng(seed)
-		keep = frozenset(np.random.choice(a=ts.num_sites, size=nsnps, replace=False))
+		keep = frozenset(rng.choice(a=ts.num_sites, size=nsnps, replace=False))
 		sites_to_remove = list(frozenset(np.arange(ts.num_sites, dtype=np.int32)) - keep)
 		ts = ts.delete_sites(sites_to_remove)
 		final_sites = ts.num_sites
@@ -150,7 +149,7 @@ def get_local_ancestry(ts, admixture_time, per_batch):
 	# sampling population
 	local_ancestry_df['samplepop'] = [pop_of_node[x] for x in local_ancestry_df['child']]
 	local_ancestry_df = local_ancestry_df.sort_values(['samplepop', 'child', 'left']).reset_index(drop=True)
-	return local_ancestry_df
+	return(local_ancestry_df)
 
 
 def get_local_ancestry_pop(ts, pop, admixture_time, max_samples=100, per_rep=12):
@@ -194,7 +193,7 @@ def get_local_ancestry_pop(ts, pop, admixture_time, max_samples=100, per_rep=12)
 	# record the population of the sample (samplepop)
 	local_ancestry_df['samplepop'] = [pop_of_node[x] for x in local_ancestry_df['child']]
 	local_ancestry_df = local_ancestry_df.sort_values(['samplepop', 'child', 'left']).reset_index(drop=True)
-	return local_ancestry_df
+	return(local_ancestry_df)
 
 
 def get_la_mat(ts, df, mapping=None):
@@ -512,8 +511,8 @@ def get_true_anc_dosage(true_la, n_anc):
 	hap2 = np.zeros((true_la.shape[0], int(true_la.shape[1] / 2 * n_anc)), dtype='int8')
 	aa = np.arange(true_la[:, ::2].shape[1]) * n_anc + true_la[:, ::2]
 	bb = np.arange(true_la[:, 1::2].shape[1]) * n_anc + true_la[:, 1::2]
-	np.put_along_axis(hap1, aa, 1, axis=1)
-	np.put_along_axis(hap2, bb, 1, axis=1)
+	np.put_along_axis(hap1, aa.astype('int'), 1, axis=1)
+	np.put_along_axis(hap2, bb.astype('int'), 1, axis=1)
 	return(hap1 + hap2)
 
 
@@ -595,15 +594,10 @@ def load_rfmix_fb(path):
 	return(rfmix_res)
 
 
-def load_flare(path, sites_file, BCFTOOLS):
-	"""Load and return an array of the posterior local ancestry probabilities from flare."""
-	# convert the vcf.gz to a csv
-	csv_path = path.replace('.vcf.gz', '.csv')
-	flare_sites = path.replace('.vcf.gz', '.flare_sites')
-	os.system(f"{BCFTOOLS} query -f '%CHROM, %POS, [%ANP1, %ANP2,]\\n' {path} > {csv_path}")
-	os.system(f"{BCFTOOLS} query -f '%POS\n' {path} > {flare_sites}")
+def load_flare(path, sites_file, flare_sites, BCFTOOLS):
+	"""Load an array of the posterior local ancestry probabilities from flare."""
 
-	flare = pd.read_csv(csv_path, header=None)
+	flare = pd.read_csv(path, header=None)
 	flare = flare.dropna(axis=1)
 	res = flare.iloc[:, 2:].values
 	res = np.concatenate([res[:1], res])
@@ -694,8 +688,7 @@ def max_la(vals, n_anc):
 		b = vals[:, idxs[i - 1]:idxs[i]]
 		dims = list(b.shape)
 		dims[1] = 1
-		# a = b.argmax(1, keepdims=True)  # breaks ties by assigning the lower pop
-		a = b.argmax(1).reshape(dims)
+		a = b.argmax(1).reshape(dims)  # breaks ties by assigning the lower pop
 		c = np.zeros_like(b)
 		np.put_along_axis(c, a, 1, axis=1)
 		vals[:, idxs[i - 1]:idxs[i]] = c
