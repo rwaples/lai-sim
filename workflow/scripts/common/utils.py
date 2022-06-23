@@ -595,23 +595,23 @@ def load_rfmix_fb(path):
 	return(rfmix_res)
 
 
-def load_bmix(path, sites_file, BCFTOOLS):
-	"""Load and return an array of the posterior local ancestry probabilities from bmix."""
+def load_flare(path, sites_file, BCFTOOLS):
+	"""Load and return an array of the posterior local ancestry probabilities from flare."""
 	# convert the vcf.gz to a csv
 	csv_path = path.replace('.vcf.gz', '.csv')
-	bmix_sites = path.replace('.vcf.gz', '.bmix_sites')
+	flare_sites = path.replace('.vcf.gz', '.flare_sites')
 	os.system(f"{BCFTOOLS} query -f '%CHROM, %POS, [%ANP1, %ANP2,]\\n' {path} > {csv_path}")
-	os.system(f"{BCFTOOLS} query -f '%POS\n' {path} > {bmix_sites}")
+	os.system(f"{BCFTOOLS} query -f '%POS\n' {path} > {flare_sites}")
 
-	bmix = pd.read_csv(csv_path, header=None)
-	bmix = bmix.dropna(axis=1)
-	res = bmix.iloc[:, 2:].values
+	flare = pd.read_csv(csv_path, header=None)
+	flare = flare.dropna(axis=1)
+	res = flare.iloc[:, 2:].values
 	res = np.concatenate([res[:1], res])
 	res = res.astype(np.half)
 
-	# account for any sites filtered by bmix (e.g. due to MAF)
+	# account for any sites filtered by flare (e.g. due to MAF)
 	pre_sites = pd.read_csv(sites_file, header=None).values.flatten()
-	post_sites = pd.read_csv(bmix_sites, header=None).values.flatten()
+	post_sites = pd.read_csv(flare_sites, header=None).values.flatten()
 	post_indexes = np.searchsorted(post_sites, pre_sites)
 	del pre_sites, post_sites
 	res = res[post_indexes]

@@ -79,7 +79,7 @@ p4_seqU4_50	fourpop_rep2_seq	200	400,400,400,20	1	1000000	287	0.0002	4	12
 p4_arrU4_50	fourpop_rep2_arr	200	400,400,400,20	1	20000	288	0.0002	4	12
 
 
-# larger ref sizes for bmix
+# larger ref sizes for flare
 BIGp3_LARGE_seq1	threepop_LARGE_rep1_seq	200	2000,2000,2000	1	1000000	961	0.0002	3	12
 BIGp3_LARGE_arr1	threepop_LARGE_rep1_arr	200	2000,2000,2000	1	20000	962	0.0002	3	12
 BIGp3_LARGE_seq2	threepop_LARGE_rep2_seq	200	10000,10000,10000	1	1000000	961	0.0002	3	12

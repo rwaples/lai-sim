@@ -94,26 +94,26 @@ rule make_mosaic_input:
 		'../scripts/make_mosaic_inputs.py'
 
 
-rule run_bmix:
+rule run_flare:
 	input:
 		target_vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.target_inds.vcf.gz',
 		reference_vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.reference_inds.vcf.gz',
 		sample_map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/sample_map.txt',
 		genetic_map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/plink_map.txt',
 	output:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/bmix/bmix.anc.vcf.gz',
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.vcf.gz',
 	params:
-		BMIX = config['PATHS']['BMIX'],
+		FLARE = config['PATHS']['FLARE'],
 		bcftools = config['PATHS']['BCFTOOLS'],
-		prefix = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/bmix/bmix',
+		prefix = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare',
 		nthreads = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nthreads,
 		seed = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].anal_seed,
 	log:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/bmix/run_bmix.log',
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/run_flare.log',
 	benchmark:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_bmix.tsv',
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_flare.tsv',
 	shell:
-		"java -Xmx240g -jar {params.BMIX} "
+		"java -Xmx240g -jar {params.FLARE} "
 		"ref={input.reference_vcf} "
 		"ref-panel={input.sample_map} "
 		"gt={input.target_vcf} "
@@ -254,17 +254,17 @@ rule get_dosage_true:
 		'../scripts/get_dosage.true.py'
 
 
-rule get_dosage_bmix:
+rule get_dosage_flare:
 	input:
-		bmix_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/bmix/bmix.anc.vcf.gz',
+		flare_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.vcf.gz',
 	output:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.bmix.npz',
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.flare.npz',
 	params:
 		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
 		sites_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
 		BCFTOOLS = config['PATHS']['BCFTOOLS'],
 	script:
-		'../scripts/get_dosage.bmix.py'
+		'../scripts/get_dosage.flare.py'
 
 
 rule get_dosage_mosaic:

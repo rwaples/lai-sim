@@ -10,7 +10,7 @@ PATHS:
     RFMix: programs/RFmix/RFMix_v1.5.4/RunRFMix.py
     RFMix2: programs/RFmix2/rfmix/rfmix
     MOSAIC: programs/MOSAIC/mosaic/mosaic.R
-    BMIX: programs/bmix/bmix.v60.jar
+    FLARE: programs/flare/flare.v13.jar
     ADD_ERR: programs/add_err/add-err.jar
 
 diagnostic_plots: True

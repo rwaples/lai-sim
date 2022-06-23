@@ -35,21 +35,8 @@ rule all:
 			for u in units.itertuples()
 		],
 
-		# R2_anc = [
-		# 	f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.ancestry.tsv"
-		# 	for u in units.itertuples()
-		# ],
-		# R2_ind = [
-		# 	f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.individuals.tsv"
-		# 	for u in units.itertuples()
-		# ],
-		# Q_RMSD = [
-		# 	f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/Q_RMSD.tsv"
-		# 	for u in units.itertuples()
-		# ],
-
 		temp1 = [
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.bmix.ancestry.tsv"
+			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.flare.ancestry.tsv"
 			for u in units.itertuples()
 		],
 
@@ -64,7 +51,7 @@ rule all:
 		],
 
 		temp4 = [
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/RMSD.bmix.tsv"
+			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/RMSD.flare.tsv"
 			for u in units.itertuples()
 		],
 
@@ -100,7 +87,7 @@ rule reports:
 	input:
 		R2 = "results/reports/R2_report.txt",
 		Q = "results/reports/Q_report.txt",
-		QQ_bmix = "results/reports/QQ.bmix.txt",
+		QQ_flare = "results/reports/QQ.flare.txt",
 		QQ_rfmix = "results/reports/QQ.rfmix.txt",
 		QQ_mosaic = "results/reports/QQ.mosaic.txt",
 
@@ -119,13 +106,13 @@ rule just_ascertain:
 		],
 
 
-rule just_bmix:
+rule just_flare:
 	input:
-		bmix = [
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.bmix.ancestry.tsv"
+		flare = [
+			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.flare.ancestry.tsv"
 			for u in units.itertuples()
 		],
-		# QQ_bmix = "results/reports/QQ.bmix.txt",
+		# QQ_flare = "results/reports/QQ.flare.txt",
 
 
 rule diagnostic_plots:
@@ -143,6 +130,6 @@ rule diagnostic_plots:
 			for u in units.itertuples()
 		],
 		ancestry_dosage = [
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.0.bmix.pdf"
+			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.0.flare.pdf"
 			for u in units.itertuples()
 		]

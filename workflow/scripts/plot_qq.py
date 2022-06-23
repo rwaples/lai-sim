@@ -4,23 +4,23 @@ import seaborn as sns
 import numpy as np
 
 # input
-bmix_report = str(snakemake.input.bmix_report)
+flare_report = str(snakemake.input.flare_report)
 mosaic_report = str(snakemake.input.mosaic_report)
 rfmix_report = str(snakemake.input.rfmix_report)
 # output
 plot_path = str(snakemake.output.plot_path)
 
 
-bmix_qq = pd.read_csv(bmix_report, sep='\t')
+flare_qq = pd.read_csv(flare_report, sep='\t')
 rfmix_qq = pd.read_csv(rfmix_report, sep='\t')
 mosaic_qq = pd.read_csv(mosaic_report, sep='\t')
 
 
-def plot_qq_reports(bmix, rfmix, mosaic, plot_path, reflines=True):
+def plot_qq_reports(flare, rfmix, mosaic, plot_path, reflines=True):
 	with sns.plotting_context('notebook', font_scale=1.3):
 		fig, ax = plt.subplots(nrows=2, ncols=3, figsize=(12, 6), sharex=True, sharey='row')
-		names = ['bmix', 'rfmix', 'mosaic']
-		for i, report in enumerate([bmix, rfmix, mosaic]):
+		names = ['flare', 'rfmix', 'mosaic']
+		for i, report in enumerate([flare, rfmix, mosaic]):
 			name = names[i]
 			if reflines:
 				point1 = [0, 0]
@@ -62,4 +62,4 @@ def plot_qq_reports(bmix, rfmix, mosaic, plot_path, reflines=True):
 	plt.savefig(plot_path, dpi=300)
 
 
-plot_qq_reports(bmix_qq, rfmix_qq, mosaic_qq, plot_path)
+plot_qq_reports(flare_qq, rfmix_qq, mosaic_qq, plot_path)

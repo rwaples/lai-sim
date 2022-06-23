@@ -19,9 +19,9 @@ cd ../..
 
 
 # bmix
-mkdir ./programs/bmix
-cd ./programs/bmix
-wget https://faculty.washington.edu/browning/bmix.jar
+mkdir ./programs/flare
+cd ./programs/flare
+wget https://faculty.washington.edu/browning/bmix.jar  # TODO: needs to be updated
 wget ../..
 
 

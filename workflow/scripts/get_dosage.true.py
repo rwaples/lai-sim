@@ -1,4 +1,4 @@
-"""Load output from bmix and save diploid ancestry dosages as compressed numpy array."""
+"""Load output from flare and save diploid ancestry dosages as compressed numpy array."""
 import numpy as np
 from common.utils import get_true_anc_dosage, load_true_la
 true_path = str(snakemake.input.true_la)

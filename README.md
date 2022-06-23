@@ -5,7 +5,7 @@ A Snakemake workflow for simulating admixture and evaluating local ancestry infe
 * SLiM [link](https://messerlab.org/slim/)
 * msprime [(link)](https://tskit.dev/msprime/docs/stable/intro.html)
 * RFMix version 2 [(link)](https://github.com/slowkoni/rfmix)
-* bmix [(link)](https://github.com/browning-lab/bmix)
+* flare [(link)](TODO - update)
 * MOSAIC [(link)](https://maths.ucd.ie/~mst/MOSAIC/)
 * BCFTOOLS [(link)](http://samtools.github.io/bcftools/howtos/index.html)
 * BEAGLE [(link)](http://faculty.washington.edu/browning/beagle/beagle.html)
