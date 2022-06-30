@@ -112,7 +112,7 @@ rule run_flare:
 	benchmark:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_flare.tsv',
 	shell:
-		"java -Xmx240g -jar {params.FLARE} "
+		"java -Xmx250g -jar {params.FLARE} "
 		"ref={input.reference_vcf} "
 		"ref-panel={input.sample_map} "
 		"gt={input.target_vcf} "
