@@ -166,7 +166,7 @@ rule make_rfmix_input:
 		nind_ref = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nind_ref,
 		nind_admixed = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nind_admixed,
 	log:
-		positions_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/logs/make_rfmix_input.log',
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/logs/make_rfmix_input.log',
 	script:
 		'../scripts/make_rfmix_input.py'
 
@@ -204,7 +204,7 @@ rule run_RFMix2:
 		"{params.rfmix2} -f {input.target_vcf} -r {input.reference_vcf} "
 		"-m {input.sample_map} -g {input.genetic_map} -o {params.output} "
 		# "--reanalyze-reference "
-		# "-e 5 "
+		"-e 5 "
 		"--n-threads={params.nthreads} --chromosome={params.chr} "
 		"--random-seed={params.seed} 2>&1 | tee {log} "
 
