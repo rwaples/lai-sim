@@ -189,7 +189,7 @@ rule run_RFMix2:
 		nthreads = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nthreads,
 		chr = lambda w: simulations.loc[w.sim_name].chr,
 		seed = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].anal_seed,
-		# output files that will be zipped
+		# output files that will be gzipped
 		fb = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.fb.tsv',
 		Q = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.rfmix.Q',
 		msp = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.msp.tsv',
