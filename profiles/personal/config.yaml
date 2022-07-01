@@ -1,6 +1,6 @@
-simulations: config/refsize.simulations.tsv
-ascertainments: config/refsize.ascertainments.tsv
-analyses: config/refsize.analyses.tsv
+simulations: config/personal.simulations.tsv
+ascertainments: config/personal.ascertainments.tsv
+analyses: config/personal.analyses.tsv
 
 # put full paths in here, dont use '~' for your home directory (not sure why)
 PATHS:

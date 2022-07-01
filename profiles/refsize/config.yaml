@@ -1,6 +1,6 @@
-simulations: config/paper.simulations.tsv
-ascertainments: config/paper.ascertainments.tsv
-analyses: config/paper.analyses.tsv
+simulations: config/refsize.simulations.tsv
+ascertainments: config/refsize.ascertainments.tsv
+analyses: config/refsize.analyses.tsv
 
 cpus: 20
 email: "ryan.waples@gmail.com"
