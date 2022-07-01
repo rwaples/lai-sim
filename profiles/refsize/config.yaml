@@ -1,11 +1,16 @@
-simulations: config/refsize.simulations.tsv
-ascertainments: config/refsize.ascertainments.tsv
-analyses: config/refsize.analyses.tsv
+simulations: config/paper.simulations.tsv
+ascertainments: config/paper.ascertainments.tsv
+analyses: config/paper.analyses.tsv
 
-# put full paths in here, dont use '~' for your home directory (not sure why)
+cpus: 20
+email: "ryan.waples@gmail.com"
+email_type: "FAIL"
+
+# put full paths in here
+# dont use '~' for your home directory (not really sure why)
 PATHS:
     SLiM: programs/SLiM/slim
-    BCFTOOLS: programs/bcftools/bcftools-1.14/bcftools
+    BCFTOOLS: /home/users/waplesr/lai/lai-sim/programs/bcftools-1.14/bcftools
     BEAGLE: programs/BEAGLE/beagle.28Jun21.220.jar
     RFMix: programs/RFmix/RFMix_v1.5.4/RunRFMix.py
     RFMix2: programs/RFmix2/rfmix/rfmix
