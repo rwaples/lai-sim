@@ -84,6 +84,7 @@ rule make_mosaic_input:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/pop_1genofile.22',
 	params:
 		folder = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input',
+		# now hardcoded to be 22
 		# chrom_id = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].chr,
 		nind_ref = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nind_ref,
 		target_pop = lambda w: units.loc[(w.sim_name, w.asc_name)].target_pop[0],
@@ -271,7 +272,6 @@ rule convert_flare_vcf:
 
 rule get_dosage_flare:
 	input:
-		# flare_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.vcf.gz',
 		flare_csv = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.csv',
 		flare_sites = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.flare_sites',
 	output:
