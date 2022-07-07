@@ -13,9 +13,13 @@ A Snakemake workflow for simulating admixture and evaluating local ancestry infe
 * Snakemake [(link)](https://snakemake.readthedocs.io/en/stable/)
 * conda [(link)](https://docs.conda.io/en/latest/)
 
-### create and activate the conda environment
+### create and activate a conda environment
+
+#### Snakemake suggest mamba (and it is much faster, but it breaks msprime on my machine)
+#### So I am using conda below
 #### uses mamba, rather than conda, as suggested by Snakemake
 `mamba env create -f environment.yml --prefix ./env`
+`conda env create -f environment.yml --prefix ./env`
 #### activate conda environment (from base directory)
 `conda activate ./env`
 
