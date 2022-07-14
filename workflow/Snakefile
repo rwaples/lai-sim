@@ -81,6 +81,7 @@ rule do_runtime_report:
 	input:
 		'results/reports/runtime_report.txt',
 
+
 rule reports:
 	input:
 		R2 = "results/reports/R2_report.txt",
