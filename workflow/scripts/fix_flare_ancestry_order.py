@@ -17,6 +17,6 @@ n_anc = len(order)
 n_ind = int(dosage.shape[1] / n_anc)
 target_order = sorted(order)  # the order I want
 reorder = np.array([target_order.index(x) for x in order])
-
+reindex = np.concatenate([reorder + x * n_anc for x in range(n_ind)])
 dosage = dosage[:, reindex]
 np.savez_compressed(out_path, dosage)
