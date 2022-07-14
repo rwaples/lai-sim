@@ -267,15 +267,39 @@ rule convert_flare_vcf:
 		"""
 		{params.BCFTOOLS} query -f '%CHROM, %POS, [%ANP1, %ANP2,]\\n' {input.flare_la} > {output.flare_csv}
 
-		{params.BCFTOOLS} query -f '%POS\n' {input.flare_la}>  {output.flare_sites}
+		{params.BCFTOOLS} query -f '%POS\n' {input.flare_la} > {output.flare_sites}
 		"""
+
+rule fix_flare_ancestry_order:
+	input:
+		dosage = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.TEMP.flare.npz',
+		order_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/ancestry_order.txt',
+		vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.vcf.gz',
+	output:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.flare.npz',
+	params:
+		BCFTOOLS = config['PATHS']['BCFTOOLS'],
+	script:
+		'../scripts/fix_flare_ancestry_order.py'
+
+
+rule get_ancestry_order_flare:
+	input:
+		vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.vcf.gz',
+	output:
+		order_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/ancestry_order.txt',
+	params:
+		BCFTOOLS = config['PATHS']['BCFTOOLS'],
+	shell:
+		"{params.BCFTOOLS} view --header {input.vcf} | grep ANCESTRY > {output.order_file} "
+
 
 rule get_dosage_flare:
 	input:
 		flare_csv = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.csv',
 		flare_sites = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.flare_sites',
 	output:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.flare.npz',
+		temp('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.TEMP.flare.npz',)
 	params:
 		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
 		sites_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
