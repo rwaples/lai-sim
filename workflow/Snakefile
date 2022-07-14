@@ -87,7 +87,6 @@ rule reports:
 		Q = "results/reports/Q_report.txt",
 		runtime = 'results/reports/runtime_report.txt',
 		sites = 'results/reports/sites_report.txt',
-		QQ_mosaic = "results/reports/QQ.mosaic.txt",
 
 
 rule just_sim:
