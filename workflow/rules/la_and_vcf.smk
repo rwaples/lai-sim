@@ -5,7 +5,7 @@ rule write_vcfs:
 		site_ts = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/sample.filter.tsz',
 	output:
 		phased_ancestry_vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/la_true.vcf.gz',
-		phased_genotype_vcf = temp('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/genotypes.vcf.gz'),
+		phased_genotype_vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/genotypes.vcf.gz',
 		genetic_map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/genetic_map.txt',
 		plink_map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/plink_map.txt',
 		sample_map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/sample_map.txt',
@@ -42,7 +42,7 @@ rule split_bcf:
 		vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.gz',
 		samples = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/{sample_group}.txt'
 	output:
-		bcf = temp('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.{sample_group}.bcf'),
+		bcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.{sample_group}.bcf',
 	params:
 		bcftools = config['PATHS']['BCFTOOLS']
 	shell:

@@ -17,7 +17,6 @@ nind_admixed = int(snakemake.params.nind_admixed)
 
 # local ancestry tracts
 ts = tszip.decompress(ancestry_ts)
-# local_ancestry_df = get_local_ancestry(ts, admixture_time=admixture_time, per_batch=12)
 local_ancestry_df = get_local_ancestry_pop(
 	ts,
 	pop=target_pop,
