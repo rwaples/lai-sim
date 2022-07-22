@@ -731,7 +731,7 @@ def plot_ancestry_dosage(
 		plt.savefig(path, dpi=300, format=format, bbox_inches='tight')
 
 
-def make_qq_report(inferred_dosage, true_dosage, nbins=100):
+def make_qq_report(inferred_dosage, true_dosage, nbins):
 	"""Generate a report of observed vs inferred mean ancestry dosage.
 
 	Bins are equally spaced between 0 to 2.
@@ -752,9 +752,9 @@ def make_qq_report(inferred_dosage, true_dosage, nbins=100):
 
 
 def add_reports(report_a, report_b):
-	"""Add two QQ reports to take a weighted average.
+	"""Add two QQ reports and return a new report.
 
-	New report is a weighted average.
+	New report is a weighted average of the two inputs.
 	"""
 	new_report = report_a.copy()  # keep bins
 

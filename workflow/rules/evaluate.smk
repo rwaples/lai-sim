@@ -113,16 +113,15 @@ rule get_Q_score:
 
 rule write_qq_reports:
 	input:
-		true_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/true_local_ancestry.site_matrix.npz',
-		mosaic_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/la_probs.npz',
-		rfmix2_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.fb.tsv.gz',
-		flare_csv = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.csv',
-		flare_sites = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.flare_sites',
-		sites_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
+		true_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.true.npz',
+		flare_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.flare.npz',
+		mosaic_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.mosaic.npz',
+		rfmix2_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.rfmix2.npz',
+
 	output:
 		flare_report = report('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/qq_flare.txt'),
-		mosaic_report = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/qq_mosaic.txt',
-		rfmix_report = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/qq_rfmix.txt',
+		mosaic_report = report('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/qq_mosaic.txt'),
+		rfmix_report = report('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/qq_rfmix.txt'),
 	params:
 		bcftools = config['PATHS']['BCFTOOLS'],
 		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,

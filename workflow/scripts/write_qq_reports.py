@@ -1,3 +1,4 @@
+import numpy as np
 from common.utils import get_true_anc_dosage, get_ancestry_dosage, load_true_la, load_flare, load_mosaic, load_rfmix_fb, make_qq_report
 
 # params
@@ -5,11 +6,9 @@ BCFTOOLS = str(snakemake.params.bcftools)
 n_anc = int(snakemake.params.nsource)
 # input
 true_path = str(snakemake.input.true_la)
+flare_path = str(snakemake.input.flare_la)
 mosaic_path = str(snakemake.input.mosaic_la)
 rfmix2_path = str(snakemake.input.rfmix2_la)
-flare_csv = str(snakemake.input.flare_csv)
-flare_sites = str(snakemake.input.flare_sites)
-sites_file = str(snakemake.input.sites_file)
 
 # output
 flare_report = str(snakemake.output.flare_report)
@@ -17,15 +16,20 @@ mosaic_report = str(snakemake.output.mosaic_report)
 rfmix_report = str(snakemake.output.rfmix_report)
 
 
-true_anc_dosage = get_true_anc_dosage(load_true_la(true_path), n_anc=n_anc)
-flare_anc_dosage = get_ancestry_dosage(load_flare(flare_csv, sites_file=sites_file, flare_sites=flare_sites, BCFTOOLS=BCFTOOLS), n_anc=n_anc)
-mosaic_anc_dosage = get_ancestry_dosage(load_mosaic(mosaic_path), n_anc=n_anc)
-rfmix_anc_dosage = get_ancestry_dosage(load_rfmix_fb(rfmix2_path), n_anc=n_anc)[:len(true_anc_dosage)]
+true_anc_dosage = np.load(true_path)['arr_0']
 
+flare_anc_dosage = np.load(flare_path)['arr_0']
+flare_qq = make_qq_report(inferred_dosage=flare_anc_dosage, true_dosage=true_anc_dosage, nbins=400)
+del flare_anc_dosage
 
-flare_qq = make_qq_report(inferred_dosage=flare_anc_dosage, true_dosage=true_anc_dosage, nbins=13)
-mosaic_qq = make_qq_report(inferred_dosage=mosaic_anc_dosage, true_dosage=true_anc_dosage, nbins=13)
-rfmix_qq = make_qq_report(inferred_dosage=rfmix_anc_dosage, true_dosage=true_anc_dosage, nbins=13)
+mosaic_anc_dosage = np.load(mosaic_path)['arr_0']
+mosaic_qq = make_qq_report(inferred_dosage=mosaic_anc_dosage, true_dosage=true_anc_dosage, nbins=400)
+del mosaic_anc_dosage
+
+rfmix_anc_dosage = np.load(rfmix2_path)['arr_0']
+rfmix_qq = make_qq_report(inferred_dosage=rfmix_anc_dosage, true_dosage=true_anc_dosage, nbins=400)
+del rfmix_anc_dosage
+
 
 flare_qq.to_csv(flare_report, sep='\t', index=None, float_format='%.3f')
 mosaic_qq.to_csv(mosaic_report, sep='\t', index=None, float_format='%.3f')
