@@ -758,7 +758,7 @@ def make_qq_report(inferred_dosage, true_dosage, nbins):
 		bins=np.linspace(0, 2, nbins + 1),
 		include_lowest=True,
 		labels=False
-	)
+	).astype("int16")
 	report = qq.groupby(['bin'])['true'].agg([np.mean, len]).reset_index()
 	report.columns = ['bin', 'mean', 'n']
 	return(report)
