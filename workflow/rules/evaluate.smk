@@ -117,7 +117,6 @@ rule write_qq_reports:
 		flare_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.flare.npz',
 		mosaic_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.mosaic.npz',
 		rfmix2_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.rfmix2.npz',
-
 	output:
 		flare_report = report('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/qq_flare.txt'),
 		mosaic_report = report('results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/qq_mosaic.txt'),

@@ -326,5 +326,6 @@ rule get_dosage_rfmix2:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/ancestry_dosage.rfmix2.npz',
 	params:
 		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
+		sites_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
 	script:
 		'../scripts/get_dosage.rfmix2.py'

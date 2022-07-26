@@ -3,11 +3,13 @@ import numpy as np
 from common.utils import get_ancestry_dosage, load_rfmix_fb
 rfmix2_path = str(snakemake.input.rfmix2_la)
 n_anc = int(snakemake.params.nsource)
+sites_file = str(snakemake.params.sites_file)
 out_path = str(snakemake.output)
 
 rfmix2_anc_dosage = get_ancestry_dosage(
 	load_rfmix_fb(
-		rfmix2_path
+		rfmix2_path,
+		sites_file
 	),
 	n_anc=n_anc
 )

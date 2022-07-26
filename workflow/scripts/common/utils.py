@@ -596,7 +596,6 @@ def load_rfmix_fb(path):
 
 def load_flare(path, sites_file, flare_sites, BCFTOOLS):
 	"""Load an array of the posterior local ancestry probabilities from flare."""
-
 	flare = pd.read_csv(path, header=None)
 	flare = flare.dropna(axis=1)
 	res = flare.iloc[:, 2:].values
@@ -736,6 +735,11 @@ def make_qq_report(inferred_dosage, true_dosage, nbins):
 
 	Bins are equally spaced between 0 to 2.
 	"""
+	try:
+		assert true_dosage.shape == inferred_dosage.shape
+	except AssertionError:
+		report = pd.DataFrame({'bin': range(nbins), 'mean': 0, 'n': 0})
+		return(report)
 	qq = pd.DataFrame(
 		{
 			'true': true_dosage.flatten(),
