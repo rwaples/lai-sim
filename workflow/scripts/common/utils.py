@@ -771,19 +771,19 @@ def add_reports(report_a, report_b):
 
 	New report is a weighted average of the two inputs.
 	"""
-	new_report = report_a.copy()  # keep bins
 
 	merged = report_a.merge(report_b, on='bin', how='outer')
 	merged = merged.replace(np.nan, 0)
 	# n is a sum of a and b
-	new_report['n'] = np.nansum([merged['n_x'], merged['n_y']], axis=0, dtype=int)
+	merged['n'] = np.nansum([merged['n_x'], merged['n_y']], axis=0, dtype=int)
 	# mean is a weighted average of a and b
-	new_report['mean'] = np.average(
+	merged['mean'] = np.average(
 		[merged['mean_x'], merged['mean_y']],
 		axis=0,
 		weights=[merged['n_x'], merged['n_y']]
 	)
-	return(new_report)
+
+	return(merged[['bin', 'mean', 'n']])
 
 
 def plot_qq_report(report, title=None, reflines=True):
