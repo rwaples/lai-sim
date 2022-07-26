@@ -28,7 +28,7 @@ try:
 	mosaic_qq = make_qq_report(inferred_dosage=mosaic_anc_dosage, true_dosage=true_anc_dosage, nbins=400)
 	mosaic_qq.to_csv(mosaic_report, sep='\t', index=None, float_format='%.3f')
 	del mosaic_anc_dosage
-except ValueError:
+except ValueError:  # catch empty file error
 	with open(mosaic_report, 'a'):  # Create file if does not exist
 		pass
 

@@ -752,6 +752,8 @@ def make_qq_report(inferred_dosage, true_dosage, nbins):
 	)
 	del inferred_dosage
 	del true_dosage
+	MAXSIZE = 1800000000
+	qq = qq.head(MAXSIZE)
 
 	qq['bin'] = pd.cut(
 		qq['inferred'],
