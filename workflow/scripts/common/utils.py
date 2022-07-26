@@ -584,13 +584,16 @@ def r2_dosage_individual(true_dosage, pred_dosage, n_anc):
 	return(per_ind)
 
 
-def load_rfmix_fb(path):
+def load_rfmix_fb(path, sites_file):
 	"""Load an array of the posterior local ancestry probabilities from RFMixv2."""
 	rfmix_res = pd.read_csv(path, sep='\t', comment='#')
 	# expand out to each site
 	# needed because RFMix2 only reports LA every fifth site.
 	rfmix_res = np.repeat(rfmix_res.iloc[:, 4:].values, [5], axis=0)
 	rfmix_res = rfmix_res.astype(np.half)
+
+	nsites = len(pd.read_csv(sites_file, header=None))
+	rfmix_res = rfmix_res[:nsites, :]
 	return(rfmix_res)
 
 
