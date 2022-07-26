@@ -736,10 +736,16 @@ def make_qq_report(inferred_dosage, true_dosage, nbins):
 
 	Bins are equally spaced between 0 to 2.
 	"""
-	qq = pd.DataFrame({
-		'true': true_dosage.flatten(),
-		'inferred': inferred_dosage.flatten()
-	})
+	qq = pd.DataFrame(
+		{
+			'true': true_dosage.flatten(),
+			'inferred': inferred_dosage.flatten()
+		},
+		dtype="float16"
+	)
+	del inferred_dosage
+	del true_dosage
+
 	qq['bin'] = pd.cut(
 		qq['inferred'],
 		bins=np.linspace(0, 2, nbins + 1),
