@@ -14,6 +14,5 @@ for x in reports:
 	except pd.errors.EmptyDataError:
 		pass
 
-#reps = [pd.read_csv(x, sep='\t') for x in reports]
 combined_report = reduce(add_reports, reps)
-combined_report.to_csv(out, sep='\t', index=None, float_format='%.3f')
+combined_report.to_csv(out, sep='\t', index=None, float_format='%.4f')

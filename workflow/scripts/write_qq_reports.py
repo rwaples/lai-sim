@@ -20,13 +20,13 @@ true_anc_dosage = np.load(true_path)['arr_0']
 
 flare_anc_dosage = np.load(flare_path)['arr_0']
 flare_qq = make_qq_report(inferred_dosage=flare_anc_dosage, true_dosage=true_anc_dosage, nbins=200)
-flare_qq.to_csv(flare_report, sep='\t', index=None, float_format='%.3f')
+flare_qq.to_csv(flare_report, sep='\t', index=None, float_format='%.4f')
 del flare_anc_dosage
 
 try:
 	mosaic_anc_dosage = np.load(mosaic_path)['arr_0']
 	mosaic_qq = make_qq_report(inferred_dosage=mosaic_anc_dosage, true_dosage=true_anc_dosage, nbins=200)
-	mosaic_qq.to_csv(mosaic_report, sep='\t', index=None, float_format='%.3f')
+	mosaic_qq.to_csv(mosaic_report, sep='\t', index=None, float_format='%.4f')
 	del mosaic_anc_dosage
 except ValueError:  # catch empty file error
 	with open(mosaic_report, 'a'):  # Create file if does not exist
@@ -35,7 +35,7 @@ except ValueError:  # catch empty file error
 try:
 	rfmix_anc_dosage = np.load(rfmix2_path)['arr_0']
 	rfmix_qq = make_qq_report(inferred_dosage=rfmix_anc_dosage, true_dosage=true_anc_dosage, nbins=200)
-	rfmix_qq.to_csv(rfmix_report, sep='\t', index=None, float_format='%.3f')
+	rfmix_qq.to_csv(rfmix_report, sep='\t', index=None, float_format='%.4f')
 	del rfmix_anc_dosage
 except ValueError:
 	with open(rfmix_report, 'a'):  # Create file if does not exist
