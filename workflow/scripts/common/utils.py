@@ -748,7 +748,7 @@ def make_qq_report(inferred_dosage, true_dosage, nbins):
 			'true': true_dosage.flatten(),
 			'inferred': inferred_dosage.flatten()
 		},
-		dtype="float16"
+		dtype="float32"
 	)
 	del inferred_dosage
 	del true_dosage
