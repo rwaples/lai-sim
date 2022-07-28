@@ -503,7 +503,7 @@ def get_ancestry_dosage(arr, n_anc):
 
 def load_true_la(path):
 	"""Load true local ancestry."""
-	return(np.load(path)['arr'].astype(np.single))
+	return(np.load(path)['arr'])
 	# return(np.load(path)['arr'].astype(np.single))
 
 
@@ -593,7 +593,7 @@ def load_rfmix_fb(path, sites_file):
 	# needed because RFMix2 only reports LA every fifth site.
 	rfmix_res = np.repeat(rfmix_res.iloc[:, 4:].values, [5], axis=0)
 	# rfmix_res = rfmix_res.astype(np.half)
-	#rfmix_res = rfmix_res.astype(np.single)
+	# rfmix_res = rfmix_res.astype(np.single)
 
 	nsites = len(pd.read_csv(sites_file, header=None))
 	rfmix_res = rfmix_res[:nsites, :]
@@ -607,7 +607,7 @@ def load_flare(path, sites_file, flare_sites, BCFTOOLS):
 	res = flare.iloc[:, 2:].values
 	res = np.concatenate([res[:1], res])
 	# res = res.astype(np.half)
-	#res = res.astype(np.single)
+	# res = res.astype(np.single)
 
 	# account for any sites filtered by flare (e.g. due to MAF)
 	pre_sites = pd.read_csv(sites_file, header=None).values.flatten()
@@ -624,7 +624,7 @@ def load_mosaic(path):
 	arr = np.load(path)['arr']
 	res = arr.T.reshape((arr.shape[2], -1), order='C')
 	# res = res.astype(np.half)
-	#res = res.astype(np.single)
+	# res = res.astype(np.single)
 	return(res)
 
 
@@ -759,11 +759,11 @@ def make_qq_report(inferred_dosage, true_dosage, nbins):
 	)
 	del inferred_dosage
 	del true_dosage
-	qq = qq.head(MAXSIZE)
 
 	qq['bin'] = pd.cut(
 		qq['inferred'],
-		bins=np.linspace(0, 2, nbins + 1, dtype="float32"),
+		#bins=np.linspace(0, 2, nbins + 1, dtype="float32"),
+		bins=np.linspace(0, 2, nbins + 1),
 		include_lowest=True,
 		labels=False
 	)
