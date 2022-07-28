@@ -475,7 +475,8 @@ def get_fst_faser(ts, popA, popB):
 
 def get_ancestry_dosage(arr, n_anc):
 	"""Compute ancestry dosage from probablistic haploid ancestry calls."""
-	anc_dosage = np.zeros((arr.shape[0], int(arr.shape[1] / 2)), dtype=np.half)
+	#anc_dosage = np.zeros((arr.shape[0], int(arr.shape[1] / 2)), dtype=np.half)
+	anc_dosage = np.zeros((arr.shape[0], int(arr.shape[1] / 2)))
 	if n_anc == 2:
 		a0 = arr[:, 0::2]  # should be views
 		a1 = arr[:, 1::2]
@@ -503,6 +504,7 @@ def get_ancestry_dosage(arr, n_anc):
 def load_true_la(path):
 	"""Load true local ancestry."""
 	return(np.load(path)['arr'].astype(np.single))
+	# return(np.load(path)['arr'].astype(np.single))
 
 
 def get_true_anc_dosage(true_la, n_anc):
@@ -591,7 +593,7 @@ def load_rfmix_fb(path, sites_file):
 	# needed because RFMix2 only reports LA every fifth site.
 	rfmix_res = np.repeat(rfmix_res.iloc[:, 4:].values, [5], axis=0)
 	# rfmix_res = rfmix_res.astype(np.half)
-	rfmix_res = rfmix_res.astype(np.single)
+	#rfmix_res = rfmix_res.astype(np.single)
 
 	nsites = len(pd.read_csv(sites_file, header=None))
 	rfmix_res = rfmix_res[:nsites, :]
@@ -605,7 +607,7 @@ def load_flare(path, sites_file, flare_sites, BCFTOOLS):
 	res = flare.iloc[:, 2:].values
 	res = np.concatenate([res[:1], res])
 	# res = res.astype(np.half)
-	res = res.astype(np.single)
+	#res = res.astype(np.single)
 
 	# account for any sites filtered by flare (e.g. due to MAF)
 	pre_sites = pd.read_csv(sites_file, header=None).values.flatten()
@@ -622,7 +624,7 @@ def load_mosaic(path):
 	arr = np.load(path)['arr']
 	res = arr.T.reshape((arr.shape[2], -1), order='C')
 	# res = res.astype(np.half)
-	res = res.astype(np.single)
+	#res = res.astype(np.single)
 	return(res)
 
 
@@ -741,6 +743,8 @@ def make_qq_report(inferred_dosage, true_dosage, nbins):
 
 	Bins are equally spaced between 0 to 2.
 	"""
+	MAXSIZE = 1800000000
+
 	try:
 		assert true_dosage.shape == inferred_dosage.shape
 	except AssertionError:
@@ -748,14 +752,13 @@ def make_qq_report(inferred_dosage, true_dosage, nbins):
 		return(report)
 	qq = pd.DataFrame(
 		{
-			'true': true_dosage.flatten(),
-			'inferred': inferred_dosage.flatten()
+			'true': true_dosage.flatten()[:MAXSIZE],
+			'inferred': inferred_dosage.flatten()[:MAXSIZE]
 		},
-		dtype="float32"
+		#dtype="float32"
 	)
 	del inferred_dosage
 	del true_dosage
-	MAXSIZE = 1800000000
 	qq = qq.head(MAXSIZE)
 
 	qq['bin'] = pd.cut(
@@ -763,7 +766,7 @@ def make_qq_report(inferred_dosage, true_dosage, nbins):
 		bins=np.linspace(0, 2, nbins + 1, dtype="float32"),
 		include_lowest=True,
 		labels=False
-	).astype("int16")
+	)
 	report = qq.groupby(['bin'])['true'].agg([np.mean, len]).reset_index()
 	report.columns = ['bin', 'mean', 'n']
 	return(report)
