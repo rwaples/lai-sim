@@ -755,7 +755,7 @@ def make_qq_report(inferred_dosage, true_dosage, nbins):
 			'true': true_dosage.flatten()[:MAXSIZE],
 			'inferred': inferred_dosage.flatten()[:MAXSIZE]
 		},
-		#dtype="float32"
+		dtype="float64"
 	)
 	del inferred_dosage
 	del true_dosage
@@ -763,7 +763,7 @@ def make_qq_report(inferred_dosage, true_dosage, nbins):
 	qq['bin'] = pd.cut(
 		qq['inferred'],
 		#bins=np.linspace(0, 2, nbins + 1, dtype="float32"),
-		bins=np.linspace(0, 2, nbins + 1),
+		bins=np.linspace(0, 2, nbins + 1, dtype="float64"),
 		include_lowest=True,
 		labels=False
 	)

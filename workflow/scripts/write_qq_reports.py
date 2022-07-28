@@ -19,6 +19,8 @@ rfmix_report = str(snakemake.output.rfmix_report)
 true_anc_dosage = np.load(true_path)['arr_0']
 
 flare_anc_dosage = np.load(flare_path)['arr_0']
+# tryt to round to 2 decimal places
+flare_anc_dosage = np.round(flare_anc_dosage, 2)
 flare_qq = make_qq_report(inferred_dosage=flare_anc_dosage, true_dosage=true_anc_dosage, nbins=200)
 flare_qq.to_csv(flare_report, sep='\t', index=None, float_format='%.4f')
 del flare_anc_dosage
