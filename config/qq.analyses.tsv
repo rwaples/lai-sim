@@ -1,13 +1,13 @@
 anal_name	asc_name	nind_admixed	nind_ref	MAC_filter	max_snps	anal_seed	gt_err	target_pop	nthreads
 # even ref sizes
-p2_seq1	twopop_rep1_seq	200	100,100	1	1000000	41	0.0002	2	20
-p2_arr1	twopop_rep1_arr	200	100,100	1	20000	42	0.0002	2	20
-p2_seq2	twopop_rep2_seq	200	100,100	1	1000000	43	0.0002	2	20
-p2_arr2	twopop_rep2_arr	200	100,100	1	20000	44	0.0002	2	20
-p2_seq3	twopop_rep3_seq	200	100,100	1	1000000	45	0.0002	2	20
-p2_arr3	twopop_rep3_arr	200	100,100	1	20000	46	0.0002	2	20
-p2_seq4	twopop_rep4_seq	200	100,100	1	1000000	47	0.0002	2	20
-p2_arr4	twopop_rep4_arr	200	100,100	1	20000	48	0.0002	2	20
+#p2_seq1	twopop_rep1_seq	200	100,100	1	1000000	41	0.0002	2	20
+#p2_arr1	twopop_rep1_arr	200	100,100	1	20000	42	0.0002	2	20
+#p2_seq2	twopop_rep2_seq	200	100,100	1	1000000	43	0.0002	2	20
+#p2_arr2	twopop_rep2_arr	200	100,100	1	20000	44	0.0002	2	20
+#p2_seq3	twopop_rep3_seq	200	100,100	1	1000000	45	0.0002	2	20
+#p2_arr3	twopop_rep3_arr	200	100,100	1	20000	46	0.0002	2	20
+#p2_seq4	twopop_rep4_seq	200	100,100	1	1000000	47	0.0002	2	20
+#p2_arr4	twopop_rep4_arr	200	100,100	1	20000	48	0.0002	2	20
 
 p3_ref100_seq1	threepop_LARGE_rep1_seq	400	100,100,100	1	1000000	9961	0.0002	3	20
 p3_ref100_arr1	threepop_LARGE_rep1_arr	400	100,100,100	1	20000	9962	0.0002	3	20
@@ -30,23 +30,23 @@ p4_arr4	fourpop_rep4_arr	400	400,400,400,400	1	20000	78	0.0002	4	20
 
 # uneven ref sizes
 #p2
-p2_seqU1_20a	twopop_rep1_seq	400	20,100	1	1000000	221	0.0002	2	20
-p2_arrU1_20a	twopop_rep1_arr	400	20,100	1	20000	222	0.0002	2	20
-p2_seqU2_20a	twopop_rep2_seq	400	20,100	1	1000000	223	0.0002	2	20
-p2_arrU2_20a	twopop_rep2_arr	400	20,100	1	20000	224	0.0002	2	20
-p2_seqU3_20a	twopop_rep3_seq	400	20,100	1	1000000	225	0.0002	2	20
-p2_arrU3_20a	twopop_rep3_arr	400	20,100	1	20000	226	0.0002	2	20
-p2_seqU4_20a	twopop_rep4_seq	400	20,100	1	1000000	227	0.0002	2	20
-p2_arrU4_20a	twopop_rep4_arr	400	20,100	1	20000	228	0.0002	2	20
+#p2_seqU1_20a	twopop_rep1_seq	400	20,100	1	1000000	221	0.0002	2	20
+#p2_arrU1_20a	twopop_rep1_arr	400	20,100	1	20000	222	0.0002	2	20
+#p2_seqU2_20a	twopop_rep2_seq	400	20,100	1	1000000	223	0.0002	2	20
+#p2_arrU2_20a	twopop_rep2_arr	400	20,100	1	20000	224	0.0002	2	20
+#p2_seqU3_20a	twopop_rep3_seq	400	20,100	1	1000000	225	0.0002	2	20
+#p2_arrU3_20a	twopop_rep3_arr	400	20,100	1	20000	226	0.0002	2	20
+#p2_seqU4_20a	twopop_rep4_seq	400	20,100	1	1000000	227	0.0002	2	20
+#p2_arrU4_20a	twopop_rep4_arr	400	20,100	1	20000	228	0.0002	2	20
 
-p2_seqU1_20b	twopop_rep1_seq	400	100,20	1	1000000	211	0.0002	2	20
-p2_arrU1_20b	twopop_rep1_arr	400	100,20	1	20000	212	0.0002	2	20
-p2_seqU2_20b	twopop_rep2_seq	400	100,20	1	1000000	213	0.0002	2	20
-p2_arrU2_20b	twopop_rep2_arr	400	100,20	1	20000	214	0.0002	2	20
-p2_seqU3_20b	twopop_rep3_seq	400	100,20	1	1000000	215	0.0002	2	20
-p2_arrU3_20b	twopop_rep3_arr	400	100,20	1	20000	216	0.0002	2	20
-p2_seqU4_20b	twopop_rep4_seq	400	100,20	1	1000000	217	0.0002	2	20
-p2_arrU4_20b	twopop_rep4_arr	400	100,20	1	20000	218	0.0002	2	20
+#p2_seqU1_20b	twopop_rep1_seq	400	100,20	1	1000000	211	0.0002	2	20
+#p2_arrU1_20b	twopop_rep1_arr	400	100,20	1	20000	212	0.0002	2	20
+#p2_seqU2_20b	twopop_rep2_seq	400	100,20	1	1000000	213	0.0002	2	20
+#p2_arrU2_20b	twopop_rep2_arr	400	100,20	1	20000	214	0.0002	2	20
+#p2_seqU3_20b	twopop_rep3_seq	400	100,20	1	1000000	215	0.0002	2	20
+#p2_arrU3_20b	twopop_rep3_arr	400	100,20	1	20000	216	0.0002	2	20
+#p2_seqU4_20b	twopop_rep4_seq	400	100,20	1	1000000	217	0.0002	2	20
+#p2_arrU4_20b	twopop_rep4_arr	400	100,20	1	20000	218	0.0002	2	20
 
 #p3
 p3_seqU1_20a	threepop_LARGE_rep1_seq	400	20,400,400	1	1000000	25231	0.0002	3	20

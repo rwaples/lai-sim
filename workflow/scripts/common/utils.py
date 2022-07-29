@@ -121,7 +121,7 @@ def get_local_ancestry(ts, admixture_time, per_batch):
 		np.where(ts.tables.nodes.asdict()['time'] == 0)[0]
 	)
 	# target ancestors exist at time==admixture_time
-	target_ancestors = np.where(ts.tables.nodes.asdict()['time'] == admixture_time)[0]
+	tarstors = np.where(ts.tables.nodes.asdict()['time'] == admixture_time)[0]
 
 	nsample = len(target_samples)
 	L = [x for x in range(0, nsample, per_batch)]
@@ -130,7 +130,7 @@ def get_local_ancestry(ts, admixture_time, per_batch):
 	for i in range(len(L)):
 		local = ts.tables.link_ancestors(
 			samples=target_samples[L[i]:R[i]],
-			ancestors=target_ancestors
+			ancestors=tarstors
 		)
 
 		local_df = pd.DataFrame({
