@@ -1,73 +1,73 @@
-snakemake.utils.min_version("6.3")
+snakemake.utils.min_version('6.3')
 wildcard_constraints:
-	anal_name = "\w+",
-	asc_name = "\w+",
-	sim_name = "\w+",
-	model_name = "\w+",
-	method = "\w+",
+	anal_name = '\w+',
+	asc_name = '\w+',
+	sim_name = '\w+',
+	model_name = '\w+',
+	method = '\w+',
 
-# configfile: "config.yml" # should now be loaded via "--configfile" flag
-include: "rules/common.smk"
-include: "rules/simulate.smk"
-include: "rules/la_and_vcf.smk"
-include: "rules/analyze.smk"
-include: "rules/evaluate.smk"
-include: "rules/plot.smk"
-include: "rules/resolve.smk"
+# configfile: 'config.yml' # should now be loaded via '--configfile' flag
+include: 'rules/common.smk'
+include: 'rules/simulate.smk'
+include: 'rules/la_and_vcf.smk'
+include: 'rules/analyze.smk'
+include: 'rules/evaluate.smk'
+include: 'rules/plot.smk'
+include: 'rules/resolve.smk'
 
-report: "report/workflow.rst"
+report: 'report/workflow.rst'
 
 
 rule all:
 	input:
 		diag_coal = [
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/pop_coal_time.png"
+			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/pop_coal_time.png'
 			for u in units.itertuples()
 		],
 		diag_fst = [
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png"
+			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png'
 			for u in units.itertuples()
 		],
 		diag_qq = [
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/qq.png"
+			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/qq.png'
 			for u in units.itertuples()
 		],
 
 		temp1 = [
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.flare.ancestry.tsv"
+			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.flare.ancestry.tsv'
 			for u in units.itertuples()
 		],
 
 		temp2 = [
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.mosaic.ancestry.tsv"
+			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.mosaic.ancestry.tsv'
 			for u in units.itertuples()
 		],
 
 		temp3 = [
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.rfmix2.ancestry.tsv"
+			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.rfmix2.ancestry.tsv'
 			for u in units.itertuples()
 		],
 
 		temp4 = [
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/RMSD.flare.tsv"
+			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/RMSD.flare.tsv'
 			for u in units.itertuples()
 		],
 
 
 rule do_R2_report:
 	input:
-		R2 = "results/reports/R2_report.txt",
+		R2 = 'results/reports/R2_report.txt',
 		# temp4 = [
-		# 	f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_report.txt"
+		# 	f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_report.txt'
 		# 	for u in units.itertuples()
 		# ],
 
 
 rule do_Q_report:
 	input:
-		Q = "results/reports/Q_report.txt",
+		Q = 'results/reports/Q_report.txt',
 		# temp4 = [
-		# f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/Q_report.txt"
+		# f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/Q_report.txt'
 		# for u in units.itertuples()
 		# ],
 
@@ -84,8 +84,33 @@ rule do_runtime_report:
 
 rule reports:
 	input:
-		R2 = "results/reports/R2_report.txt",
-		Q = "results/reports/Q_report.txt",
+		R2 = 'results/reports/R2_report.txt',
+		Q = 'results/reports/Q_report.txt',
+		runtime = 'results/reports/runtime_report.txt',
+		sites = 'results/reports/sites_report.txt',
+
+
+rule testing:
+	input:
+		# diagnostic plots
+		ancestry_dosage_flare = [
+			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.0.flare.pdf'
+			for u in units.itertuples()
+		],
+		ancestry_dosage_mosaic = [
+			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.0.mosaic.pdf'
+			for u in units.itertuples()
+		],
+		ancestry_dosage_rfmix = [
+			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.0.rfmix2.pdf'
+			for u in units.itertuples()
+		],
+		pairwise_Fst = [
+			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png'
+			for u in units.itertuples()
+		],
+		R2 = 'results/reports/R2_report.txt',
+		Q = 'results/reports/Q_report.txt',
 		runtime = 'results/reports/runtime_report.txt',
 		sites = 'results/reports/sites_report.txt',
 
@@ -93,21 +118,21 @@ rule reports:
 rule just_sim:
 	input:
 		sim = [
-			f"results/{u.model_name}/{u.sim_name}/full.tsz" for u in units.itertuples()
+			f'results/{u.model_name}/{u.sim_name}/full.tsz' for u in units.itertuples()
 		],
 
 
 rule just_ascertain:
 	input:
 		asc = [
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/ascertained.tsz" for u in units.itertuples()
+			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/ascertained.tsz' for u in units.itertuples()
 		],
 
 
 rule just_flare:
 	input:
 		flare = [
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.flare.ancestry.tsv"
+			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/SUMMARY/R2_score.flare.ancestry.tsv'
 				for u in units.itertuples()
 		],
 
@@ -115,18 +140,18 @@ rule just_flare:
 rule diagnostic_plots:
 	input:
 		pop_coal_time = [
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/pop_coal_time.png"
+			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/pop_coal_time.png'
 			for u in units.itertuples()
 		],
 		pairwise_Fst = [
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png"
+			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png'
 			for u in units.itertuples()
 		],
 		true_local_ancestry = [
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/true_local_ancestry.png"
+			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/true_local_ancestry.png'
 			for u in units.itertuples()
 		],
 		ancestry_dosage = [
-			f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.0.flare.pdf"
+			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.0.flare.pdf'
 			for u in units.itertuples()
 		]

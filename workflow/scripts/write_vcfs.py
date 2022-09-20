@@ -15,8 +15,9 @@ site_matrix = str(snakemake.input.site_matrix)
 base_path = str(snakemake.params.base_path)
 chrom_id = str(snakemake.params.chrom_id)
 nind_ref = str(snakemake.params.nind_ref)
-chr_len = float(snakemake.params.chr_len)
+# chr_len = float(snakemake.params.chr_len)
 target_pop = int(snakemake.params.target_pop)
+# rec_map = str()
 
 nind_ref = np.array([int(x) for x in nind_ref.split(',')])
 
@@ -90,16 +91,6 @@ with open(os.path.join(base_path, 'target_inds.txt'), 'w') as OUTFILE:
 # write two formats of genetic maps files
 os.system(f"{snakemake.config['PATHS']['BCFTOOLS']} query -f '%POS\\n' {os.path.join(base_path, 'genotypes.bcf')} > {os.path.join(base_path, 'site.positions')}")
 positions = pd.read_csv(os.path.join(base_path, 'site.positions'), header=None)[0].values
-species = stdpopsim.get_species("HomSap")
-contig = species.get_contig(chrom_id, length_multiplier=chr_len)
-rate = contig.recombination_map.get_rates()[0] * 100  # convert to cM
-cM_pos = [pos * rate for pos in positions]
-with open(os.path.join(base_path, 'genetic_map.txt'), 'w') as OUTFILE:
-	for i in range(len(positions)):
-		OUTFILE.write(f"{chrom_id}\t{positions[i]}\t{cM_pos[i]:0.6f}\n")
-with open(os.path.join(base_path, 'plink_map.txt'), 'w') as OUTFILE:
-	for i in range(len(positions)):
-		OUTFILE.write(f"{chrom_id}\t.\t{cM_pos[i]:0.6f}\t{positions[i]}\n")
 
 
 # write vcfs with true local ancestry

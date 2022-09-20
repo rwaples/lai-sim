@@ -1,3 +1,15 @@
+rule write_analysis_maps:
+	input:
+		sites_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
+	output:
+		plink_map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/plink_map.txt',
+		genetic_map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/genetic_map.txt',
+	params:
+		rec_map_path = lambda w: simulations.loc[w.sim_name].rec_map_path,
+	script:
+		"../scripts/write_analysis_maps.py"
+
+
 rule export_mosaic:
 	input:
 		la_results = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/localanc_admixed.RData',

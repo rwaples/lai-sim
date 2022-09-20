@@ -1,33 +1,43 @@
 import tskit
 import msprime
-import stdpopsim
+#import stdpopsim
 import tszip
-import sys
 import numpy as np
 from common.utils import strip_MAC
 
 
-ts_path = str(snakemake.input[0])
+ts_path = str(snakemake.input.ts_path)
 out_path = str(snakemake.output[0])
 ancestral_Ne = int(snakemake.params.ancestral_Ne)
-chr = str(snakemake.params.chr)
-chr_len = float(snakemake.params.chr_len)
+# chr = str(snakemake.params.chr)
+# chr_len = float(snakemake.params.chr_len)
+rec_map_path = str(snakemake.params.rec_map_path)
+max_bp = int(snakemake.params.max_bp)
+
 mutation_rate = float(snakemake.params.mutation_rate)
 sim_seed = int(snakemake.params.sim_seed)
 admixture_time = int(snakemake.params.admixture_time)
 assert(mutation_rate <= 1e-7)  # make sure mutation rate is not crazy high
 
 ts = tskit.load(ts_path)
-species = stdpopsim.get_species("HomSap")
-contig = species.get_contig(chr, length_multiplier=chr_len)
+
+
+rmap = msprime.RateMap.read_hapmap(rec_map_path)
+recapmap = rmap.slice(0, max_bp + 1, trim=True)
+
+# print('ts_length', ts.get_sequence_length())
+# print('tail', recapmap.right[-1])
+
+# species = stdpopsim.get_species("HomSap")
+# contig = species.get_contig(chr, length_multiplier=chr_len)
 
 
 # recombination map used for recapitation
-recapmap = msprime.RecombinationMap(
-	positions=[0.0, ts.get_sequence_length()],
-	rates=contig.recombination_map.get_rates(),
-	num_loci=int(ts.get_sequence_length())
-)
+# recapmap = msprime.RecombinationMap(
+# positions=[0.0, ts.get_sequence_length()],
+# rates=contig.recombination_map.get_rates(),
+# num_loci=int(ts.get_sequence_length())
+# )
 
 
 # recapitate

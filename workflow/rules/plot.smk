@@ -13,8 +13,9 @@ rule plot_ancestry_dosage:
 		true_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/true_local_ancestry.site_matrix.npz',
 		mosaic_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/la_probs.npz',
 		rfmix2_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix2/rfmix2.fb.tsv.gz',
-		flare_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.vcf.gz',
+		flare_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.csv',
 		sites_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
+		flare_sites = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.flare_sites',
 	output:
 		flare = report(
 			expand(
