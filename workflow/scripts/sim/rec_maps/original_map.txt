@@ -1,0 +1,3 @@
+Chromosome	Position(bp)	Rate(cM/Mb)	Map(cM)
+chr22	1	1.444502	0.000000
+chr22	51304566	0.000000	74.109562

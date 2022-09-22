@@ -15,7 +15,7 @@ rule simulate_admixture:
 		slim_path = config['PATHS']['SLiM'],
 		sim_seed = lambda w: simulations.loc[w.sim_name].sim_seed,
 		slim_script = lambda w: simulations.loc[w.sim_name].slim_script_path,
-		max_bp = lambda w: simulations.loc[w.sim_name].max_bp,
+		#max_bp = lambda w: simulations.loc[w.sim_name].max_bp,
 		size_A = lambda w: simulations.loc[w.sim_name].size_A,
 		size_B = lambda w: simulations.loc[w.sim_name].size_B,
 		size_admixed = lambda w: simulations.loc[w.sim_name].size_admixed,
@@ -27,7 +27,6 @@ rule simulate_admixture:
 			-seed {params.sim_seed} \
 			-d 'slim_map="{input}"' \
 			-d 'trees_file="{output}"' \
-			-d 'max_bp="{params.max_bp}"' \
 			-d 'sA="{params.size_A}"' \
 			-d 'sB="{params.size_B}"' \
 			-d 'sadmixed="{params.size_admixed}"' \
@@ -47,7 +46,7 @@ rule recap_and_mutate:
 		#chr = lambda w: simulations.loc[w.sim_name].chr,
 		#chr_len = lambda w: simulations.loc[w.sim_name].chr_len,
 		rec_map_path = lambda w: simulations.loc[w.sim_name].rec_map_path,
-		max_bp = lambda w: simulations.loc[w.sim_name].max_bp,
+		#max_bp = lambda w: simulations.loc[w.sim_name].max_bp,
 		mutation_rate = lambda w: simulations.loc[w.sim_name].mutation_rate,
 		sim_seed = lambda w: simulations.loc[w.sim_name].sim_seed,
 		admixture_time = lambda w: simulations.loc[w.sim_name].admixture_time,
@@ -62,6 +61,6 @@ rule write_slim_map:
 		slim_map_path = 'results/{model_name}/{sim_name}/slim_map.txt'
 	params:
 		rec_map_path = lambda w: simulations.loc[w.sim_name].rec_map_path,
-		max_bp = lambda w: simulations.loc[w.sim_name].max_bp,
+		#max_bp = lambda w: simulations.loc[w.sim_name].max_bp,
 	script:
 		'../scripts/write_slim_map.py'

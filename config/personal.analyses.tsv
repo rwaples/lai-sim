@@ -1,47 +1,86 @@
 anal_name	asc_name	nind_admixed	nind_ref	MAC_filter	max_snps	anal_seed	gt_err	target_pop	nthreads
-p2_gen100_seq_ref40	twopop_gen100_seq	100	40,40	1	200000	11510	0.0002	2	4
-p2_gen100_arr_ref40	twopop_gen100_arr	100	40,40	1	20000	12520	0.0002	2	4
-p2_gen100_seq_ref200	twopop_gen100_seq	100	200,200	1	200000	21510	0.0002	2	4
-p2_gen100_arr_ref200	twopop_gen100_arr	100	200,200	1	20000	32520	0.0002	2	4
-#p2_gen100_seq_ref1000	twopop_gen100_seq	100	1000,1000	1	200000	41510	0.0002	2	4
-#p2_gen100_arr_ref1000	twopop_gen100_arr	100	1000,1000	1	20000	42520	0.0002	2	4
+#p2_original_seq	twopop_original_map_seq	20	40,40	1	200000	7151001	0.0002	2	4
+#p2_original_arr	twopop_original_map_arr	20	40,40	1	20000	2705204	0.0002	2	4
+#p2_variable_seq	twopop_variable_map_seq	20	40,40	1	200000	7151002	0.0002	2	4
+#p2_variable_arr	twopop_variable_map_arr	20	40,40	1	20000	2705201	0.0002	2	4
+#p2_uniform_seq	twopop_uniform_map_seq	20	40,40	1	200000	7151003	0.0002	2	4
+#p2_uniform_arr	twopop_uniform_map_arr	20	40,40	1	20000	2705240	0.0002	2	4
 
-p2_gen200_seq_ref40	twopop_gen200_seq	100	40,40	1	200000	15910	0.0002	2	4
-p2_gen200_arr_ref40	twopop_gen200_arr	100	40,40	1	20000	25209	0.0002	2	4
-p2_gen200_seq_ref200	twopop_gen200_seq	100	200,200	1	200000	91510	0.0002	2	4
-p2_gen200_arr_ref200	twopop_gen200_arr	100	200,200	1	20000	92520	0.0002	2	4
-#p2_gen200_seq_ref1000	twopop_gen200_seq	100	1000,1000	1	200000	15190	0.0002	2	4
-#p2_gen200_arr_ref1000	twopop_gen200_arr	100	1000,1000	1	20000	25820	0.0002	2	4
 
-p2_gen400_seq_ref40	twopop_gen400_seq	100	40,40	1	200000	21510	0.0002	2	4
-p2_gen400_arr_ref40	twopop_gen400_arr	100	40,40	1	20000	25320	0.0002	2	4
-p2_gen400_seq_ref200	twopop_gen400_seq	100	200,200	1	200000	15310	0.0002	2	4
-p2_gen400_arr_ref200	twopop_gen400_arr	100	200,200	1	20000	25420	0.0002	2	4
-#p2_gen400_seq_ref1000	twopop_gen400_seq	100	1000,1000	1	200000	15710	0.0002	2	4
-#p2_gen400_arr_ref1000	twopop_gen400_arr	100	1000,1000	1	20000	27520	0.0002	2	4
+p2_original_gen100_x1_seq	twopop_original_gen100_x1_seq	100	200,200	1	200000	97151001	0.0002	2	8
+p2_original_gen100_x1_arr	twopop_original_gen100_x1_arr	100	200,200	1	20000	97151001	0.0002	2	8
+p2_variable_gen100_x1_seq	twopop_variable_gen100_x1_seq	100	200,200	1	200000	79151001	0.0002	2	8
+p2_variable_gen100_x1_arr	twopop_variable_gen100_x1_arr	100	200,200	1	20000	79151001	0.0002	2	8
+p2_uniform_gen100_x1_seq	twopop_uniform_gen100_x1_seq	100	200,200	1	200000	71951001	0.0002	2	8
+p2_uniform_gen100_x1_arr	twopop_uniform_gen100_x1_arr	100	200,200	1	20000	71951001	0.0002	2	8
+p2_original_gen100_x2_seq	twopop_original_gen100_x2_seq	100	200,200	1	200000	71591001	0.0002	2	8
+p2_original_gen100_x2_arr	twopop_original_gen100_x2_arr	100	200,200	1	20000	71510901	0.0002	2	8
+p2_variable_gen100_x2_seq	twopop_variable_gen100_x2_seq	100	200,200	1	200000	71591001	0.0002	2	8
+p2_variable_gen100_x2_arr	twopop_variable_gen100_x2_arr	100	200,200	1	20000	71510901	0.0002	2	8
+p2_uniform_gen100_x2_seq	twopop_uniform_gen100_x2_seq	100	200,200	1	200000	71510091	0.0002	2	8
+p2_uniform_gen100_x2_arr	twopop_uniform_gen100_x2_arr	100	200,200	1	20000	71510019	0.0002	2	8
 
-p2_gen800_seq_ref40	twopop_gen800_seq	100	40,40	1	200000	15100	0.0002	2	4
-p2_gen800_arr_ref40	twopop_gen800_arr	100	40,40	1	20000	20520	0.0002	2	4
-p2_gen800_seq_ref200	twopop_gen800_seq	100	200,200	1	200000	13510	0.0002	2	4
-p2_gen800_arr_ref200	twopop_gen800_arr	100	200,200	1	20000	25230	0.0002	2	4
-#p2_gen800_seq_ref1000	twopop_gen800_seq	100	1000,1000	1	200000	31510	0.0002	2	4
-#p2_gen800_arr_ref1000	twopop_gen800_arr	100	1000,1000	1	20000	42520	0.0002	2	4
+p2_original_gen200_x1_seq	twopop_original_gen200_x1_seq	100	200,200	1	200000	87151001	0.0002	2	8
+p2_original_gen200_x1_arr	twopop_original_gen200_x1_arr	100	200,200	1	20000	78151001	0.0002	2	8
+p2_variable_gen200_x1_seq	twopop_variable_gen200_x1_seq	100	200,200	1	200000	71581001	0.0002	2	8
+p2_variable_gen200_x1_arr	twopop_variable_gen200_x1_arr	100	200,200	1	20000	71518001	0.0002	2	8
+p2_uniform_gen200_x1_seq	twopop_uniform_gen200_x1_seq	100	200,200	1	200000	715981001	0.0002	2	8
+p2_uniform_gen200_x1_arr	twopop_uniform_gen200_x1_arr	100	200,200	1	20000	715109801	0.0002	2	8
+p2_original_gen200_x2_seq	twopop_original_gen200_x2_seq	100	200,200	1	200000	715108801	0.0002	2	8
+p2_original_gen200_x2_arr	twopop_original_gen200_x2_arr	100	200,200	1	20000	715108801	0.0002	2	8
+p2_variable_gen200_x2_seq	twopop_variable_gen200_x2_seq	100	200,200	1	200000	715881001	0.0002	2	8
+p2_variable_gen200_x2_arr	twopop_variable_gen200_x2_arr	100	200,200	1	20000	715180018	0.0002	2	8
+p2_uniform_gen200_x2_seq	twopop_uniform_gen200_x2_seq	100	200,200	1	200000	718518001	0.0002	2	8
+p2_uniform_gen200_x2_arr	twopop_uniform_gen200_x2_arr	100	200,200	1	20000	781510801	0.0002	2	8
 
-p2_gen1600_seq_ref40	twopop_gen1600_seq	100	40,40	1	200000	15180	0.0002	2	4
-p2_gen1600_arr_ref40	twopop_gen1600_arr	100	40,40	1	20000	28520	0.0002	2	4
-p2_gen1600_seq_ref200	twopop_gen1600_seq	100	200,200	1	200000	15108	0.0002	2	4
-p2_gen1600_arr_ref200	twopop_gen1600_arr	100	200,200	1	20000	42520	0.0002	2	4
-#p2_gen1600_seq_ref1000	twopop_gen1600_seq	100	1000,1000	1	200000	41510	0.0002	2	4
-#p2_gen1600_arr_ref1000	twopop_gen1600_arr	100	1000,1000	1	20000	28520	0.0002	2	4
+p2_original_gen400_x1_seq	twopop_original_gen400_x1_seq	100	200,200	1	200000	777151001	0.0002	2	8
+p2_original_gen400_x1_arr	twopop_original_gen400_x1_arr	100	200,200	1	20000	771571001	0.0002	2	8
+p2_variable_gen400_x1_seq	twopop_variable_gen400_x1_seq	100	200,200	1	200000	771571001	0.0002	2	8
+p2_variable_gen400_x1_arr	twopop_variable_gen400_x1_arr	100	200,200	1	20000	717517001	0.0002	2	8
+p2_uniform_gen400_x1_seq	twopop_uniform_gen400_x1_seq	100	200,200	1	200000	715170701	0.0002	2	8
+p2_uniform_gen400_x1_arr	twopop_uniform_gen400_x1_arr	100	200,200	1	20000	715100771	0.0002	2	8
+p2_original_gen400_x2_seq	twopop_original_gen400_x2_seq	100	200,200	1	200000	715100177	0.0002	2	8
+p2_original_gen400_x2_arr	twopop_original_gen400_x2_arr	100	200,200	1	20000	715170071	0.0002	2	8
+p2_variable_gen400_x2_seq	twopop_variable_gen400_x2_seq	100	200,200	1	200000	715671001	0.0002	2	8
+p2_variable_gen400_x2_arr	twopop_variable_gen400_x2_arr	100	200,200	1	20000	715170401	0.0002	2	8
+p2_uniform_gen400_x2_seq	twopop_uniform_gen400_x2_seq	100	200,200	1	200000	715371001	0.0002	2	8
+p2_uniform_gen400_x2_arr	twopop_uniform_gen400_x2_arr	100	200,200	1	20000	715102301	0.0002	2	8
 
-p2_gen3200_seq_ref40	twopop_gen3200_seq	100	40,40	1	200000	151320	0.0002	2	4
-p2_gen3200_arr_ref40	twopop_gen3200_arr	100	40,40	1	20000	252320	0.0002	2	4
-p2_gen3200_seq_ref200	twopop_gen3200_seq	100	200,200	1	200000	152310	0.0002	2	4
-p2_gen3200_arr_ref200	twopop_gen3200_arr	100	200,200	1	20000	252320	0.0002	2	4
-#p2_gen3200_seq_ref1000	twopop_gen3200_seq	100	1000,1000	1	200000	123510	0.0002	2	4
-#p2_gen3200_arr_ref1000	twopop_gen3200_arr	100	1000,1000	1	20000	253320	0.0002	2	4
+p2_original_gen800_x1_seq	twopop_original_gen800_x1_seq	100	200,200	1	200000	715101901	0.0002	2	8
+p2_original_gen800_x1_arr	twopop_original_gen800_x1_arr	100	200,200	1	20000	791151001	0.0002	2	8
+p2_variable_gen800_x1_seq	twopop_variable_gen800_x1_seq	100	200,200	1	200000	715109101	0.0002	2	8
+p2_variable_gen800_x1_arr	twopop_variable_gen800_x1_arr	100	200,200	1	20000	715109901	0.0002	2	8
+p2_uniform_gen800_x1_seq	twopop_uniform_gen800_x1_seq	100	200,200	1	200000	715931001	0.0002	2	8
+p2_uniform_gen800_x1_arr	twopop_uniform_gen800_x1_arr	100	200,200	1	20000	715109031	0.0002	2	8
+p2_original_gen800_x2_seq	twopop_original_gen800_x2_seq	100	200,200	1	200000	7151239001	0.0002	2	8
+p2_original_gen800_x2_arr	twopop_original_gen800_x2_arr	100	200,200	1	20000	715112001	0.0002	2	8
+p2_variable_gen800_x2_seq	twopop_variable_gen800_x2_seq	100	200,200	1	200000	2351001	0.0002	2	8
+p2_variable_gen800_x2_arr	twopop_variable_gen800_x2_arr	100	200,200	1	20000	3451001	0.0002	2	8
+p2_uniform_gen800_x2_seq	twopop_uniform_gen800_x2_seq	100	200,200	1	200000	56151001	0.0002	2	8
+p2_uniform_gen800_x2_arr	twopop_uniform_gen800_x2_arr	100	200,200	1	20000	71781001	0.0002	2	8
 
-# p2_sep16_seq11	twopop_rep1_seq	20	40,40	1	200000	378510	0.0002	2	4
-# p2_sep16_arr11	twopop_rep1_arr	20	40,40	1	20000	452780	0.0002	2	4
-# p2_sep16_seq111	twopop_rep1_seq	20	60,60	1	200000	551870	0.0002	2	4
-# p2_sep16_arr111	twopop_rep1_arr	20	60,60	1	20000	652870	0.0002	2	4
+p2_original_gen1600_x1_seq	twopop_original_gen1600_x1_seq	100	200,200	1	200000	7111001	0.0002	2	8
+p2_original_gen1600_x1_arr	twopop_original_gen1600_x1_arr	100	200,200	1	20000	7181001	0.0002	2	8
+p2_variable_gen1600_x1_seq	twopop_variable_gen1600_x1_seq	100	200,200	1	200000	71871001	0.0002	2	8
+p2_variable_gen1600_x1_arr	twopop_variable_gen1600_x1_arr	100	200,200	1	20000	7121001	0.0002	2	8
+p2_uniform_gen1600_x1_seq	twopop_uniform_gen1600_x1_seq	100	200,200	1	200000	7101001	0.0002	2	8
+p2_uniform_gen1600_x1_arr	twopop_uniform_gen1600_x1_arr	100	200,200	1	20000	7151000	0.0002	2	8
+p2_original_gen1600_x2_seq	twopop_original_gen1600_x2_seq	100	200,200	1	200000	731001	0.0002	2	8
+p2_original_gen1600_x2_arr	twopop_original_gen1600_x2_arr	100	200,200	1	20000	7131	0.0002	2	8
+p2_variable_gen1600_x2_seq	twopop_variable_gen1600_x2_seq	100	200,200	1	200000	713201	0.0002	2	8
+p2_variable_gen1600_x2_arr	twopop_variable_gen1600_x2_arr	100	200,200	1	20000	76661001	0.0002	2	8
+p2_uniform_gen1600_x2_seq	twopop_uniform_gen1600_x2_seq	100	200,200	1	200000	71516006	0.0002	2	8
+p2_uniform_gen1600_x2_arr	twopop_uniform_gen1600_x2_arr	100	200,200	1	20000	712513001	0.0002	2	8
+
+p2_original_gen3200_x1_seq	twopop_original_gen3200_x1_seq	100	200,200	1	200000	7123001	0.0002	2	8
+p2_original_gen3200_x1_arr	twopop_original_gen3200_x1_arr	100	200,200	1	20000	715144501	0.0002	2	8
+p2_variable_gen3200_x1_seq	twopop_variable_gen3200_x1_seq	100	200,200	1	200000	7158871001	0.0002	2	8
+p2_variable_gen3200_x1_arr	twopop_variable_gen3200_x1_arr	100	200,200	1	20000	715171	0.0002	2	8
+p2_uniform_gen3200_x1_seq	twopop_uniform_gen3200_x1_seq	100	200,200	1	200000	7177001	0.0002	2	8
+p2_uniform_gen3200_x1_arr	twopop_uniform_gen3200_x1_arr	100	200,200	1	20000	71518501	0.0002	2	8
+p2_original_gen3200_x2_seq	twopop_original_gen3200_x2_seq	100	200,200	1	200000	7656701	0.0002	2	8
+p2_original_gen3200_x2_arr	twopop_original_gen3200_x2_arr	100	200,200	1	20000	7151561	0.0002	2	8
+p2_variable_gen3200_x2_seq	twopop_variable_gen3200_x2_seq	100	200,200	1	200000	71555001	0.0002	2	8
+p2_variable_gen3200_x2_arr	twopop_variable_gen3200_x2_arr	100	200,200	1	20000	7151	0.0002	2	8
+p2_uniform_gen3200_x2_seq	twopop_uniform_gen3200_x2_seq	100	200,200	1	200000	5151001	0.0002	2	8
+p2_uniform_gen3200_x2_arr	twopop_uniform_gen3200_x2_arr	100	200,200	1	20000	55151001	0.0002	2	8

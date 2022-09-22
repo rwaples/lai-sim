@@ -12,7 +12,7 @@ ancestral_Ne = int(snakemake.params.ancestral_Ne)
 # chr = str(snakemake.params.chr)
 # chr_len = float(snakemake.params.chr_len)
 rec_map_path = str(snakemake.params.rec_map_path)
-max_bp = int(snakemake.params.max_bp)
+#max_bp = int(snakemake.params.max_bp)
 
 mutation_rate = float(snakemake.params.mutation_rate)
 sim_seed = int(snakemake.params.sim_seed)
@@ -23,10 +23,13 @@ ts = tskit.load(ts_path)
 
 
 rmap = msprime.RateMap.read_hapmap(rec_map_path)
-recapmap = rmap.slice(0, max_bp + 1, trim=True)
+#recapmap = rmap.slice(0, max_bp + 1, trim=True)
+recapmap = rmap
 
-# print('ts_length', ts.get_sequence_length())
-# print('tail', recapmap.right[-1])
+print('ts_length', ts.get_sequence_length())
+#print('recapmap', recapmap.right[-1])
+print('rmap', rmap.right[-1])
+
 
 # species = stdpopsim.get_species("HomSap")
 # contig = species.get_contig(chr, length_multiplier=chr_len)

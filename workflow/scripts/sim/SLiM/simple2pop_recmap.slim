@@ -22,7 +22,7 @@ initialize() {
     defineConstant("burn_in", 10.0);
     defineConstant("generation_time", 1);
     defineConstant("mutation_rate", Q * 0);
-    defineConstant("chromosome_length", asInteger(max_bp));
+    // defineConstant("chromosome_length", asInteger(max_bp));
     defineConstant("pop_names", c("sourceA", "sourceB", "admixed"));
 
 
@@ -38,7 +38,7 @@ initialize() {
     // multiply rates by 3 to account for gene conversion
     _recombination_rates = rates * 3;
     _recombination_ends = ends;
-    defineConstant("recombination_rates", _recombination_rates) ;
+    defineConstant("recombination_rates", _recombination_rates);
     defineConstant("recombination_ends", _recombination_ends);
 
     // Time of epoch boundaries, in years before present.
@@ -112,7 +112,7 @@ initialize() {
     initializeMutationRate(mutation_rate);
     initializeMutationType("m1", 0.5, "f", 0);
     initializeGenomicElementType("g1", m1, 1.0);
-    initializeGenomicElement(g1, 0, chromosome_length-1);
+    initializeGenomicElement(g1, 0, recombination_ends[length(recombination_ends)-1]);
     initializeRecombinationRate(recombination_rates, recombination_ends);
     initializeGeneConversion(0.6666666, 300, 1.0);
 }

@@ -1,7 +1,42 @@
-sim_name	model_name	sim_seed	slim_script_path	rec_map_path	ancestral_Ne	mutation_rate	chr	max_bp	admixture_time	size_A	size_B	size_admixed	time_split
-twopop_gen100	simple2pop	100	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/genetic_map_GRCh37_chr18.txt	10000	1.44E-08	chr22	51304565	20	10000	10000	10000	100
-twopop_gen200	simple2pop	200	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/genetic_map_GRCh37_chr18.txt	10000	1.44E-08	chr22	51304565	20	10000	10000	10000	200
-twopop_gen400	simple2pop	400	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/genetic_map_GRCh37_chr18.txt	10000	1.44E-08	chr22	51304565	20	10000	10000	10000	400
-twopop_gen800	simple2pop	800	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/genetic_map_GRCh37_chr18.txt	10000	1.44E-08	chr22	51304565	20	10000	10000	10000	800
-twopop_gen1600	simple2pop	1600	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/genetic_map_GRCh37_chr18.txt	10000	1.44E-08	chr22	51304565	20	10000	10000	10000	1600
-twopop_gen3200	simple2pop	3200	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/genetic_map_GRCh37_chr18.txt	10000	1.44E-08	chr22	51304565	20	10000	10000	10000	3200
+sim_name	model_name	sim_seed	slim_script_path	rec_map_path	ancestral_Ne	mutation_rate	chr	admixture_time	size_A	size_B	size_admixed	time_split
+twopop_original_gen100_x1	simple2pop	801	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/original_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	100
+twopop_variable_gen100_x1	simple2pop	802	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/variable_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	100
+twopop_uniform_gen100_x1	simple2pop	803	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/uniform_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	100
+twopop_original_gen100_x2	simple2pop	8012	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/original_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	100
+twopop_variable_gen100_x2	simple2pop	8022	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/variable_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	100
+twopop_uniform_gen100_x2	simple2pop	8032	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/uniform_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	100
+
+twopop_original_gen200_x1	simple2pop	2801	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/original_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	200
+twopop_variable_gen200_x1	simple2pop	2802	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/variable_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	200
+twopop_uniform_gen200_x1	simple2pop	2803	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/uniform_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	200
+twopop_original_gen200_x2	simple2pop	28012	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/original_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	200
+twopop_variable_gen200_x2	simple2pop	28022	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/variable_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	200
+twopop_uniform_gen200_x2	simple2pop	28032	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/uniform_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	200
+
+twopop_original_gen400_x1	simple2pop	3801	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/original_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	400
+twopop_variable_gen400_x1	simple2pop	3802	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/variable_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	400
+twopop_uniform_gen400_x1	simple2pop	3803	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/uniform_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	400
+twopop_original_gen400_x2	simple2pop	38012	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/original_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	400
+twopop_variable_gen400_x2	simple2pop	38022	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/variable_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	400
+twopop_uniform_gen400_x2	simple2pop	38032	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/uniform_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	400
+
+twopop_original_gen800_x1	simple2pop	4801	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/original_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	800
+twopop_variable_gen800_x1	simple2pop	4802	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/variable_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	800
+twopop_uniform_gen800_x1	simple2pop	4803	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/uniform_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	800
+twopop_original_gen800_x2	simple2pop	48012	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/original_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	800
+twopop_variable_gen800_x2	simple2pop	48022	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/variable_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	800
+twopop_uniform_gen800_x2	simple2pop	48032	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/uniform_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	800
+
+twopop_original_gen1600_x1	simple2pop	5801	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/original_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	1600
+twopop_variable_gen1600_x1	simple2pop	5802	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/variable_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	1600
+twopop_uniform_gen1600_x1	simple2pop	5803	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/uniform_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	1600
+twopop_original_gen1600_x2	simple2pop	58012	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/original_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	1600
+twopop_variable_gen1600_x2	simple2pop	58022	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/variable_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	1600
+twopop_uniform_gen1600_x2	simple2pop	58032	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/uniform_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	1600
+
+twopop_original_gen3200_x1	simple2pop	6801	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/original_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	3200
+twopop_variable_gen3200_x1	simple2pop	6802	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/variable_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	3200
+twopop_uniform_gen3200_x1	simple2pop	6803	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/uniform_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	3200
+twopop_original_gen3200_x2	simple2pop	68012	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/original_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	3200
+twopop_variable_gen3200_x2	simple2pop	68022	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/variable_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	3200
+twopop_uniform_gen3200_x2	simple2pop	68032	workflow/scripts/sim/SLiM/simple2pop_recmap.slim	workflow/scripts/sim/rec_maps/uniform_map.txt	10000	1.44E-08	chr22	20	10000	10000	10000	3200
