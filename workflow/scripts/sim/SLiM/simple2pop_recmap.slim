@@ -32,7 +32,7 @@ initialize() {
 
     defineConstant("time_split", asInteger(tsplit));
 
-    recmap = readCSV(slim_map, c("ends", "rates"), sep="\t");
+    recmap = readCSV(filePath = slim_map, colNames = c("ends", "rates"), colTypes = "if" , sep="\t");
     ends = recmap.getValue("ends");
     rates = recmap.getValue("rates");
     // multiply rates by 3 to account for gene conversion
