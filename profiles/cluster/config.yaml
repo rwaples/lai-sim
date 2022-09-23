@@ -1,8 +1,7 @@
-simulations: config/cluster.simulations.tsv
-ascertainments: config/cluster.ascertainments.tsv
-analyses: config/cluster.analyses.tsv
+simulations: config/personal.simulations.tsv
+ascertainments: config/personal.ascertainments.tsv
+analyses: config/personal.analyses.tsv
 
-cpus: 12
 email: "ryan.waples@gmail.com"
 email_type: "FAIL"
 
