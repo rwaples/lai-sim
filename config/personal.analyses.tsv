@@ -52,7 +52,7 @@ p2_variable_gen800_x1_seq	twopop_variable_gen800_x1_seq	100	200,200	1	200000	715
 p2_variable_gen800_x1_arr	twopop_variable_gen800_x1_arr	100	200,200	1	20000	715109901	0.0002	2	8
 p2_uniform_gen800_x1_seq	twopop_uniform_gen800_x1_seq	100	200,200	1	200000	715931001	0.0002	2	8
 p2_uniform_gen800_x1_arr	twopop_uniform_gen800_x1_arr	100	200,200	1	20000	715109031	0.0002	2	8
-p2_original_gen800_x2_seq	twopop_original_gen800_x2_seq	100	200,200	1	200000	7151239001	0.0002	2	8
+p2_original_gen800_x2_seq	twopop_original_gen800_x2_seq	100	200,200	1	200000	7151901	0.0002	2	8
 p2_original_gen800_x2_arr	twopop_original_gen800_x2_arr	100	200,200	1	20000	715112001	0.0002	2	8
 p2_variable_gen800_x2_seq	twopop_variable_gen800_x2_seq	100	200,200	1	200000	2351001	0.0002	2	8
 p2_variable_gen800_x2_arr	twopop_variable_gen800_x2_arr	100	200,200	1	20000	3451001	0.0002	2	8
@@ -74,7 +74,7 @@ p2_uniform_gen1600_x2_arr	twopop_uniform_gen1600_x2_arr	100	200,200	1	20000	7125
 
 p2_original_gen3200_x1_seq	twopop_original_gen3200_x1_seq	100	200,200	1	200000	7123001	0.0002	2	8
 p2_original_gen3200_x1_arr	twopop_original_gen3200_x1_arr	100	200,200	1	20000	715144501	0.0002	2	8
-p2_variable_gen3200_x1_seq	twopop_variable_gen3200_x1_seq	100	200,200	1	200000	7158871001	0.0002	2	8
+p2_variable_gen3200_x1_seq	twopop_variable_gen3200_x1_seq	100	200,200	1	200000	70021	0.0002	2	8
 p2_variable_gen3200_x1_arr	twopop_variable_gen3200_x1_arr	100	200,200	1	20000	715171	0.0002	2	8
 p2_uniform_gen3200_x1_seq	twopop_uniform_gen3200_x1_seq	100	200,200	1	200000	7177001	0.0002	2	8
 p2_uniform_gen3200_x1_arr	twopop_uniform_gen3200_x1_arr	100	200,200	1	20000	71518501	0.0002	2	8
