@@ -1,0 +1,19 @@
+anal_name	asc_name	nind_admixed	nind_ref	MAC_filter	max_snps	anal_seed	gt_err	target_pop	nthreads
+# changing ref sizes
+p3_ref20_seq1	threepop_LARGE_rep1_seq	400	20,20,20	1	1000000	99621	0.0002	3	20
+p3_ref20_arr1	threepop_LARGE_rep1_arr	400	20,20,20	1	20000	99622	0.0002	3	20
+p3_ref20_seq2	threepop_LARGE_rep2_seq	400	20,20,20	1	1000000	99623	0.0002	3	20
+p3_ref20_arr2	threepop_LARGE_rep2_arr	400	20,20,20	1	20000	99624	0.0002	3	20
+p3_ref20_seq3	threepop_LARGE_rep3_seq	400	20,20,20	1	1000000	99625	0.0002	3	20
+p3_ref20_arr3	threepop_LARGE_rep3_arr	400	20,20,20	1	20000	99626	0.0002	3	20
+p3_ref20_seq4	threepop_LARGE_rep4_seq	400	20,20,20	1	1000000	99627	0.0002	3	20
+p3_ref20_arr4	threepop_LARGE_rep4_arr	400	20,20,20	1	20000	99628	0.0002	3	20
+
+p3_ref50_seq1	threepop_LARGE_rep1_seq	400	50,50,50	1	1000000	99651	0.0002	3	20
+p3_ref50_arr1	threepop_LARGE_rep1_arr	400	50,50,50	1	20000	99652	0.0002	3	20
+p3_ref50_seq2	threepop_LARGE_rep2_seq	400	50,50,50	1	1000000	99653	0.0002	3	20
+p3_ref50_arr2	threepop_LARGE_rep2_arr	400	50,50,50	1	20000	99654	0.0002	3	20
+p3_ref50_seq3	threepop_LARGE_rep3_seq	400	50,50,50	1	1000000	99655	0.0002	3	20
+p3_ref50_arr3	threepop_LARGE_rep3_arr	400	50,50,50	1	20000	99656	0.0002	3	20
+p3_ref50_seq4	threepop_LARGE_rep4_seq	400	50,50,50	1	1000000	99657	0.0002	3	20
+p3_ref50_arr4	threepop_LARGE_rep4_arr	400	50,50,50	1	20000	99658	0.0002	3	20

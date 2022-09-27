@@ -1,0 +1,9 @@
+asc_name	sim_name	asc_MAC	asc_MAF	asc_maxsites	asc_seed
+threepop_LARGE_rep1_seq	threepop_LARGE_rep1	1	0.00	5000000	141
+threepop_LARGE_rep1_arr	threepop_LARGE_rep1	1	0.05	5000000	142
+threepop_LARGE_rep2_seq	threepop_LARGE_rep2	1	0.00	5000000	143
+threepop_LARGE_rep2_arr	threepop_LARGE_rep2	1	0.05	5000000	144
+threepop_LARGE_rep3_seq	threepop_LARGE_rep3	1	0.00	5000000	145
+threepop_LARGE_rep3_arr	threepop_LARGE_rep3	1	0.05	5000000	146
+threepop_LARGE_rep4_seq	threepop_LARGE_rep4	1	0.00	5000000	147
+threepop_LARGE_rep4_arr	threepop_LARGE_rep4	1	0.05	5000000	148
