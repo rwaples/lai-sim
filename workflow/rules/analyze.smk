@@ -234,7 +234,7 @@ rule run_beagle:
 		gt = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/genotypes.witherror.vcf.gz',
 		map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/plink_map.txt',
 	output:
-		vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.gz',
+		vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.gzPPPPPPPPPPP',
 		index = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.gz.csi',
 	log:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.beagle.log',
@@ -254,6 +254,36 @@ rule run_beagle:
 
 		{params.bcftools} index {output.vcf}
 		"""
+
+
+rule run_beagle_optional:
+	input:
+		gt = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/genotypes.witherror.vcf.gz',
+		map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/plink_map.txt',
+	output:
+		vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.gz',
+		index = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.gz.csi',
+	log:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.beagle.log',
+	params:
+		prefix = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased',
+		bcftools = config['PATHS']['BCFTOOLS'],
+		BEAGLE = config['PATHS']['BEAGLE'],
+		seed = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].anal_seed,
+		do_phasing = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].do_phasing,
+	run:
+		print(units)
+		print(params.do_phasing)
+
+		if params.do_phasing == 'yes':
+			# do phasing as normal.
+			shell("java -jar {params.BEAGLE} gt={input.gt} map={input.map} seed={params.seed} out={params.prefix} 2>&1 | tee {log}" )
+		elif params.do_phasing == 'no':
+			# do not re-phase, take phasing as given.
+			shell("cp {input.gt} {output.vcf}")
+		else:
+			assert False, "do_phasing should be 'yes' or 'no' "
+		shell("{params.bcftools} index {output.vcf}")
 
 
 rule get_dosage_true:

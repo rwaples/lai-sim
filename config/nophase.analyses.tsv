@@ -1,0 +1,10 @@
+anal_name	asc_name	nind_admixed	nind_ref	MAC_filter	max_snps	anal_seed	gt_err	target_pop	nthreads	do_phasing
+p3_ref20_seq1_nophase	threepop_LARGE_rep1_seq	20	20,20,20	1	1000000	61985	0.0002	3	5	no
+p3_ref20_arr1_nophase	threepop_LARGE_rep1_arr	20	20,20,20	1	20000	615674	0.0002	3	5	no
+p3_ref20_seq1	threepop_LARGE_rep1_seq	20	20,20,20	1	1000000	61985	0.0002	3	5	yes
+p3_ref20_arr1	threepop_LARGE_rep1_arr	20	20,20,20	1	20000	615674	0.0002	3	5	yes
+
+p3_ref50_seq1_nophase	threepop_LARGE_rep1_seq	20	50,50,50	1	1000000	619815	0.0002	3	5	no
+p3_ref50_arr1_nophase	threepop_LARGE_rep1_arr	20	50,50,50	1	20000	6156714	0.0002	3	5	no
+p3_ref50_seq1	threepop_LARGE_rep1_seq	20	50,50,50	1	1000000	619815	0.0002	3	5	yes
+p3_ref50_arr1	threepop_LARGE_rep1_arr	20	50,50,50	1	20000	6156714	0.0002	3	5	yes
