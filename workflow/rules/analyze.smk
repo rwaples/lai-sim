@@ -1,3 +1,4 @@
+
 rule write_analysis_maps:
 	input:
 		sites_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
@@ -134,7 +135,7 @@ rule run_flare:
 		"probs=true "
 		"nthreads={params.nthreads} "
 		"seed={params.seed} "
-		# "min-maf=0 "
+		# min-maf 
 
 		"""
 
