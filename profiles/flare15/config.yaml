@@ -9,8 +9,8 @@ email_type: "FAIL"
 # dont use '~' for your home directory (not really sure why)
 PATHS:
     SLiM: programs/SLiM/slim
-    # BCFTOOLS: /home/users/waplesr/lai/lai-sim/programs/bcftools-1.14/bcftools
-    BCFTOOLS: programs/bcftools/bcftools-1.14/bcftools
+    BCFTOOLS: /home/users/waplesr/lai/lai-sim/programs/bcftools-1.14/bcftools
+    #BCFTOOLS: programs/bcftools/bcftools-1.14/bcftools
     BEAGLE: programs/BEAGLE/beagle.28Jun21.220.jar
     RFMix: programs/RFmix/RFMix_v1.5.4/RunRFMix.py
     RFMix2: programs/RFmix2/rfmix/rfmix
