@@ -107,12 +107,19 @@ rule make_mosaic_input:
 		'../scripts/make_mosaic_inputs.py'
 
 
+rule rerun_flare:
+	input:
+		path = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/touch_to_rerun',
+	shell:
+		"touch {input.path}"
+
 rule run_flare:
 	input:
 		target_vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.target_inds.vcf.gz',
 		reference_vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.reference_inds.vcf.gz',
 		sample_map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/sample_map.txt',
 		genetic_map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/plink_map.txt',
+		rerun_flag = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/touch_to_rerun',
 	output:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.vcf.gz',
 	params:
