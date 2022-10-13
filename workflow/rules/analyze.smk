@@ -108,7 +108,7 @@ rule make_mosaic_input:
 
 
 rule rerun_flare:
-	input:
+	output:
 		path = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/touch_to_rerun',
 	shell:
 		"touch {input.path}"
