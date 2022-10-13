@@ -121,6 +121,7 @@ rule run_flare:
 		prefix = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare',
 		nthreads = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nthreads,
 		seed = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].anal_seed,
+		is_arr = lambda w: int(units.loc[(w.sim_name, w.asc_name, w.anal_name)].max_snps) < 25000 ,
 	log:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/run_flare.log',
 	benchmark:
@@ -135,7 +136,8 @@ rule run_flare:
 		"probs=true "
 		"nthreads={params.nthreads} "
 		"seed={params.seed} "
-		# min-maf 
+		"array={params.is_arr} "
+		# min-maf
 
 		"""
 
@@ -272,8 +274,8 @@ rule run_beagle_optional:
 		seed = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].anal_seed,
 		do_phasing = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].do_phasing,
 	run:
-		print(units)
-		print(params.do_phasing)
+		#print(units)
+		#print(params.do_phasing)
 
 		if params.do_phasing == 'yes':
 			# do phasing as normal.
