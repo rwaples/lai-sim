@@ -14,26 +14,27 @@ anal_name	asc_name	nind_admixed	nind_ref	MAC_filter	max_snps	anal_seed	gt_err	ta
 #p3_f15_ref50_seq4	threepop_LARGE_rep4_seq	400	50,50,50	1	1000000	9967	0.0002	3	20	yes
 #p3_f15_ref50_arr4	threepop_LARGE_rep4_arr	400	50,50,50	1	20000	9968	0.0002	3	20	yes
 
-#p3_f15_ref100_seq1	threepop_LARGE_rep1_seq	400	100,100,100	1	1000000	61	0.0002	3	20	yes
 #p3_f15_ref100_arr1	threepop_LARGE_rep1_arr	400	100,100,100	1	20000	19962	0.0002	3	20	yes
-#p3_f15_ref100_seq2	threepop_LARGE_rep2_seq	400	100,100,100	1	1000000	19963	0.0002	3	20	yes
 #p3_f15_ref100_arr2	threepop_LARGE_rep2_arr	400	100,100,100	1	20000	19964	0.0002	3	20	yes
-#p3_f15_ref100_seq3	threepop_LARGE_rep3_seq	400	100,100,100	1	1000000	19965	0.0002	3	20	yes
 #p3_f15_ref100_arr3	threepop_LARGE_rep3_arr	400	100,100,100	1	20000	19966	0.0002	3	20	yes
-#p3_f15_ref100_seq4	threepop_LARGE_rep4_seq	400	100,100,100	1	1000000	19967	0.0002	3	20	yes
 #p3_f15_ref100_arr4	threepop_LARGE_rep4_arr	400	100,100,100	1	20000	19968	0.0002	3	20	yes
 
-#p3_f15_ref400_seq1	threepop_LARGE_rep1_seq	400	400,400,400	1	1000000	90961	0.0002	3	20	yes
-#p3_f15_ref400_seq2	threepop_LARGE_rep2_seq	400	400,400,400	1	1000000	99603	0.0002	3	20	yes
-#p3_f15_ref400_seq3	threepop_LARGE_rep3_seq	400	400,400,400	1	1000000	99605	0.0002	3	20	yes
-#p3_f15_ref400_seq4	threepop_LARGE_rep4_seq	400	400,400,400	1	1000000	99607	0.0002	3	20	yes
 
-#p3_f15_ref1000_seq1	threepop_LARGE_rep1_seq	400	1000,1000,1000	1	1000000	1009961	0.0002	3	20	yes
-#p3_f15_ref1000_seq2	threepop_LARGE_rep2_seq	400	1000,1000,1000	1	1000000	1009963	0.0002	3	20	yes
-#p3_f15_ref1000_seq3	threepop_LARGE_rep3_seq	400	1000,1000,1000	1	1000000	1009965	0.0002	3	20	yes
-#p3_f15_ref1000_seq4	threepop_LARGE_rep4_seq	400	1000,1000,1000	1	1000000	1009967	0.0002	3	20	yes
+p3_f14_ref100_seq1	threepop_LARGE_rep1_seq	400	100,100,100	1	1000000	61	0.0002	3	20	yes
+p3_f14_ref100_seq2	threepop_LARGE_rep2_seq	400	100,100,100	1	1000000	19963	0.0002	3	20	yes
+p3_f14_ref100_seq3	threepop_LARGE_rep3_seq	400	100,100,100	1	1000000	19965	0.0002	3	20	yes
+p3_f14_ref100_seq4	threepop_LARGE_rep4_seq	400	100,100,100	1	1000000	19967	0.0002	3	20	yes
 
-# TODO update to LARGE three pop simulation
+p3_f14_ref400_seq1	threepop_LARGE_rep1_seq	400	400,400,400	1	1000000	90961	0.0002	3	20	yes
+p3_f14_ref400_seq2	threepop_LARGE_rep2_seq	400	400,400,400	1	1000000	99603	0.0002	3	20	yes
+p3_f14_ref400_seq3	threepop_LARGE_rep3_seq	400	400,400,400	1	1000000	99605	0.0002	3	20	yes
+p3_f14_ref400_seq4	threepop_LARGE_rep4_seq	400	400,400,400	1	1000000	99607	0.0002	3	20	yes
+
+p3_f14_ref1000_seq1	threepop_LARGE_rep1_seq	400	1000,1000,1000	1	1000000	1009961	0.0002	3	20	yes
+p3_f14_ref1000_seq2	threepop_LARGE_rep2_seq	400	1000,1000,1000	1	1000000	1009963	0.0002	3	20	yes
+p3_f14_ref1000_seq3	threepop_LARGE_rep3_seq	400	1000,1000,1000	1	1000000	1009965	0.0002	3	20	yes
+p3_f14_ref1000_seq4	threepop_LARGE_rep4_seq	400	1000,1000,1000	1	1000000	1009967	0.0002	3	20	yes
+
 # three pop uneven ref sizes
 p3_seqU1_20	threepop_LARGE_rep1_seq	400	20,400,400	1	1000000	231	0.0002	3	20	yes
 p3_seqU2_20	threepop_LARGE_rep2_seq	400	400,20,400	1	1000000	233	0.0002	3	20	yes
