@@ -113,6 +113,7 @@ rule rerun_flare:
 	shell:
 		"touch {output.path}"
 
+
 rule run_flare:
 	input:
 		target_vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.target_inds.vcf.gz',

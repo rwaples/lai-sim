@@ -26,15 +26,6 @@ p3_f14_ref1000_seq2	threepop_LARGE_rep2_seq	400	1000,1000,1000	1	1000000	1009963
 p3_f14_ref1000_seq3	threepop_LARGE_rep3_seq	400	1000,1000,1000	1	1000000	1009965	0.0002	3	20	yes
 p3_f14_ref1000_seq4	threepop_LARGE_rep4_seq	400	1000,1000,1000	1	1000000	1009967	0.0002	3	20	yes
 
-# three pop uneven ref sizes
-p3_seqU1_20	threepop_LARGE_rep1_seq	400	20,400,400	1	1000000	231	0.0002	3	20	yes
-p3_seqU2_20	threepop_LARGE_rep2_seq	400	400,20,400	1	1000000	233	0.0002	3	20	yes
-p3_seqU3_20	threepop_LARGE_rep3_seq	400	400,400,20	1	1000000	235	0.0002	3	20	yes
-
-p3_seqU1_50	threepop_LARGE_rep1_seq	400	50,400,400	1	1000000	251	0.0002	3	20	yes
-p3_seqU2_50	threepop_LARGE_rep2_seq	400	400,50,400	1	1000000	253	0.0002	3	20	yes
-p3_seqU3_50	threepop_LARGE_rep3_seq	400	400,400,50	1	1000000	255	0.0002	3	20	yes
-
 
 # four pop
 p4_seq1	fourpop_rep1_seq	400	400,400,400,400	1	1000000	71	0.0002	4	20	yes
@@ -43,7 +34,6 @@ p4_seq3	fourpop_rep3_seq	400	400,400,400,400	1	1000000	75	0.0002	4	20	yes
 p4_seq4	fourpop_rep4_seq	400	400,400,400,400	1	1000000	77	0.0002	4	20	yes
 
 
-# TODO NEED TO ADD REPS 3 + 4
 # two population
 p2_variable_gen100_x1_seq	twopop_variable_gen100_x1_seq	100	200,200	1	1000000	79151001	0.0002	2	20	yes
 p2_uniform_gen100_x1_seq	twopop_uniform_gen100_x1_seq	100	200,200	1	1000000	71951001	0.0002	2	20	yes
@@ -101,3 +91,36 @@ p2_variable_gen3200_x3_seq	twopop_variable_gen3200_x3_seq	100	200,200	1	1000000	
 p2_uniform_gen3200_x3_seq	twopop_uniform_gen3200_x3_seq	100	200,200	1	1000000	177001	0.0002	2	20	yes
 p2_variable_gen3200_x4_seq	twopop_variable_gen3200_x4_seq	100	200,200	1	1000000	555001	0.0002	2	20	yes
 p2_uniform_gen3200_x4_seq	twopop_uniform_gen3200_x4_seq	100	200,200	1	1000000	3001	0.0002	2	20	yes
+
+
+
+# three pop uneven ref sizes
+p3_seqU1_20a	threepop_LARGE_rep1_seq	400	20,400,400	1	1000000	25231	0.0002	3	20
+p3_seqU2_20a	threepop_LARGE_rep2_seq	400	20,400,400	1	1000000	25233	0.0002	3	20
+p3_seqU3_20a	threepop_LARGE_rep3_seq	400	20,400,400	1	1000000	25235	0.0002	3	20
+p3_seqU4_20a	threepop_LARGE_rep4_seq	400	20,400,400	1	1000000	25235	0.0002	3	20
+
+p3_seqU1_50a	threepop_LARGE_rep1_seq	400	50,400,400	1	1000000	5231	0.0002	3	20
+p3_seqU2_50a	threepop_LARGE_rep2_seq	400	50,400,400	1	1000000	5233	0.0002	3	20
+p3_seqU3_50a	threepop_LARGE_rep3_seq	400	50,400,400	1	1000000	5235	0.0002	3	20
+p3_seqU4_50a	threepop_LARGE_rep4_seq	400	50,400,400	1	1000000	5235	0.0002	3	20
+
+p3_seqU1_20b	threepop_LARGE_rep1_seq	400	400,20,400	1	1000000	25231	0.0002	3	20
+p3_seqU2_20b	threepop_LARGE_rep2_seq	400	400,20,400	1	1000000	25233	0.0002	3	20
+p3_seqU3_20b	threepop_LARGE_rep3_seq	400	400,20,400	1	1000000	25235	0.0002	3	20
+p3_seqU4_20b	threepop_LARGE_rep4_seq	400	400,20,400	1	1000000	25235	0.0002	3	20
+
+p3_seqU1_50b	threepop_LARGE_rep1_seq	400	400,50,400	1	1000000	5231	0.0002	3	20
+p3_seqU2_50b	threepop_LARGE_rep2_seq	400	400,50,400	1	1000000	5233	0.0002	3	20
+p3_seqU3_50b	threepop_LARGE_rep3_seq	400	400,50,400	1	1000000	5235	0.0002	3	20
+p3_seqU4_50b	threepop_LARGE_rep4_seq	400	400,50,400	1	1000000	5235	0.0002	3	20
+
+p3_seqU1_20c	threepop_LARGE_rep1_seq	400	400,400,20	1	1000000	125231	0.0002	3	20
+p3_seqU2_20c	threepop_LARGE_rep2_seq	400	400,400,20	1	1000000	125233	0.0002	3	20
+p3_seqU3_20c	threepop_LARGE_rep3_seq	400	400,400,20	1	1000000	125235	0.0002	3	20
+p3_seqU4_20c	threepop_LARGE_rep4_seq	400	400,400,20	1	1000000	125235	0.0002	3	20
+
+p3_seqU1_50c	threepop_LARGE_rep1_seq	400	400,400,50	1	1000000	75231	0.0002	3	20
+p3_seqU2_50c	threepop_LARGE_rep2_seq	400	400,400,50	1	1000000	75233	0.0002	3	20
+p3_seqU3_50c	threepop_LARGE_rep3_seq	400	400,400,50	1	1000000	75235	0.0002	3	20
+p3_seqU4_50c	threepop_LARGE_rep4_seq	400	400,400,50	1	1000000	75235	0.0002	3	20
