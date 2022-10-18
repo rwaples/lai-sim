@@ -97,14 +97,14 @@ rule testing:
 			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.0.flare.pdf'
 			for u in units.itertuples()
 		],
-		ancestry_dosage_mosaic = [
-			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.0.mosaic.pdf'
-			for u in units.itertuples()
-		],
-		ancestry_dosage_rfmix = [
-			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.0.rfmix2.pdf'
-			for u in units.itertuples()
-		],
+		#ancestry_dosage_mosaic = [
+		#	f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.0.mosaic.pdf'
+		#	for u in units.itertuples()
+		#],
+		#ancestry_dosage_rfmix = [
+		#	f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.0.rfmix2.pdf'
+		#	for u in units.itertuples()
+		#],
 		pairwise_Fst = [
 			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png'
 			for u in units.itertuples()
