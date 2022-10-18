@@ -93,10 +93,10 @@ rule reports:
 rule testing:
 	input:
 		# diagnostic plots
-		ancestry_dosage_flare = [
-			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.0.flare.pdf'
-			for u in units.itertuples()
-		],
+		#ancestry_dosage_flare = [
+		#	f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.0.flare.pdf'
+		#	for u in units.itertuples()
+		#],
 		#ancestry_dosage_mosaic = [
 		#	f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.0.mosaic.pdf'
 		#	for u in units.itertuples()
