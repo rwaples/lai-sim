@@ -1,6 +1,6 @@
-simulations: config/paper.simulations.tsv
-ascertainments: config/paper.ascertainments.tsv
-analyses: config/qq.analyses.tsv
+simulations: config/qq2.simulations.tsv
+ascertainments: config/qq2.ascertainments.tsv
+analyses: config/qq2.analyses.tsv
 
 cpus: 20
 email: "ryan.waples@gmail.com"
@@ -15,7 +15,7 @@ PATHS:
     RFMix: programs/RFmix/RFMix_v1.5.4/RunRFMix.py
     RFMix2: programs/RFmix2/rfmix/rfmix
     MOSAIC: programs/MOSAIC/mosaic/mosaic.R
-    FLARE: programs/flare/flare.v13.jar
+    FLARE: programs/flare/flare.v15.jar
     ADD_ERR: programs/add_err/add-err.jar
 
 diagnostic_plots: True
