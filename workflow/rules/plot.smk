@@ -1,13 +1,3 @@
-rule ancestry_dosage_plots:
-	input:
-		flare = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.{i}.flare.pdf"
-										for u in units.itertuples() for i in range(3)],
-		rfmix2 = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.{i}.rfmix2.pdf"
-										for u in units.itertuples() for i in range(3)],
-		mosaic = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.{i}.mosaic.pdf"
-										for u in units.itertuples() for i in range(3)]
-
-
 rule plot_ancestry_dosage:
 	input:
 		true_la = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/true_local_ancestry.site_matrix.npz',

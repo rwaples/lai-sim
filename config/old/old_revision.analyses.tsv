@@ -1,0 +1,241 @@
+anal_name	asc_name	nind_admixed	nind_ref	MAC_filter	max_snps	anal_seed	gt_err	target_pop	nthreads	do_phasing
+#three pop even
+p3_ref20_seq1	threepop_LARGE_rep1_seq	400	20,20,20	1	1000000	19961	0.0002	3	20	yes
+p3_ref20_arr1	threepop_LARGE_rep1_arr	400	20,20,20	1	20000	29962	0.0002	3	20	yes
+p3_ref20_seq2	threepop_LARGE_rep2_seq	400	20,20,20	1	1000000	39963	0.0002	3	20	yes
+p3_ref20_arr2	threepop_LARGE_rep2_arr	400	20,20,20	1	20000	49964	0.0002	3	20	yes
+p3_ref20_seq3	threepop_LARGE_rep3_seq	400	20,20,20	1	1000000	59965	0.0002	3	20	yes
+p3_ref20_arr3	threepop_LARGE_rep3_arr	400	20,20,20	1	20000	69966	0.0002	3	20	yes
+p3_ref20_seq4	threepop_LARGE_rep4_seq	400	20,20,20	1	1000000	79967	0.0002	3	20	yes
+p3_ref20_arr4	threepop_LARGE_rep4_arr	400	20,20,20	1	20000	79968	0.0002	3	20	yes
+
+p3_ref50_seq1	threepop_LARGE_rep1_seq	400	50,50,50	1	1000000	9961	0.0002	3	20	yes
+p3_ref50_arr1	threepop_LARGE_rep1_arr	400	50,50,50	1	20000	9962	0.0002	3	20	yes
+p3_ref50_seq2	threepop_LARGE_rep2_seq	400	50,50,50	1	1000000	9963	0.0002	3	20	yes
+p3_ref50_arr2	threepop_LARGE_rep2_arr	400	50,50,50	1	20000	9964	0.0002	3	20	yes
+p3_ref50_seq3	threepop_LARGE_rep3_seq	400	50,50,50	1	1000000	9965	0.0002	3	20	yes
+p3_ref50_arr3	threepop_LARGE_rep3_arr	400	50,50,50	1	20000	9966	0.0002	3	20	yes
+p3_ref50_seq4	threepop_LARGE_rep4_seq	400	50,50,50	1	1000000	9967	0.0002	3	20	yes
+p3_ref50_arr4	threepop_LARGE_rep4_arr	400	50,50,50	1	20000	9968	0.0002	3	20	yes
+
+p3_ref100_seq1	threepop_LARGE_rep1_seq	400	100,100,100	1	1000000	61	0.0002	3	20	yes
+p3_ref100_arr1	threepop_LARGE_rep1_arr	400	100,100,100	1	20000	19962	0.0002	3	20	yes
+p3_ref100_seq2	threepop_LARGE_rep2_seq	400	100,100,100	1	1000000	19963	0.0002	3	20	yes
+p3_ref100_arr2	threepop_LARGE_rep2_arr	400	100,100,100	1	20000	19964	0.0002	3	20	yes
+p3_ref100_seq3	threepop_LARGE_rep3_seq	400	100,100,100	1	1000000	19965	0.0002	3	20	yes
+p3_ref100_arr3	threepop_LARGE_rep3_arr	400	100,100,100	1	20000	19966	0.0002	3	20	yes
+p3_ref100_seq4	threepop_LARGE_rep4_seq	400	100,100,100	1	1000000	19967	0.0002	3	20	yes
+p3_ref100_arr4	threepop_LARGE_rep4_arr	400	100,100,100	1	20000	19968	0.0002	3	20	yes
+
+p3_ref400_seq1	threepop_LARGE_rep1_seq	400	400,400,400	1	1000000	90961	0.0002	3	20	yes
+p3_ref400_arr1	threepop_LARGE_rep1_arr	400	400,400,400	1	20000	99602	0.0002	3	20	yes
+p3_ref400_seq2	threepop_LARGE_rep2_seq	400	400,400,400	1	1000000	99603	0.0002	3	20	yes
+p3_ref400_arr2	threepop_LARGE_rep2_arr	400	400,400,400	1	20000	99604	0.0002	3	20	yes
+p3_ref400_seq3	threepop_LARGE_rep3_seq	400	400,400,400	1	1000000	99605	0.0002	3	20	yes
+p3_ref400_arr3	threepop_LARGE_rep3_arr	400	400,400,400	1	20000	99606	0.0002	3	20	yes
+p3_ref400_seq4	threepop_LARGE_rep4_seq	400	400,400,400	1	1000000	99607	0.0002	3	20	yes
+p3_ref400_arr4	threepop_LARGE_rep4_arr	400	400,400,400	1	20000	99608	0.0002	3	20	yes
+
+p3_ref1000_seq1	threepop_LARGE_rep1_seq	400	1000,1000,1000	1	1000000	1009961	0.0002	3	20	yes
+p3_ref1000_arr1	threepop_LARGE_rep1_arr	400	1000,1000,1000	1	20000	1009962	0.0002	3	20	yes
+p3_ref1000_seq2	threepop_LARGE_rep2_seq	400	1000,1000,1000	1	1000000	1009963	0.0002	3	20	yes
+p3_ref1000_arr2	threepop_LARGE_rep2_arr	400	1000,1000,1000	1	20000	1009964	0.0002	3	20	yes
+p3_ref1000_seq3	threepop_LARGE_rep3_seq	400	1000,1000,1000	1	1000000	1009965	0.0002	3	20	yes
+p3_ref1000_arr3	threepop_LARGE_rep3_arr	400	1000,1000,1000	1	20000	1009966	0.0002	3	20	yes
+p3_ref1000_seq4	threepop_LARGE_rep4_seq	400	1000,1000,1000	1	1000000	1009967	0.0002	3	20	yes
+p3_ref1000_arr4	threepop_LARGE_rep4_arr	400	1000,1000,1000	1	20000	1009968	0.0002	3	20	yes
+
+p3_ref10000_seq1	threepop_LARGE_rep1_seq	400	10000,10000,10000	1	1000000	719961	0.0002	3	20	yes
+p3_ref10000_arr1	threepop_LARGE_rep1_arr	400	10000,10000,10000	1	20000	719962	0.0002	3	20	yes
+p3_ref10000_seq2	threepop_LARGE_rep2_seq	400	10000,10000,10000	1	1000000	719963	0.0002	3	20	yes
+p3_ref10000_arr2	threepop_LARGE_rep2_arr	400	10000,10000,10000	1	20000	719964	0.0002	3	20	yes
+p3_ref10000_seq3	threepop_LARGE_rep3_seq	400	10000,10000,10000	1	1000000	719965	0.0002	3	20	yes
+p3_ref10000_arr3	threepop_LARGE_rep3_arr	400	10000,10000,10000	1	20000	719966	0.0002	3	20	yes
+p3_ref10000_seq4	threepop_LARGE_rep4_seq	400	10000,10000,10000	1	1000000	719967	0.0002	3	20	yes
+p3_ref10000_arr4	threepop_LARGE_rep4_arr	400	10000,10000,10000	1	20000	719968	0.0002	3	20	yes
+
+p3_ref50000_seq1	threepop_LARGE_rep1_seq	10000	50000,50000,50000	1	600000	919961	0.0002	3	20	yes
+p3_ref50000_arr1	threepop_LARGE_rep1_arr	10000	50000,50000,50000	1	20000	919962	0.0002	3	20	yes
+p3_ref50000_seq2	threepop_LARGE_rep2_seq	10000	50000,50000,50000	1	600000	919963	0.0002	3	20	yes
+p3_ref50000_arr2	threepop_LARGE_rep2_arr	10000	50000,50000,50000	1	20000	919964	0.0002	3	20	yes
+p3_ref50000_seq3	threepop_LARGE_rep3_seq	10000	50000,50000,50000	1	600000	919965	0.0002	3	20	yes
+p3_ref50000_arr3	threepop_LARGE_rep3_arr	10000	50000,50000,50000	1	20000	919966	0.0002	3	20	yes
+p3_ref50000_seq4	threepop_LARGE_rep4_seq	10000	50000,50000,50000	1	600000	919967	0.0002	3	20	yes
+p3_ref50000_arr4	threepop_LARGE_rep4_arr	10000	50000,50000,50000	1	20000	919968	0.0002	3	20	yes
+
+
+# four pop even
+p4_seq1	fourpop_rep1_seq	400	400,400,400,400	1	1000000	71	0.0002	4	20	yes
+p4_arr1	fourpop_rep1_arr	400	400,400,400,400	1	20000	72	0.0002	4	20	yes
+p4_seq2	fourpop_rep2_seq	400	400,400,400,400	1	1000000	73	0.0002	4	20	yes
+p4_arr2	fourpop_rep2_arr	400	400,400,400,400	1	20000	74	0.0002	4	20	yes
+p4_seq3	fourpop_rep3_seq	400	400,400,400,400	1	1000000	75	0.0002	4	20	yes
+p4_arr3	fourpop_rep3_arr	400	400,400,400,400	1	20000	76	0.0002	4	20	yes
+p4_seq4	fourpop_rep4_seq	400	400,400,400,400	1	1000000	77	0.0002	4	20	yes
+p4_arr4	fourpop_rep4_arr	400	400,400,400,400	1	20000	78	0.0002	4	20	yes
+
+
+# two pop even
+p2_variable_gen100_x1_seq	twopop_variable_gen100_x1_seq	100	200,200	1	1000000	79151001	0.0002	2	20	yes
+p2_uniform_gen100_x1_seq	twopop_uniform_gen100_x1_seq	100	200,200	1	1000000	71951001	0.0002	2	20	yes
+p2_variable_gen100_x2_seq	twopop_variable_gen100_x2_seq	100	200,200	1	1000000	71591001	0.0002	2	20	yes
+p2_uniform_gen100_x2_seq	twopop_uniform_gen100_x2_seq	100	200,200	1	1000000	71510091	0.0002	2	20	yes
+p2_variable_gen100_x3_seq	twopop_variable_gen100_x3_seq	100	200,200	1	1000000	9151001	0.0002	2	20	yes
+p2_uniform_gen100_x3_seq	twopop_uniform_gen100_x3_seq	100	200,200	1	1000000	1951001	0.0002	2	20	yes
+p2_variable_gen100_x4_seq	twopop_variable_gen100_x4_seq	100	200,200	1	1000000	1591301	0.0002	2	20	yes
+p2_uniform_gen100_x4_seq	twopop_uniform_gen100_x4_seq	100	200,200	1	1000000	1510091	0.0002	2	20	yes
+
+p2_variable_gen200_x1_seq	twopop_variable_gen200_x1_seq	100	200,200	1	1000000	71581001	0.0002	2	20	yes
+p2_uniform_gen200_x1_seq	twopop_uniform_gen200_x1_seq	100	200,200	1	1000000	715981001	0.0002	2	20	yes
+p2_variable_gen200_x2_seq	twopop_variable_gen200_x2_seq	100	200,200	1	1000000	715881001	0.0002	2	20	yes
+p2_uniform_gen200_x2_seq	twopop_uniform_gen200_x2_seq	100	200,200	1	1000000	718518001	0.0002	2	20	yes
+p2_variable_gen200_x3_seq	twopop_variable_gen200_x3_seq	100	200,200	1	1000000	1581001	0.0002	2	20	yes
+p2_uniform_gen200_x3_seq	twopop_uniform_gen200_x3_seq	100	200,200	1	1000000	15981001	0.0002	2	20	yes
+p2_variable_gen200_x4_seq	twopop_variable_gen200_x4_seq	100	200,200	1	1000000	15881001	0.0002	2	20	yes
+p2_uniform_gen200_x4_seq	twopop_uniform_gen200_x4_seq	100	200,200	1	1000000	18518001	0.0002	2	20	yes
+
+p2_variable_gen400_x1_seq	twopop_variable_gen400_x1_seq	100	200,200	1	1000000	771571001	0.0002	2	20	yes
+p2_uniform_gen400_x1_seq	twopop_uniform_gen400_x1_seq	100	200,200	1	1000000	715170701	0.0002	2	20	yes
+p2_variable_gen400_x2_seq	twopop_variable_gen400_x2_seq	100	200,200	1	1000000	715671001	0.0002	2	20	yes
+p2_uniform_gen400_x2_seq	twopop_uniform_gen400_x2_seq	100	200,200	1	1000000	715371001	0.0002	2	20	yes
+p2_variable_gen400_x3_seq	twopop_variable_gen400_x3_seq	100	200,200	1	1000000	71571001	0.0002	2	20	yes
+p2_uniform_gen400_x3_seq	twopop_uniform_gen400_x3_seq	100	200,200	1	1000000	15170701	0.0002	2	20	yes
+p2_variable_gen400_x4_seq	twopop_variable_gen400_x4_seq	100	200,200	1	1000000	15671001	0.0002	2	20	yes
+p2_uniform_gen400_x4_seq	twopop_uniform_gen400_x4_seq	100	200,200	1	1000000	15371001	0.0002	2	20	yes
+
+p2_variable_gen800_x1_seq	twopop_variable_gen800_x1_seq	100	200,200	1	1000000	715109101	0.0002	2	20	yes
+p2_uniform_gen800_x1_seq	twopop_uniform_gen800_x1_seq	100	200,200	1	1000000	715931001	0.0002	2	20	yes
+p2_variable_gen800_x2_seq	twopop_variable_gen800_x2_seq	100	200,200	1	1000000	2351001	0.0002	2	20	yes
+p2_uniform_gen800_x2_seq	twopop_uniform_gen800_x2_seq	100	200,200	1	1000000	56151001	0.0002	2	20	yes
+p2_variable_gen800_x3_seq	twopop_variable_gen800_x3_seq	100	200,200	1	1000000	15109101	0.0002	2	20	yes
+p2_uniform_gen800_x3_seq	twopop_uniform_gen800_x3_seq	100	200,200	1	1000000	15931001	0.0002	2	20	yes
+p2_variable_gen800_x4_seq	twopop_variable_gen800_x4_seq	100	200,200	1	1000000	51001	0.0002	2	20	yes
+p2_uniform_gen800_x4_seq	twopop_uniform_gen800_x4_seq	100	200,200	1	1000000	6151001	0.0002	2	20	yes
+
+p2_variable_gen1600_x1_seq	twopop_variable_gen1600_x1_seq	100	200,200	1	1000000	1871001	0.0002	2	20	yes
+p2_uniform_gen1600_x1_seq	twopop_uniform_gen1600_x1_seq	100	200,200	1	1000000	101001	0.0002	2	20	yes
+p2_variable_gen1600_x2_seq	twopop_variable_gen1600_x2_seq	100	200,200	1	1000000	713201	0.0002	2	20	yes
+p2_uniform_gen1600_x2_seq	twopop_uniform_gen1600_x2_seq	100	200,200	1	1000000	71516006	0.0002	2	20	yes
+p2_variable_gen1600_x3_seq	twopop_variable_gen1600_x3_seq	100	200,200	1	1000000	71871001	0.0002	2	20	yes
+p2_uniform_gen1600_x3_seq	twopop_uniform_gen1600_x3_seq	100	200,200	1	1000000	7101001	0.0002	2	20	yes
+p2_variable_gen1600_x4_seq	twopop_variable_gen1600_x4_seq	100	200,200	1	1000000	13201	0.0002	2	20	yes
+p2_uniform_gen1600_x4_seq	twopop_uniform_gen1600_x4_seq	100	200,200	1	1000000	1516006	0.0002	2	20	yes
+
+p2_variable_gen3200_x1_seq	twopop_variable_gen3200_x1_seq	100	200,200	1	1000000	70021	0.0002	2	20	yes
+p2_uniform_gen3200_x1_seq	twopop_uniform_gen3200_x1_seq	100	200,200	1	1000000	7177001	0.0002	2	20	yes
+p2_variable_gen3200_x2_seq	twopop_variable_gen3200_x2_seq	100	200,200	1	1000000	71555001	0.0002	2	20	yes
+p2_uniform_gen3200_x2_seq	twopop_uniform_gen3200_x2_seq	100	200,200	1	1000000	5151001	0.0002	2	20	yes
+p2_variable_gen3200_x3_seq	twopop_variable_gen3200_x3_seq	100	200,200	1	1000000	0021	0.0002	2	20	yes
+p2_uniform_gen3200_x3_seq	twopop_uniform_gen3200_x3_seq	100	200,200	1	1000000	177001	0.0002	2	20	yes
+p2_variable_gen3200_x4_seq	twopop_variable_gen3200_x4_seq	100	200,200	1	1000000	555001	0.0002	2	20	yes
+p2_uniform_gen3200_x4_seq	twopop_uniform_gen3200_x4_seq	100	200,200	1	1000000	3001	0.0002	2	20	yes
+
+p2_variable_gen100_x1_arr	twopop_variable_gen100_x1_arr	100	200,200	1	20000	79151001	0.0002	2	20	yes
+p2_uniform_gen100_x1_arr	twopop_uniform_gen100_x1_arr	100	200,200	1	20000	71951001	0.0002	2	20	yes
+p2_variable_gen100_x2_arr	twopop_variable_gen100_x2_arr	100	200,200	1	20000	71591001	0.0002	2	20	yes
+p2_uniform_gen100_x2_arr	twopop_uniform_gen100_x2_arr	100	200,200	1	20000	71510091	0.0002	2	20	yes
+p2_variable_gen100_x3_arr	twopop_variable_gen100_x3_arr	100	200,200	1	20000	9151001	0.0002	2	20	yes
+p2_uniform_gen100_x3_arr	twopop_uniform_gen100_x3_arr	100	200,200	1	20000	1951001	0.0002	2	20	yes
+p2_variable_gen100_x4_arr	twopop_variable_gen100_x4_arr	100	200,200	1	20000	1591301	0.0002	2	20	yes
+p2_uniform_gen100_x4_arr	twopop_uniform_gen100_x4_arr	100	200,200	1	20000	1510091	0.0002	2	20	yes
+
+p2_variable_gen200_x1_arr	twopop_variable_gen200_x1_arr	100	200,200	1	20000	71581001	0.0002	2	20	yes
+p2_uniform_gen200_x1_arr	twopop_uniform_gen200_x1_arr	100	200,200	1	20000	715981001	0.0002	2	20	yes
+p2_variable_gen200_x2_arr	twopop_variable_gen200_x2_arr	100	200,200	1	20000	715881001	0.0002	2	20	yes
+p2_uniform_gen200_x2_arr	twopop_uniform_gen200_x2_arr	100	200,200	1	20000	718518001	0.0002	2	20	yes
+p2_variable_gen200_x3_arr	twopop_variable_gen200_x3_arr	100	200,200	1	20000	1581001	0.0002	2	20	yes
+p2_uniform_gen200_x3_arr	twopop_uniform_gen200_x3_arr	100	200,200	1	20000	15981001	0.0002	2	20	yes
+p2_variable_gen200_x4_arr	twopop_variable_gen200_x4_arr	100	200,200	1	20000	15881001	0.0002	2	20	yes
+p2_uniform_gen200_x4_arr	twopop_uniform_gen200_x4_arr	100	200,200	1	20000	18518001	0.0002	2	20	yes
+
+p2_variable_gen400_x1_arr	twopop_variable_gen400_x1_arr	100	200,200	1	20000	771571001	0.0002	2	20	yes
+p2_uniform_gen400_x1_arr	twopop_uniform_gen400_x1_arr	100	200,200	1	20000	715170701	0.0002	2	20	yes
+p2_variable_gen400_x2_arr	twopop_variable_gen400_x2_arr	100	200,200	1	20000	715671001	0.0002	2	20	yes
+p2_uniform_gen400_x2_arr	twopop_uniform_gen400_x2_arr	100	200,200	1	20000	715371001	0.0002	2	20	yes
+p2_variable_gen400_x3_arr	twopop_variable_gen400_x3_arr	100	200,200	1	20000	71571001	0.0002	2	20	yes
+p2_uniform_gen400_x3_arr	twopop_uniform_gen400_x3_arr	100	200,200	1	20000	15170701	0.0002	2	20	yes
+p2_variable_gen400_x4_arr	twopop_variable_gen400_x4_arr	100	200,200	1	20000	15671001	0.0002	2	20	yes
+p2_uniform_gen400_x4_arr	twopop_uniform_gen400_x4_arr	100	200,200	1	20000	15371001	0.0002	2	20	yes
+
+p2_variable_gen800_x1_arr	twopop_variable_gen800_x1_arr	100	200,200	1	20000	715109101	0.0002	2	20	yes
+p2_uniform_gen800_x1_arr	twopop_uniform_gen800_x1_arr	100	200,200	1	20000	715931001	0.0002	2	20	yes
+p2_variable_gen800_x2_arr	twopop_variable_gen800_x2_arr	100	200,200	1	20000	2351001	0.0002	2	20	yes
+p2_uniform_gen800_x2_arr	twopop_uniform_gen800_x2_arr	100	200,200	1	20000	56151001	0.0002	2	20	yes
+p2_variable_gen800_x3_arr	twopop_variable_gen800_x3_arr	100	200,200	1	20000	15109101	0.0002	2	20	yes
+p2_uniform_gen800_x3_arr	twopop_uniform_gen800_x3_arr	100	200,200	1	20000	15931001	0.0002	2	20	yes
+p2_variable_gen800_x4_arr	twopop_variable_gen800_x4_arr	100	200,200	1	20000	51001	0.0002	2	20	yes
+p2_uniform_gen800_x4_arr	twopop_uniform_gen800_x4_arr	100	200,200	1	20000	6151001	0.0002	2	20	yes
+
+p2_variable_gen1600_x1_arr	twopop_variable_gen1600_x1_arr	100	200,200	1	20000	1871001	0.0002	2	20	yes
+p2_uniform_gen1600_x1_arr	twopop_uniform_gen1600_x1_arr	100	200,200	1	20000	101001	0.0002	2	20	yes
+p2_variable_gen1600_x2_arr	twopop_variable_gen1600_x2_arr	100	200,200	1	20000	713201	0.0002	2	20	yes
+p2_uniform_gen1600_x2_arr	twopop_uniform_gen1600_x2_arr	100	200,200	1	20000	71516006	0.0002	2	20	yes
+p2_variable_gen1600_x3_arr	twopop_variable_gen1600_x3_arr	100	200,200	1	20000	71871001	0.0002	2	20	yes
+p2_uniform_gen1600_x3_arr	twopop_uniform_gen1600_x3_arr	100	200,200	1	20000	7101001	0.0002	2	20	yes
+p2_variable_gen1600_x4_arr	twopop_variable_gen1600_x4_arr	100	200,200	1	20000	13201	0.0002	2	20	yes
+p2_uniform_gen1600_x4_arr	twopop_uniform_gen1600_x4_arr	100	200,200	1	20000	1516006	0.0002	2	20	yes
+
+p2_variable_gen3200_x1_arr	twopop_variable_gen3200_x1_arr	100	200,200	1	20000	70021	0.0002	2	20	yes
+p2_uniform_gen3200_x1_arr	twopop_uniform_gen3200_x1_arr	100	200,200	1	20000	7177001	0.0002	2	20	yes
+p2_variable_gen3200_x2_arr	twopop_variable_gen3200_x2_arr	100	200,200	1	20000	71555001	0.0002	2	20	yes
+p2_uniform_gen3200_x2_arr	twopop_uniform_gen3200_x2_arr	100	200,200	1	20000	5151001	0.0002	2	20	yes
+p2_variable_gen3200_x3_arr	twopop_variable_gen3200_x3_arr	100	200,200	1	20000	0021	0.0002	2	20	yes
+p2_uniform_gen3200_x3_arr	twopop_uniform_gen3200_x3_arr	100	200,200	1	20000	177001	0.0002	2	20	yes
+p2_variable_gen3200_x4_arr	twopop_variable_gen3200_x4_arr	100	200,200	1	20000	555001	0.0002	2	20	yes
+p2_uniform_gen3200_x4_arr	twopop_uniform_gen3200_x4_arr	100	200,200	1	20000	3001	0.0002	2	20	yes
+
+
+# three pop uneven
+p3_seqU1_20a	threepop_LARGE_rep1_seq	400	20,400,400	1	1000000	25231	0.0002	3	20	yes
+p3_arrU1_20a	threepop_LARGE_rep1_arr	400	20,400,400	1	20000	25232	0.0002	3	20	yes
+p3_seqU2_20a	threepop_LARGE_rep2_seq	400	20,400,400	1	1000000	25233	0.0002	3	20	yes
+p3_arrU2_20a	threepop_LARGE_rep2_arr	400	20,400,400	1	20000	25234	0.0002	3	20	yes
+p3_seqU3_20a	threepop_LARGE_rep3_seq	400	20,400,400	1	1000000	25235	0.0002	3	20	yes
+p3_arrU3_20a	threepop_LARGE_rep3_arr	400	20,400,400	1	20000	25236	0.0002	3	20	yes
+p3_seqU4_20a	threepop_LARGE_rep4_seq	400	20,400,400	1	1000000	25235	0.0002	3	20	yes
+p3_arrU4_20a	threepop_LARGE_rep4_arr	400	20,400,400	1	20000	25236	0.0002	3	20	yes
+
+p3_seqU1_50a	threepop_LARGE_rep1_seq	400	50,400,400	1	1000000	5231	0.0002	3	20	yes
+p3_arrU1_50a	threepop_LARGE_rep1_arr	400	50,400,400	1	20000	5232	0.0002	3	20	yes
+p3_seqU2_50a	threepop_LARGE_rep2_seq	400	50,400,400	1	1000000	5233	0.0002	3	20	yes
+p3_arrU2_50a	threepop_LARGE_rep2_arr	400	50,400,400	1	20000	5234	0.0002	3	20	yes
+p3_seqU3_50a	threepop_LARGE_rep3_seq	400	50,400,400	1	1000000	5235	0.0002	3	20	yes
+p3_arrU3_50a	threepop_LARGE_rep3_arr	400	50,400,400	1	20000	5236	0.0002	3	20	yes
+p3_seqU4_50a	threepop_LARGE_rep4_seq	400	50,400,400	1	1000000	5235	0.0002	3	20	yes
+p3_arrU4_50a	threepop_LARGE_rep4_arr	400	50,400,400	1	20000	5236	0.0002	3	20	yes
+
+p3_seqU1_20b	threepop_LARGE_rep1_seq	400	400,20,400	1	1000000	25231	0.0002	3	20	yes
+p3_arrU1_20b	threepop_LARGE_rep1_arr	400	400,20,400	1	20000	25232	0.0002	3	20	yes
+p3_seqU2_20b	threepop_LARGE_rep2_seq	400	400,20,400	1	1000000	25233	0.0002	3	20	yes
+p3_arrU2_20b	threepop_LARGE_rep2_arr	400	400,20,400	1	20000	25234	0.0002	3	20	yes
+p3_seqU3_20b	threepop_LARGE_rep3_seq	400	400,20,400	1	1000000	25235	0.0002	3	20	yes
+p3_arrU3_20b	threepop_LARGE_rep3_arr	400	400,20,400	1	20000	25236	0.0002	3	20	yes
+p3_seqU4_20b	threepop_LARGE_rep4_seq	400	400,20,400	1	1000000	25235	0.0002	3	20	yes
+p3_arrU4_20b	threepop_LARGE_rep4_arr	400	400,20,400	1	20000	25236	0.0002	3	20	yes
+
+p3_seqU1_50b	threepop_LARGE_rep1_seq	400	400,50,400	1	1000000	5231	0.0002	3	20	yes
+p3_arrU1_50b	threepop_LARGE_rep1_arr	400	400,50,400	1	20000	5232	0.0002	3	20	yes
+p3_seqU2_50b	threepop_LARGE_rep2_seq	400	400,50,400	1	1000000	5233	0.0002	3	20	yes
+p3_arrU2_50b	threepop_LARGE_rep2_arr	400	400,50,400	1	20000	5234	0.0002	3	20	yes
+p3_seqU3_50b	threepop_LARGE_rep3_seq	400	400,50,400	1	1000000	5235	0.0002	3	20	yes
+p3_arrU3_50b	threepop_LARGE_rep3_arr	400	400,50,400	1	20000	5236	0.0002	3	20	yes
+p3_seqU4_50b	threepop_LARGE_rep4_seq	400	400,50,400	1	1000000	5235	0.0002	3	20	yes
+p3_arrU4_50b	threepop_LARGE_rep4_arr	400	400,50,400	1	20000	5236	0.0002	3	20	yes
+
+p3_seqU1_20c	threepop_LARGE_rep1_seq	400	400,400,20	1	1000000	125231	0.0002	3	20	yes
+p3_arrU1_20c	threepop_LARGE_rep1_arr	400	400,400,20	1	20000	125232	0.0002	3	20	yes
+p3_seqU2_20c	threepop_LARGE_rep2_seq	400	400,400,20	1	1000000	125233	0.0002	3	20	yes
+p3_arrU2_20c	threepop_LARGE_rep2_arr	400	400,400,20	1	20000	125234	0.0002	3	20	yes
+p3_seqU3_20c	threepop_LARGE_rep3_seq	400	400,400,20	1	1000000	125235	0.0002	3	20	yes
+p3_arrU3_20c	threepop_LARGE_rep3_arr	400	400,400,20	1	20000	125236	0.0002	3	20	yes
+p3_seqU4_20c	threepop_LARGE_rep4_seq	400	400,400,20	1	1000000	125235	0.0002	3	20	yes
+p3_arrU4_20c	threepop_LARGE_rep4_arr	400	400,400,20	1	20000	125236	0.0002	3	20	yes
+
+p3_seqU1_50c	threepop_LARGE_rep1_seq	400	400,400,50	1	1000000	75231	0.0002	3	20	yes
+p3_arrU1_50c	threepop_LARGE_rep1_arr	400	400,400,50	1	20000	75232	0.0002	3	20	yes
+p3_seqU2_50c	threepop_LARGE_rep2_seq	400	400,400,50	1	1000000	75233	0.0002	3	20	yes
+p3_arrU2_50c	threepop_LARGE_rep2_arr	400	400,400,50	1	20000	75234	0.0002	3	20	yes
+p3_seqU3_50c	threepop_LARGE_rep3_seq	400	400,400,50	1	1000000	75235	0.0002	3	20	yes
+p3_arrU3_50c	threepop_LARGE_rep3_arr	400	400,400,50	1	20000	75236	0.0002	3	20	yes
+p3_seqU4_50c	threepop_LARGE_rep4_seq	400	400,400,50	1	1000000	75235	0.0002	3	20	yes
+p3_arrU4_50c	threepop_LARGE_rep4_arr	400	400,400,50	1	20000	75236	0.0002	3	20	yes
