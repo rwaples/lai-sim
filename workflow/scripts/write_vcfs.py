@@ -15,9 +15,7 @@ site_matrix = str(snakemake.input.site_matrix)
 base_path = str(snakemake.params.base_path)
 chrom_id = str(snakemake.params.chrom_id)
 nind_ref = str(snakemake.params.nind_ref)
-# chr_len = float(snakemake.params.chr_len)
 target_pop = int(snakemake.params.target_pop)
-# rec_map = str()
 
 nind_ref = np.array([int(x) for x in nind_ref.split(',')])
 
@@ -26,6 +24,7 @@ ts = tszip.decompress(site_ts)
 tables = ts.tables
 tables.individuals.clear()
 tables.nodes.individual = np.repeat(np.array([-1], dtype='int32'), len(tables.nodes))
+
 # set ancestral alleles to 'A', derived alleles to 'T'
 a, off = tskit.pack_strings(['A' for _ in tables.sites])
 tables.sites.set_columns(
@@ -43,7 +42,6 @@ tables.mutations.set_columns(
 
 export_ts = tables.tree_sequence()
 ind_labels = make_ind_labels(export_ts)
-
 
 # write bcf files with genotypes for all inds
 read_fd, write_fd = os.pipe()
@@ -88,13 +86,13 @@ with open(os.path.join(base_path, 'target_inds.txt'), 'w') as OUTFILE:
 		if pop == target_pop:
 			OUTFILE.write(f'{ind_string}\n')
 
-# write two formats of genetic maps files
+# write a file giving the bp positions of each site.
 os.system(f"{snakemake.config['PATHS']['BCFTOOLS']} query -f '%POS\\n' {os.path.join(base_path, 'genotypes.bcf')} > {os.path.join(base_path, 'site.positions')}")
 positions = pd.read_csv(os.path.join(base_path, 'site.positions'), header=None)[0].values
 
 
 # write vcfs with true local ancestry
-# now this contains only the target indiviudals,  no reference populations
+# now this contains only the target indiviudals, no reference populations
 la_mat = np.load(file=site_matrix)['arr']
 df = pd.DataFrame(la_mat)
 df.insert(loc=0, column='CHROM', value=chrom_id)

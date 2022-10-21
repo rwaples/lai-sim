@@ -245,7 +245,7 @@ rule convert_flare_vcf:
 		flare_sites = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/flare/flare.anc.flare_sites',
 	params:
 		BCFTOOLS = config['PATHS']['BCFTOOLS'],
-		nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
+		# nsource = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nsource,
 	shell:
 		"""
 		{params.BCFTOOLS} query -f '%CHROM, %POS, [%ANP1, %ANP2,]\\n' {input.flare_la} > {output.flare_csv}
