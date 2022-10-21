@@ -1,11 +1,9 @@
 """Write a genetic map file for use by SLiM."""
 import msprime
-import numpy as np
 import pandas as pd
 
 rec_map_path = str(snakemake.params.rec_map_path)
 slim_map_path = str(snakemake.output.slim_map_path)
-#max_bp = int(snakemake.params.max_bp)
 
 rmap = msprime.RateMap.read_hapmap(rec_map_path)
 

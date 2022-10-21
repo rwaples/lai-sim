@@ -152,47 +152,6 @@ rule run_flare:
 		{params.bcftools} index {params.prefix}.anc.vcf.gz
 		"""
 
-# notice this is RFMix v1, not currently used
-rule run_RFMix:
-	input:
-		alleles_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/admixedgenofile.22',
-		classes_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/classes_file.txt',
-		positions_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/positions_file.txt',
-	output:
-		viterbi = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix/0.Viterbi.txt',
-	params:
-		rfmix = config['PATHS']['RFMix'],
-		prefix = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix/RFMix',
-		nthreads = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nthreads,
-	benchmark:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_RFMix.tsv',
-	log:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix/run_RFMix.log',
-	shell:
-		"""
-		cd programs/RFmix/RFMix_v1.5.4
-		"""
-		"python2 RunRFMix.py TrioPhased "
-		"--num-threads {params.nthreads} "
-		"../../../{input.alleles_file} ../../../{input.classes_file} ../../../{input.positions_file} "
-		"-o ../../../{params.prefix} "
-
-
-rule make_rfmix_input:
-	input:
-		site_ts = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/sample.filter.tsz',
-		genetic_map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/genetic_map.txt',
-	output:
-		alleles_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/alleles_file.txt',
-		classes_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/classes_file.txt',
-		positions_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/positions_file.txt',
-	params:
-		nind_ref = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nind_ref,
-		nind_admixed = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nind_admixed,
-	log:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/logs/make_rfmix_input.log',
-	script:
-		'../scripts/make_rfmix_input.py'
 
 
 rule run_RFMix2:
@@ -244,33 +203,6 @@ rule run_beagle:
 		gt = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/genotypes.witherror.vcf.gz',
 		map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/plink_map.txt',
 	output:
-		vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.gzPPPPPPPPPPP',
-		index = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.gz.csi',
-	log:
-		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.beagle.log',
-	params:
-		prefix = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased',
-		bcftools = config['PATHS']['BCFTOOLS'],
-		BEAGLE = config['PATHS']['BEAGLE'],
-		seed = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].anal_seed,
-	shell:
-		"java -jar {params.BEAGLE} "
-		"gt={input.gt} "
-		"map={input.map} "
-		"seed={params.seed} "
-		"out={params.prefix} 2>&1 | tee {log} "
-
-		"""
-
-		{params.bcftools} index {output.vcf}
-		"""
-
-
-rule run_beagle_optional:
-	input:
-		gt = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/genotypes.witherror.vcf.gz',
-		map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/plink_map.txt',
-	output:
 		vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.gz',
 		index = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.gz.csi',
 	log:
@@ -282,9 +214,6 @@ rule run_beagle_optional:
 		seed = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].anal_seed,
 		do_phasing = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].do_phasing,
 	run:
-		#print(units)
-		#print(params.do_phasing)
-
 		if params.do_phasing == 'yes':
 			# do phasing as normal.
 			shell("java -jar {params.BEAGLE} gt={input.gt} map={input.map} seed={params.seed} out={params.prefix} 2>&1 | tee {log}" )
@@ -292,7 +221,8 @@ rule run_beagle_optional:
 			# do not re-phase, take phasing as given.
 			shell("cp {input.gt} {output.vcf}")
 		else:
-			assert False, "do_phasing should be 'yes' or 'no' "
+			assert False, "do_phasing should be either 'yes' or 'no' "
+
 		shell("{params.bcftools} index {output.vcf}")
 
 
@@ -382,3 +312,46 @@ rule get_dosage_rfmix2:
 		sites_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/site.positions',
 	script:
 		'../scripts/get_dosage.rfmix2.py'
+
+
+# notice this is RFMix v1, not currently used
+rule run_RFMix:
+	input:
+		alleles_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/MOSAIC/input/admixedgenofile.22',
+		classes_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/classes_file.txt',
+		positions_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/positions_file.txt',
+	output:
+		viterbi = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix/0.Viterbi.txt',
+	params:
+		rfmix = config['PATHS']['RFMix'],
+		prefix = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix/RFMix',
+		nthreads = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nthreads,
+	benchmark:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_RFMix.tsv',
+	log:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/RFMix/run_RFMix.log',
+	shell:
+		"""
+		cd programs/RFmix/RFMix_v1.5.4
+		"""
+		"python2 RunRFMix.py TrioPhased "
+		"--num-threads {params.nthreads} "
+		"../../../{input.alleles_file} ../../../{input.classes_file} ../../../{input.positions_file} "
+		"-o ../../../{params.prefix} "
+
+# for RFMix v1, not currently used
+rule make_rfmix_input:
+	input:
+		site_ts = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/sample.filter.tsz',
+		genetic_map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/genetic_map.txt',
+	output:
+		alleles_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/alleles_file.txt',
+		classes_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/classes_file.txt',
+		positions_file = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/positions_file.txt',
+	params:
+		nind_ref = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nind_ref,
+		nind_admixed = lambda w: units.loc[(w.sim_name, w.asc_name, w.anal_name)].nind_admixed,
+	log:
+		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/logs/make_rfmix_input.log',
+	script:
+		'../scripts/make_rfmix_input.py'

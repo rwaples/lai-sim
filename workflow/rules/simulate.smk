@@ -8,14 +8,13 @@ rule simulate_admixture:
 	input:
 		'results/{model_name}/{sim_name}/slim_map.txt',
 	output:
-		temp('results/{model_name}/{sim_name}/from_slim.trees'),
+		'results/{model_name}/{sim_name}/from_slim.trees',
 	log:
 		'results/{model_name}/{sim_name}/from_slim.trees.log'
 	params:
 		slim_path = config['PATHS']['SLiM'],
 		sim_seed = lambda w: simulations.loc[w.sim_name].sim_seed,
 		slim_script = lambda w: simulations.loc[w.sim_name].slim_script_path,
-		#max_bp = lambda w: simulations.loc[w.sim_name].max_bp,
 		size_A = lambda w: simulations.loc[w.sim_name].size_A,
 		size_B = lambda w: simulations.loc[w.sim_name].size_B,
 		size_admixed = lambda w: simulations.loc[w.sim_name].size_admixed,
@@ -43,10 +42,7 @@ rule recap_and_mutate:
 		'results/{model_name}/{sim_name}/recap_and_mutate.log'
 	params:
 		ancestral_Ne = lambda w: simulations.loc[w.sim_name].ancestral_Ne,
-		#chr = lambda w: simulations.loc[w.sim_name].chr,
-		#chr_len = lambda w: simulations.loc[w.sim_name].chr_len,
 		rec_map_path = lambda w: simulations.loc[w.sim_name].rec_map_path,
-		#max_bp = lambda w: simulations.loc[w.sim_name].max_bp,
 		mutation_rate = lambda w: simulations.loc[w.sim_name].mutation_rate,
 		sim_seed = lambda w: simulations.loc[w.sim_name].sim_seed,
 		admixture_time = lambda w: simulations.loc[w.sim_name].admixture_time,

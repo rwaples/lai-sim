@@ -25,21 +25,10 @@ initialize() {
     // defineConstant("chromosome_length", asInteger(max_bp));
     defineConstant("pop_names", c("sourceA", "sourceB", "admixed"));
 
-
     defineConstant("size_A", asInteger(sA));
     defineConstant("size_B", asInteger(sB));
     defineConstant("size_admixed", asInteger(sadmixed));
-
     defineConstant("time_split", asInteger(tsplit));
-
-    recmap = readCSV(filePath = slim_map, colNames = c("ends", "rates"), colTypes = "if" , sep="\t");
-    ends = recmap.getValue("ends");
-    rates = recmap.getValue("rates");
-    // multiply rates by 3 to account for gene conversion
-    _recombination_rates = rates * 3;
-    _recombination_ends = ends;
-    defineConstant("recombination_rates", _recombination_rates);
-    defineConstant("recombination_ends", _recombination_ends);
 
     // Time of epoch boundaries, in years before present.
     // The first epoch spans from INF to _T[0].
@@ -107,6 +96,15 @@ initialize() {
     ), c(3, 3)));
 
     defineConstant("N", asInteger(_N/Q));
+
+    recmap = readCSV(filePath = slim_map, colNames = c("ends", "rates"), colTypes = "if", sep="\t");
+    ends = recmap.getValue("ends");
+    rates = recmap.getValue("rates");
+    // multiply rates by 3 to account for gene conversion
+    _recombination_rates = rates * 3;
+    _recombination_ends = ends;
+    defineConstant("recombination_rates", _recombination_rates);
+    defineConstant("recombination_ends", _recombination_ends);
 
     initializeTreeSeq();
     initializeMutationRate(mutation_rate);

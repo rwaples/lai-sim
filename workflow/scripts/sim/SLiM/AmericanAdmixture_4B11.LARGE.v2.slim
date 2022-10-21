@@ -20,15 +20,8 @@ initialize() {
     defineConstant("burn_in", 10.0);
     defineConstant("generation_time", 25);
     defineConstant("mutation_rate", Q * 0);
-    defineConstant("chromosome_length", 51304566-1);
+    // defineConstant("chromosome_length", 51304566-1);
     defineConstant("pop_names", c("AFR", "EUR", "ASIA", "ADMIX"));
-
-    _recombination_rates = c(
-        4.333506830336468e-08);
-    _recombination_ends = c(
-        chromosome_length);
-    defineConstant("recombination_rates", (1-(1-2*_recombination_rates)^Q)/2);
-    defineConstant("recombination_ends", _recombination_ends);
 
     // Time of epoch boundaries, in years before present.
     // The first epoch spans from INF to _T[0].
@@ -128,11 +121,20 @@ initialize() {
 
     defineConstant("N", asInteger(_N/Q));
 
+    recmap = readCSV(filePath = slim_map, colNames = c("ends", "rates"), colTypes = "if", sep="\t");
+    ends = recmap.getValue("ends");
+    rates = recmap.getValue("rates");
+    // multiply rates by 3 to account for gene conversion
+    _recombination_rates = rates * 3;
+    _recombination_ends = ends;
+    defineConstant("recombination_rates", _recombination_rates);
+    defineConstant("recombination_ends", _recombination_ends);
+
     initializeTreeSeq();
     initializeMutationRate(mutation_rate);
     initializeMutationType("m1", 0.5, "f", 0);
     initializeGenomicElementType("g1", m1, 1.0);
-    initializeGenomicElement(g1, 0, chromosome_length);
+    initializeGenomicElement(g1, 0, recombination_ends[length(recombination_ends)-1]);
     initializeRecombinationRate(recombination_rates, recombination_ends);
     initializeGeneConversion(0.6666666, 300, 1.0);
 }

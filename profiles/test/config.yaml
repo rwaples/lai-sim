@@ -1,13 +1,13 @@
-simulations: config/revision.simulations.tsv
-ascertainments: config/revision.ascertainments.tsv
-analyses: config/revision.analyses.tsv
+simulations: config/test.simulations.tsv
+ascertainments: config/test.ascertainments.tsv
+analyses: config/test.analyses.tsv
 
 # put full paths in here
 # dont use '~' for your home directory (not really sure why)
 PATHS:
     SLiM: programs/SLiM/slim
-    BCFTOOLS: UPDATE/ME
-    BEAGLE: UPDATE
+    BCFTOOLS: /home/users/waplesr/lai/lai-sim/programs/bcftools-1.14/bcftools
+    BEAGLE: programs/BEAGLE/beagle.22Jul22.46e.jar
     RFMix: programs/RFmix/RFMix_v1.5.4/RunRFMix.py
     RFMix2: programs/RFmix2/rfmix/rfmix
     MOSAIC: programs/MOSAIC/mosaic/mosaic.R
