@@ -153,7 +153,6 @@ rule run_flare:
 		"""
 
 
-
 rule run_RFMix2:
 	input:
 		target_vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.target_inds.vcf.gz',
@@ -198,9 +197,24 @@ rule run_RFMix2:
 		"""
 
 
-rule run_beagle:
+rule unphase:
 	input:
 		gt = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/genotypes.witherror.vcf.gz',
+	output:
+		vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/genotypes.witherror.UNPHASED.vcf.gz',
+	params:
+		bcftools = config['PATHS']['BCFTOOLS'],
+	shell:
+		"""
+		zcat {input.gt} | sed '/^##/! s/|/\//g' | {params.bcftools} view -O z --output-file {output.vcf}
+
+		{params.bcftools} index {output.vcf}
+		"""
+
+
+rule run_beagle:
+	input:
+		gt = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/genotypes.witherror.UNPHASED.vcf.gz',
 		map = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/plink_map.txt',
 	output:
 		vcf = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/phased.vcf.gz',

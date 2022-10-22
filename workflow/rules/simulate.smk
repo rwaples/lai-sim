@@ -8,7 +8,7 @@ rule simulate_admixture:
 	input:
 		'results/{model_name}/{sim_name}/slim_map.txt',
 	output:
-		'results/{model_name}/{sim_name}/from_slim.trees',
+		temp('results/{model_name}/{sim_name}/from_slim.trees'),
 	log:
 		'results/{model_name}/{sim_name}/from_slim.trees.log'
 	params:

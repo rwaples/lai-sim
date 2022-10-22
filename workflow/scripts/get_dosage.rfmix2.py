@@ -1,4 +1,4 @@
-"""Load output from flare and save diploid ancestry dosages as compressed numpy array."""
+"""Load output from rfmix2 and save diploid ancestry dosages as compressed numpy array."""
 import numpy as np
 from common.utils import get_ancestry_dosage, load_rfmix_fb
 rfmix2_path = str(snakemake.input.rfmix2_la)

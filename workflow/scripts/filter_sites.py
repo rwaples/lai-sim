@@ -1,4 +1,6 @@
-"""Select sites where local ancestry is recorded."""
+"""Select sites where local ancestry is recorded and
+generate a simplified ts containing only these sites and the sampled nodes.
+Notice this drop the ancestors retained to serve as local ancestry references. """
 import tszip
 import numpy as np
 from common.utils import strip_MAC, strip_adjacent_sites, downsample_snps

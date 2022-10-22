@@ -1,4 +1,4 @@
-"""Load output from flare and save diploid ancestry dosages as compressed numpy array."""
+"""Load output from mosaic and save diploid ancestry dosages as compressed numpy array."""
 import numpy as np
 from common.utils import get_ancestry_dosage, load_mosaic
 mosaic_path = str(snakemake.input.mosaic_la)
