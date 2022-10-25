@@ -230,7 +230,7 @@ rule run_beagle:
 	run:
 		if params.do_phasing == 'yes':
 			# do phasing as normal.
-			shell("java -jar {params.BEAGLE} gt={input.gt} map={input.map} seed={params.seed} out={params.prefix} 2>&1 | tee {log}" )
+			shell("java -Xmx200g  -jar {params.BEAGLE} gt={input.gt} map={input.map} seed={params.seed} out={params.prefix} 2>&1 | tee {log}" )
 		elif params.do_phasing == 'no':
 			# do not re-phase, take phasing as given.
 			shell("cp {input.gt} {output.vcf}")
