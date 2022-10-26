@@ -475,8 +475,8 @@ def get_fst_faser(ts, popA, popB):
 
 def get_ancestry_dosage(arr, n_anc):
 	"""Compute ancestry dosage from probablistic haploid ancestry calls."""
-	#anc_dosage = np.zeros((arr.shape[0], int(arr.shape[1] / 2)), dtype=np.half)
-	anc_dosage = np.zeros((arr.shape[0], int(arr.shape[1] / 2)))
+	anc_dosage = np.zeros((arr.shape[0], int(arr.shape[1] / 2)), dtype=np.half)
+	# anc_dosage = np.zeros((arr.shape[0], int(arr.shape[1] / 2)))
 	if n_anc == 2:
 		a0 = arr[:, 0::2]  # should be views
 		a1 = arr[:, 1::2]
@@ -605,6 +605,7 @@ def load_flare(path, sites_file, flare_sites, BCFTOOLS):
 	flare = pd.read_csv(path, header=None)
 	flare = flare.dropna(axis=1)
 	res = flare.iloc[:, 2:].values
+	del flare
 	res = np.concatenate([res[:1], res])
 	# res = res.astype(np.half)
 	# res = res.astype(np.single)
