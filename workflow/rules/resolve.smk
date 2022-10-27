@@ -23,5 +23,5 @@ rule add_missing_dosage:
 		"""
 		touch {output}
 
-		touch {params.flare} {params.mosaic} {params.rfmix2} {params.log_flare} {params.log_mosaic} {params.log_rfmix2} {qq_flare} {qq_mosaic} {qq_rfmix2}
+		touch {params.flare} {params.mosaic} {params.rfmix2} {params.log_flare} {params.log_mosaic} {params.log_rfmix2} {params.qq_flare} {params.qq_mosaic} {params.qq_rfmix2}
 		"""
