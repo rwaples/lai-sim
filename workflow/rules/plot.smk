@@ -83,3 +83,8 @@ rule plot_qq_reports:
 		),
 	script:
 		'../scripts/plot_qq.py'
+
+
+rule make_all_qq_reports:
+	input:
+		plots = [f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/qq.png' for u in units.itertuples()],
