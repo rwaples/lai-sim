@@ -26,6 +26,7 @@ rule ancestry_dosage_plots:
 		mosaic = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.{i}.mosaic.pdf"
 										for u in units.itertuples() for i in range(3)]
 
+
 rule diagnostic_plots:
 	input:
 		pop_coal_time = [

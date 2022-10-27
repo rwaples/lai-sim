@@ -14,12 +14,14 @@ rule add_missing_dosage:
 		log_flare = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_flare.tsv',
 		log_mosaic = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_mosaic.tsv',
 		log_rfmix2 = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/benchmark/run_RFMix2.tsv',
-
+		qq_flare = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/qq_flare.txt',
+		qq_mosaic = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/qq_mosaic.txt',
+		qq_rfmix2 = 'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/DIAGNOSTICS/qq_rfmix.txt',
 	log:
 		'results/{model_name}/{sim_name}/{asc_name}/{anal_name}/missing.LA.log',
 	shell:
 		"""
 		touch {output}
 
-		touch {params.flare} {params.mosaic} {params.rfmix2} {params.log_flare} {params.log_mosaic} {params.log_rfmix2}
+		touch {params.flare} {params.mosaic} {params.rfmix2} {params.log_flare} {params.log_mosaic} {params.log_rfmix2} {qq_flare} {qq_mosaic} {qq_rfmix2}
 		"""
