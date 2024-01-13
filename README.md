@@ -9,7 +9,7 @@ A Snakemake workflow for simulating admixture and evaluating local ancestry infe
 * MOSAIC [(link)](https://maths.ucd.ie/~mst/MOSAIC/)
 * BCFTOOLS [(link)](http://samtools.github.io/bcftools/howtos/index.html)
 * BEAGLE [(link)](http://faculty.washington.edu/browning/beagle/beagle.html)
-* add_err (no link provided)
+* add_err (no link provided, personal program of Brian L. Browning - browning@uw.edu)
 * Snakemake [(link)](https://snakemake.readthedocs.io/en/stable/)
 * conda [(link)](https://docs.conda.io/en/latest/)
 
