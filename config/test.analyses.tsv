@@ -1,3 +1,9 @@
 anal_name	asc_name	nind_admixed	nind_ref	MAC_filter	max_snps	anal_seed	gt_err	target_pop	nthreads	do_phasing
-p2s100_x1_seq_base	p2s100_x1_seq	100	200,200	1	50000000	41829	0.0002	2	5	yes
-p2s100_x1_arr_base	p2s100_x1_arr	100	200,200	1	20000	50488	0.0002	2	5	yes
+#p2s100_x1_seq_base	p2s100_x1_seq	100	50,50	1	50000000	41829	0.0002	2	5	yes
+#p2s100_x1_arr_base	p2s100_x1_arr	100	50,50	1	20000	50488	0.0002	2	5	yes
+#p4_x1_seq_base	p4_x1_seq	100	50,50	1	50000000	41829	0.0002	4	5	yes
+#p4_x1_arr_base	p4_x1_arr	100	50,50	1	20000	50488	0.0002	4	5	yes
+p3_x1_seq_ref20	p3_x1_seq	100	100,100,100	1	50000000	76429	0.0002	3	5	yes
+p3_x1_arr_ref20	p3_x1_arr	100	100,100,100	1	20000	74461	0.0002	3	5	yes
+p2s800_x1_arr_base	p2s800_x1_arr	100	200,200	1	20000	8427	0.0002	2	5	yes
+p2s800_x1_seq_base	p2s800_x1_seq	100	200,200	1	50000000	77009	0.0002	2	5	yes

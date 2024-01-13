@@ -17,6 +17,29 @@ include: 'rules/resolve.smk'
 report: 'report/workflow.rst'
 
 
+
+
+rule all:
+	input:
+		# Diagnostic plots
+		flare = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.{i}.flare.pdf"
+										for u in units.itertuples() for i in range(3)],
+		rfmix2 = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.{i}.rfmix2.pdf"
+										for u in units.itertuples() for i in range(3)],
+		mosaic = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.{i}.mosaic.pdf"
+										for u in units.itertuples() for i in range(3)],
+		pairwise_Fst = [
+			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png'
+			for u in units.itertuples()
+		],
+		# Reports
+		R2 = 'results/reports/R2_report.txt',
+		Q = 'results/reports/Q_report.txt',
+		runtime = 'results/reports/runtime_report.txt',
+		sites = 'results/reports/sites_report.txt',
+		qq = ['results/reports/QQ.flare.txt', 'results/reports/QQ.mosaic.txt', 'results/reports/QQ.rfmix.txt']
+
+
 rule ancestry_dosage_plots:
 	input:
 		flare = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.{i}.flare.pdf"
@@ -41,27 +64,6 @@ rule diagnostic_plots:
 		#	f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/true_local_ancestry.png'
 		#	for u in units.itertuples()
 		#],
-
-rule all:
-	input:
-		# Diagnostic plots
-		flare = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.{i}.flare.pdf"
-										for u in units.itertuples() for i in range(3)],
-		rfmix2 = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.{i}.rfmix2.pdf"
-										for u in units.itertuples() for i in range(3)],
-		mosaic = [f"results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/ancestry_dosage.{i}.mosaic.pdf"
-										for u in units.itertuples() for i in range(3)],
-		pairwise_Fst = [
-			f'results/{u.model_name}/{u.sim_name}/{u.asc_name}/{u.anal_name}/DIAGNOSTICS/pairwise_Fst.png'
-			for u in units.itertuples()
-		],
-		# Reports
-		R2 = 'results/reports/R2_report.txt',
-		Q = 'results/reports/Q_report.txt',
-		runtime = 'results/reports/runtime_report.txt',
-		sites = 'results/reports/sites_report.txt',
-		qq = ['results/reports/QQ.flare.txt', 'results/reports/QQ.mosaic.txt', 'results/reports/QQ.rfmix.txt']
-
 
 rule do_R2_report:
 	input:
